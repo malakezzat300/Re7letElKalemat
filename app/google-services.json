@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695111487083",
+    "project_id": "re7letelkalemat",
+    "storage_bucket": "re7letelkalemat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695111487083:android:6ee57fceb800e772132b2e",
+        "android_client_info": {
+          "package_name": "com.malakezzat.re7letelkalemat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM0YoLdlw75T5Sb5Tcjn3PG0JZTUhLUCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
