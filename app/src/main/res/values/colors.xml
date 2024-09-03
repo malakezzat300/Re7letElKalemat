@@ -7,7 +7,5 @@
     <color name="myblack">#25000000</color>
     <color name="mywhite">#6DFFFFFF</color>
     <color name="darkGray">#1F1F1F</color>
-    <color name="semi_transparent_white">#80FFFFFF</color>
-    <color name="semi_transparent_white">#99FFFFFF</color>
-
+    <color name="semi_transparent_white">#99FFFFFF</color> <!-- 60% opacity white -->
 </resources>

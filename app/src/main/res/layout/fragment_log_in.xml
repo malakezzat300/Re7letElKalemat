@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
-        tools:context=".LogInFragment">
+        tools:context=".View.LogInFragment">
 
         <ImageView
             android:id="@+id/backImage"
@@ -25,7 +25,7 @@
             android:id="@+id/view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="52dp"
             android:background="@drawable/rounded_corners"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/app"
             android:text="@string/noAccount"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -51,8 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:fontFamily="@font/app"
             android:text="@string/LogIn"
-            android:textSize="32sp"
+            android:textSize="34sp"
             app:layout_constraintEnd_toEndOf="@+id/view"
             app:layout_constraintTop_toTopOf="@+id/view" />
 
@@ -66,6 +68,7 @@
             android:background="@drawable/rectangle"
             android:drawableEnd="@drawable/mail"
             android:drawablePadding="20dp"
+            android:fontFamily="@font/app"
             android:hint="@string/email_hint"
             android:inputType="text"
             android:paddingRight="20dp"
@@ -81,9 +84,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:background="@drawable/rectangle"
-            android:gravity="center|end"
             android:drawableEnd="@drawable/password"
             android:drawablePadding="20dp"
+            android:fontFamily="@font/app"
+            android:gravity="center|end"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:paddingEnd="20dp"
@@ -99,6 +103,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:text="@string/LogIn"
+            style="@style/GeneralButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
@@ -109,8 +114,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
+            android:fontFamily="@font/app"
             android:text="@string/logInUsing"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/googleImg"
             app:layout_constraintEnd_toEndOf="parent"

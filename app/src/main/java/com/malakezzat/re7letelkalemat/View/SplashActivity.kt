@@ -1,4 +1,4 @@
-package com.malakezzat.re7letelkalemat
+package com.malakezzat.re7letelkalemat.View
 
 import android.animation.Animator
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.malakezzat.re7letelkalemat
+package com.malakezzat.re7letelkalemat.View
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentWelcomeScreenBinding
 
 class WelcomeScreenFragment : Fragment() {
@@ -41,5 +42,4 @@ class WelcomeScreenFragment : Fragment() {
             findNavController().navigate(R.id.action_welcomeScreenFragment_to_signUpFragment)
         }
     }
-    }
-
+}
