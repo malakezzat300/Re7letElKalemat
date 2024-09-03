@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil.setContentView
 import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
+
     lateinit var db: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

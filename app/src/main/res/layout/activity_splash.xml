@@ -9,4 +9,5 @@
         tools:context=".SplashActivity">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
