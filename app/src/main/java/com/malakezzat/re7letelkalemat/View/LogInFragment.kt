@@ -1,26 +1,46 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.malakezzat.re7letelkalemat.Model.AuthModel
 import com.malakezzat.re7letelkalemat.Presenter.AuthPresenter
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.View.Interfaces.AuthView
 import com.malakezzat.re7letelkalemat.databinding.FragmentLogInBinding
-import androidx.navigation.fragment.findNavController
-import com.malakezzat.re7letelkalemat.R
-
 
 class LogInFragment : Fragment(), AuthView {
 
     lateinit var db: FragmentLogInBinding
     private lateinit var presenter: AuthPresenter
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+    private val googleSignInLauncher: ActivityResultLauncher<Intent?> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            handleSignInResult(result)
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +59,9 @@ class LogInFragment : Fragment(), AuthView {
             findNavController().navigate(R.id.action_logInFragment_to_signUpFragment)
         }
 
+        db.googleImg.setOnClickListener{
+            googleSignIn()
+        }
         db.backImage.setOnClickListener{
             findNavController().navigate(R.id.action_logInFragment_to_welcomeScreenFragment)
         }
@@ -49,7 +72,26 @@ class LogInFragment : Fragment(), AuthView {
             presenter.login(email, password)
         }
     }
-
+    private fun googleSignIn() {
+        mGoogleSignInClient?.signOut()?.addOnCompleteListener {
+            val signInIntent = mGoogleSignInClient?.signInIntent
+            googleSignInLauncher.launch(signInIntent)
+        }
+    }
+    private fun handleSignInResult(result: ActivityResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            try {
+                val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).getResult(ApiException::class.java)
+                account?.let {
+                    presenter.signInWithGoogle(it)
+                }
+            } catch (e: ApiException) {
+                showToast("Google sign-in failed: ${e.message}")
+            }
+        }
+        else
+            showToast("Failed")
+    }
     override fun showLoading() {
         db.progressBar.visibility = View.VISIBLE
         db.loginButton.isEnabled = false
