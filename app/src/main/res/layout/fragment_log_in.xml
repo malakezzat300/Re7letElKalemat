@@ -9,7 +9,7 @@
         tools:context=".LogInFragment">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/backImage"
             android:layout_width="42dp"
             android:layout_height="47dp"
             android:layout_marginStart="32dp"
@@ -29,21 +29,21 @@
             android:background="@drawable/rounded_corners"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView" />
+            app:layout_constraintTop_toBottomOf="@id/backImage" />
 
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/noAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="ليس لدي حساب"
+            android:text="@string/noAccount"
             android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            app:layout_constraintTop_toBottomOf="@+id/googleImg" />
 
         <TextView
             android:id="@+id/textView"
@@ -109,21 +109,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="او سجل دخولك بواسطة"
+            android:text="@string/logInUsing"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintBottom_toTopOf="@+id/googleImg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/googleImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="40dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            app:layout_constraintBottom_toTopOf="@+id/noAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
