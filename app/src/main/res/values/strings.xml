@@ -2,4 +2,14 @@
     <string name="app_name">Re7let El Kalemat</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcom_titel">أهلًا وسهلًا بك في تطبيق رحلة الكلمات</string>
+    <string name="welcome_text">أهلًا بك في رحلتك الممتعة لاستكشاف جمال اللغة العربية! انطلق الآن واكتشف كلمات جديدة من مختلف المدن العربية. سجل الدخول أو أنشئ حسابًا جديدًا لتبدأ مغامرتك اللغوية.</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="signup">انشاء حساب جديد</string>
+    <string name="LogIn">تسجيل الدخول</string>
+    <string name="password_hint">كلمة السر</string>
+    <string name="email_hint">البريد الالكتروني</string>
+    <string name="noAccount">ليس لدي حساب</string>
+    <string name="logInUsing">او سجل دخولك بواسطة</string>
+    <string name="default_web_client_id">695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com</string>
 </resources>
