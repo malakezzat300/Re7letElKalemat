@@ -8,4 +8,12 @@
      android:id="@+id/acc_icon_bottom_nav_bar"
      android:icon="@drawable/useruiconsvg"
      android:title=""/>
+ <item
+     android:id="@+id/settings_icon_bottom_nav_bar"
+     android:icon="@drawable/settingssvg"
+     android:title=""/>
+ <item
+     android:id="@+id/location_icon_bottom_nav_bar"
+     android:icon="@drawable/locationsvg"
+     android:title=""/>
 </menu>

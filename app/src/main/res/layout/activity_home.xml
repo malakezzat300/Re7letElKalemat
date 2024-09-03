@@ -15,7 +15,7 @@
         app:itemBackground="@drawable/test"
         app:menu="@menu/bottommenu"
         android:background="@drawable/bottom_nav_bar_shap"
-        app:itemIconSize="50dp"
+        app:itemIconSize="40dp"
        app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
