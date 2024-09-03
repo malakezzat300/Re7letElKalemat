@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background"
-        android:padding="24dp"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp"
         >
 <androidx.constraintlayout.widget.Guideline
     android:id="@+id/guid_line"
@@ -16,6 +17,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     app:layout_constraintGuide_begin="120dp"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guid_line2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="640dp"/>
 
         <TextView
             android:id="@+id/textView2"
@@ -26,6 +33,7 @@
             android:textColor="@color/darkGray"
             android:textSize="28sp"
             android:fontFamily="@font/app"
+            app:layout_constraintBottom_toTopOf="@id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guid_line" />
@@ -64,7 +72,8 @@
             android:layout_height="wrap_content"
             android:text="@string/signup"
             style="@style/GeneralButton"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toBottomOf="@id/guid_line2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signInBtn" />
