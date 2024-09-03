@@ -12,7 +12,20 @@
           "package_name": "com.malakezzat.re7letelkalemat"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "695111487083-70b9r8mldc06msjhi8u7mjst7004usuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "ca467811d85b2d15afb65ae2ddedd714dddf02bc"
+          }
+        },
+        {
+          "client_id": "695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBM0YoLdlw75T5Sb5Tcjn3PG0JZTUhLUCA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
