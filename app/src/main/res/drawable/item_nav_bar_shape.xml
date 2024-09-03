@@ -7,7 +7,7 @@
             android:insetBottom="8dp">
             <shape android:shape="rectangle">
                 <corners  android:radius="27dp" />
-                <stroke android:width="2dp" android:color="#1A5024" />
+                <stroke android:width="2dp" android:color="#144427" />
                 <solid android:color="@color/rect" /> <!-- Color when selected -->
             </shape>
         </inset>
@@ -20,7 +20,7 @@
             android:insetBottom="8dp">
             <shape android:shape="rectangle">
                 <corners android:radius="27dp" />
-                <stroke android:width="2dp" android:color="#1A5024" />
+                <stroke android:width="2dp" android:color="#144427" />
                 <solid android:color="@color/rect" /> <!-- Default color when not selected -->
             </shape>
         </inset>
