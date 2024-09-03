@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "695111487083",
+    "project_id": "re7letelkalemat",
+    "storage_bucket": "re7letelkalemat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695111487083:android:6ee57fceb800e772132b2e",
+        "android_client_info": {
+          "package_name": "com.malakezzat.re7letelkalemat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695111487083-70b9r8mldc06msjhi8u7mjst7004usuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "ca467811d85b2d15afb65ae2ddedd714dddf02bc"
+          }
+        },
+        {
+          "client_id": "695111487083-ghfipgunddf90rsps9a825qjg1dmflnu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "860a736b1d3243f4873267758fd2a7a3c1810527"
+          }
+        },
+        {
+          "client_id": "695111487083-kdje5h4lh3r9qk6kvrd6q1q4ve4md4ge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "6b7ee568216b1ccd82471dc04e966fdd553d1734"
+          }
+        },
+        {
+          "client_id": "695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM0YoLdlw75T5Sb5Tcjn3PG0JZTUhLUCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
