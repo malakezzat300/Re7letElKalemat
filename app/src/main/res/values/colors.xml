@@ -4,5 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorSecondary">#FFAA00</color>
     <color name="darkGray">#1F1F1F</color>
-    <color name="semi_transparent_white">#99FFFFFF</color> <!-- 60% opacity white -->
+    <color name="semi_transparent_white">#99FFFFFF</color>
 </resources>
