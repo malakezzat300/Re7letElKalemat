@@ -6,4 +6,9 @@
     <string name="welcome_text">أهلًا بك في رحلتك الممتعة لاستكشاف جمال اللغة العربية! انطلق الآن واكتشف كلمات جديدة من مختلف المدن العربية. سجل الدخول أو أنشئ حسابًا جديدًا لتبدأ مغامرتك اللغوية.</string>
     <string name="login">تسجيل الدخول</string>
     <string name="signup">انشاء حساب جديد</string>
+    <string name="LogIn">تسجيل الدخول</string>
+    <string name="password_hint">كلمة السر</string>
+    <string name="email_hint">البريد الالكتروني</string>
+    <string name="noAccount">ليس لدي حساب</string>
+    <string name="logInUsing">او سجل دخولك بواسطة</string>
 </resources>
