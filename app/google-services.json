@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "695111487083-ghfipgunddf90rsps9a825qjg1dmflnu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "860a736b1d3243f4873267758fd2a7a3c1810527"
+          }
+        },
+        {
+          "client_id": "695111487083-kdje5h4lh3r9qk6kvrd6q1q4ve4md4ge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malakezzat.re7letelkalemat",
+            "certificate_hash": "6b7ee568216b1ccd82471dc04e966fdd553d1734"
+          }
+        },
+        {
           "client_id": "695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com",
           "client_type": 3
         }

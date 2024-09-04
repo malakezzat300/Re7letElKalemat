@@ -1,26 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".HomeActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        style="@null"
-        android:layout_width="0dp"
-        android:layout_height="59dp"
-        android:background="@drawable/bottom_nav_bar_shap"
-        android:theme="@null"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        app:itemActiveIndicatorStyle="@null"
-        app:itemBackground="@drawable/item_nav_bar_shape"
-        app:itemIconSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottommenu" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Custom Diagonal ScrollView -->
+        <com.malakezzat.re7letelkalemat.View.DiagonalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:overScrollMode="never">
+
+            <!-- HorizontalScrollView for horizontal scrolling -->
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/home" />
+            </HorizontalScrollView>
+        </com.malakezzat.re7letelkalemat.View.DiagonalScrollView>
+
+        <!-- Your content layout on top of the background -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- BottomNavigationView -->
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:layout_width="0dp"
+                android:layout_height="59dp"
+                android:background="@drawable/bottom_nav_bar_shap"
+                android:theme="@null"
+                app:itemActiveIndicatorStyle="@null"
+                app:itemBackground="@drawable/item_nav_bar_shape"
+                app:itemIconSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/bottommenu" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
