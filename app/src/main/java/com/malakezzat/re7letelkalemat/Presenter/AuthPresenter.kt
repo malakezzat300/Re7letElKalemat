@@ -44,7 +44,7 @@ class AuthPresenter(view: AuthView, model: AuthModel) {
         }
 
         view.showLoading()
-        model.createUserWithEmailAndPassword(email, password) { task ->
+        model.createUserWithEmailAndPassword(user,email, password) { task ->
             view.hideLoading()
             if (task.isSuccessful()) {
                 model.saveLoginState(email)
