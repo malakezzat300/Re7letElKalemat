@@ -1,12 +1,15 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentWelcomeScreenBinding
 
@@ -16,9 +19,17 @@ class WelcomeScreenFragment : Fragment() {
     lateinit var signInBtn: Button
     lateinit var signUpBtn: Button
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onStart() {
+        super.onStart()
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        if(currentUser != null) {
+            val intent = Intent(requireContext(), HomeActivity::class.java)
+            currentUser.email?.let {
+                intent.putExtra("user_email", it)
+            }
+            startActivity(intent)
+            requireActivity().finish()
+        }
     }
 
     override fun onCreateView(
