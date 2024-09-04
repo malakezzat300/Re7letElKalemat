@@ -14,4 +14,9 @@
     <string name="default_web_client_id">695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com</string>
     <string name="haveAccount">أمتلك حساب بالفعل</string>
     <string name="username">اسم المستخدم</string>
+    <string name="settings">الإعدادات</string>
+    <string name="notification">الإشعارات</string>
+    <string name="night_mode">الوضع الداكن</string>
+    <string name="help_center">مركز المساعدة</string>
+    <string name="contact_us">تواصل معانا</string>
 </resources>
