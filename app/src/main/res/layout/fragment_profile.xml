@@ -53,7 +53,7 @@
 
 
     <LinearLayout
-        android:id="@+id/levelProfile"
+        android:id="@+id/level_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -83,18 +83,18 @@
         android:layout_height="2dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        app:layout_constraintTop_toBottomOf="@id/levelProfile"
+        app:layout_constraintTop_toBottomOf="@id/level_button"
         app:dividerColor="#BC9C9C9C"
         />
     <LinearLayout
-        android:id="@+id/friendsLayout"
+        android:id="@+id/friends_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
         android:gravity="center"
         android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/levelProfile"
+        app:layout_constraintTop_toBottomOf="@id/level_button"
         >
 
         <TextView
@@ -117,18 +117,18 @@
         android:layout_height="2dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        app:layout_constraintTop_toBottomOf="@id/friendsLayout"
+        app:layout_constraintTop_toBottomOf="@id/friends_button"
         app:dividerColor="#BC9C9C9C"
         />
     <LinearLayout
-        android:id="@+id/editLayout"
+        android:id="@+id/edit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
         android:gravity="center"
         android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/friendsLayout"
+        app:layout_constraintTop_toBottomOf="@id/friends_button"
         >
 
         <TextView
@@ -152,17 +152,18 @@
         android:layout_height="2dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        app:layout_constraintTop_toBottomOf="@id/editLayout"
+        app:layout_constraintTop_toBottomOf="@id/edit_button"
         app:dividerColor="#BC9C9C9C"
         />
     <LinearLayout
+        android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
         android:gravity="center"
         android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/editLayout"
+        app:layout_constraintTop_toBottomOf="@id/edit_button"
         >
 
         <TextView
