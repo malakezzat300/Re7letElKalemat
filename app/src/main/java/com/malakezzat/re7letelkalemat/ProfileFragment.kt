@@ -1,24 +1,23 @@
 package com.malakezzat.re7letelkalemat
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.malakezzat.re7letelkalemat.View.AuthActivity
+import com.malakezzat.re7letelkalemat.View.EditProfileActivity
+import com.malakezzat.re7letelkalemat.databinding.FragmentProfileBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
 
-
+    lateinit var db: FragmentProfileBinding
+    lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,18 +27,51 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        db = FragmentProfileBinding.inflate(layoutInflater)
+        return db.root
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        auth = FirebaseAuth.getInstance()
+
+        Glide.with(view.context).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
+            .apply(RequestOptions().override(200, 200))
+            .placeholder(R.drawable.vector__1_)
+            .into(db.profileImg)
+        db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
+
+        db.levelButton.setOnClickListener {
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+        }
+        db.friendsButton.setOnClickListener {
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+        }
+        db.editButton.setOnClickListener {
+            val intent = Intent(context, EditProfileActivity::class.java)
+            startActivity(intent)
+        }
+        db.logoutButton.setOnClickListener {
+            auth.signOut()
+            val intent = Intent(
+                view.context,
+                AuthActivity::class.java
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            activity?.finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.let {
+            Glide.with(it).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
+                .apply(RequestOptions().override(200, 200))
+                .placeholder(R.drawable.vector__1_)
+                .into(db.profileImg)
+        }
+        db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
+
     }
 }
