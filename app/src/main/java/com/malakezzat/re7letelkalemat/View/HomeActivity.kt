@@ -3,7 +3,11 @@ package com.malakezzat.re7letelkalemat.View
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.malakezzat.re7letelkalemat.R
 import com.google.firebase.auth.FirebaseAuth
 import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
@@ -11,19 +15,16 @@ import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
 class HomeActivity : AppCompatActivity() {
 
     lateinit var db: ActivityHomeBinding
-    lateinit var lottiePin :  LottieAnimationView
+    private lateinit var navController: NavController
+    lateinit var  bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(db.root)
-        lottiePin = db.lottieAnimation1
-        lottiePin .setOnClickListener{
-            Toast.makeText(this, "Lottie Animation 1 clicked", Toast.LENGTH_SHORT).show()
-        }
-        /*findViewById<LottieAnimationView>(R.id.lottieAnimation1).setOnClickListener {
+        navController = findNavController(R.id.nav_host_home_fragment)
+        bottomNavigationView = db.bottomNavigation
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
-            Toast.makeText(this, "Lottie Animation 1 clicked", Toast.LENGTH_SHORT).show()
-        }*/
     }
 
 }
