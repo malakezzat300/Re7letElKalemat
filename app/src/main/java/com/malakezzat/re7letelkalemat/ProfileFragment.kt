@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.malakezzat.re7letelkalemat.View.AuthActivity
 import com.malakezzat.re7letelkalemat.View.EditProfileActivity
@@ -36,7 +36,7 @@ class ProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         Glide.with(view.context).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
-            .apply(RequestOptions().override(200, 200))
+            .apply(com.bumptech.glide.request.RequestOptions().override(200, 200))
             .placeholder(R.drawable.vector__1_)
             .into(db.profileImg)
         db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         super.onResume()
         context?.let {
             Glide.with(it).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
-                .apply(RequestOptions().override(200, 200))
+                .apply(com.bumptech.glide.request.RequestOptions().override(200, 200))
                 .placeholder(R.drawable.vector__1_)
                 .into(db.profileImg)
         }
