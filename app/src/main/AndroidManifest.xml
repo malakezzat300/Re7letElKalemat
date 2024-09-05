@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Re7letElKalemat"
         tools:targetApi="31">
         <activity
+            android:name=".View.EditProfileActivity"
+            android:exported="false"/>
+        <activity
             android:name=".View.HomeActivity"
             android:exported="false">
         </activity>

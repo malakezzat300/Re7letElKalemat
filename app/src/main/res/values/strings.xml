@@ -26,5 +26,11 @@
     <string name="night_mode">الوضع الداكن</string>
     <string name="help_center">مركز المساعدة</string>
     <string name="contact_us">تواصل معانا</string>
-
+    <string name="choose_image">اختار صورة من الهاتف</string>
+    <string name="new_name">ادخل اسم جديد</string>
+    <string name="change_name">تغيير الأسم</string>
+    <string name="change_image_done">تم تغيير الصورة</string>
+    <string name="change_image_failed">فشل تغيير الصورة</string>
+    <string name="change_name_done">تم تغيير الأسم</string>
+    <string name="change_name_failed">فشل تغيير الأسم</string>
 </resources>

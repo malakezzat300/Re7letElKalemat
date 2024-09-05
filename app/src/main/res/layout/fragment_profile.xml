@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/ProfilebackImage"
-        android:layout_width="42dp"
-        android:layout_height="47dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="32dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImg"
         android:layout_width="100dp"
         android:layout_height="100dp"
