@@ -9,8 +9,8 @@
     tools:context=".View.ScoreFragment">
 
     <com.google.android.material.chip.ChipGroup
-        android:layout_width="309dp"
-        android:layout_height="wrap_content"
+        android:layout_width="325dp"
+        android:layout_height="72dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,24 +28,28 @@
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/item_nav_bar_shape"
                 android:checkable="true"
-
-                android:text="@string/Daily" />
+                android:text="@string/Daily"
+                app:chipBackgroundColor="@null" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
+                android:layout_height="match_parent"
+                android:foreground="@drawable/item_nav_bar_shape"
+                app:chipCornerRadius="50dp"
                 android:layout_weight="1"
+                app:chipBackgroundColor="@null"
                 android:checkable="true"
                 android:text="@string/weekly" />
 
             <com.google.android.material.chip.Chip
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
+                android:layout_height="match_parent"
+                app:chipBackgroundColor="@null"
+                android:backgroundTint="@drawable/item_nav_bar_shape"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:text="@string/monthly" />
