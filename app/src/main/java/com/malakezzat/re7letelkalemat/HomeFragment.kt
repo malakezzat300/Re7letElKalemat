@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.View.onCityPressed1
 import com.malakezzat.re7letelkalemat.databinding.FragmentHomeBinding
+import com.malakezzat.re7letelkalemat.databinding.FragmentProfileBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,8 +31,8 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        db = FragmentHomeBinding.inflate(layoutInflater)
+        return db.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
