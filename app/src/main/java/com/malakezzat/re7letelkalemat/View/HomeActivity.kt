@@ -1,5 +1,6 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ class HomeActivity : AppCompatActivity() {
     lateinit var db: ActivityHomeBinding
     private lateinit var navController: NavController
     lateinit var  bottomNavigationView: BottomNavigationView
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityHomeBinding.inflate(layoutInflater)
@@ -24,7 +27,13 @@ class HomeActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_home_fragment)
         bottomNavigationView = db.bottomNavigation
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        mediaPlayer = MediaPlayer.create(this, R.raw.mosta3ed)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mediaPlayer.start()
     }
 
 }
