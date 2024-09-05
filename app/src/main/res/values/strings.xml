@@ -33,4 +33,6 @@
     <string name="change_image_failed">فشل تغيير الصورة</string>
     <string name="change_name_done">تم تغيير الأسم</string>
     <string name="change_name_failed">فشل تغيير الأسم</string>
+    <string name="my_personal_card">الكروت الخاصة بك </string>
+
 </resources>
