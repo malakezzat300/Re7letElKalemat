@@ -11,7 +11,20 @@
     <string name="email_hint">البريد الالكتروني</string>
     <string name="noAccount">ليس لدي حساب</string>
     <string name="logInUsing">او سجل دخولك بواسطة</string>
+    <string name="level">مستوى التقدم</string>
+    <string name="friends">الأصدقاء</string>
+    <string name="editeProfile">تعديل الاسم والصوره</string>
+    <string name="logout">تسجيل الخروج</string>
     <string name="default_web_client_id">695111487083-sugli3r7urhb073ngd1469thk04b8ls3.apps.googleusercontent.com</string>
     <string name="haveAccount">أمتلك حساب بالفعل</string>
     <string name="username">اسم المستخدم</string>
+    <string name="weekly">اسبوعيا</string>
+    <string name="Daily">يوميا</string>
+    <string name="monthly">شهريا</string>
+    <string name="settings">الإعدادات</string>
+    <string name="notification">الإشعارات</string>
+    <string name="night_mode">الوضع الداكن</string>
+    <string name="help_center">مركز المساعدة</string>
+    <string name="contact_us">تواصل معانا</string>
+
 </resources>

@@ -2,6 +2,9 @@ package com.malakezzat.re7letelkalemat.Presenter
 
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.malakezzat.re7letelkalemat.Model.AuthModel
 import com.malakezzat.re7letelkalemat.View.Interfaces.AuthView
 
@@ -44,12 +47,17 @@ class AuthPresenter(view: AuthView, model: AuthModel) {
         }
 
         view.showLoading()
-        model.createUserWithEmailAndPassword(email, password) { task ->
+        model.createUserWithEmailAndPassword(user,email, password) { task ->
             view.hideLoading()
             if (task.isSuccessful()) {
                 model.saveLoginState(email)
                 view.navigateToHome(email)
                 view.showToast("Sign Up Successful")
+                val user1: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(user)
+                    .build()
+                user1?.updateProfile(profileUpdates)
             } else {
                 view.showToast("Sign Up Failed")
             }

@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
+import com.google.firebase.auth.FirebaseAuth
 import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
