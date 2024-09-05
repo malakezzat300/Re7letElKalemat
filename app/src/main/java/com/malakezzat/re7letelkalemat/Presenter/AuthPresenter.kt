@@ -2,6 +2,9 @@ package com.malakezzat.re7letelkalemat.Presenter
 
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.malakezzat.re7letelkalemat.Model.AuthModel
 import com.malakezzat.re7letelkalemat.View.Interfaces.AuthView
 
@@ -11,11 +14,11 @@ class AuthPresenter(view: AuthView, model: AuthModel) {
 
     fun login(email: String, password: String) {
         if (email.isEmpty()) {
-            view.setEmailError("Email is required")
+            view.setEmailError("البريد الإلكتروني مطلوب")
             return
         }
         if (password.isEmpty()) {
-            view.setPasswordError("Password is required")
+            view.setPasswordError("كلمة السر مطلوبة")
             return
         }
 
@@ -23,35 +26,38 @@ class AuthPresenter(view: AuthView, model: AuthModel) {
         model.signInWithEmailAndPassword(email, password) { task ->
             view.hideLoading()
             if (task.isSuccessful()) {
-                model.saveLoginState(email)
                 view.navigateToHome(email)
-                view.showToast("Login Successful")
+                view.showToast("تسجيل الدخول ناجح")
             } else {
-                view.showToast("Login Failed")
+                view.showToast("فشل تسجيل الدخول")
             }
         }
     }
 
     fun signUp(user: String, email: String, password: String, confirmPassword: String) {
         if (user.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            view.showToast("Please fill out all fields.")
+            view.showToast("يرجى ملء جميع الحقول.")
             return
         }
 
         if (password != confirmPassword) {
-            view.showToast("Passwords do not match.")
+            view.showToast("كلمات المرور غير متطابقة.")
             return
         }
 
         view.showLoading()
-        model.createUserWithEmailAndPassword(email, password) { task ->
+        model.createUserWithEmailAndPassword(user,email, password) { task ->
             view.hideLoading()
             if (task.isSuccessful()) {
-                model.saveLoginState(email)
                 view.navigateToHome(email)
-                view.showToast("Sign Up Successful")
+                view.showToast("التسجيل ناجح")
+                val user1: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setDisplayName(user)
+                    .build()
+                user1?.updateProfile(profileUpdates)
             } else {
-                view.showToast("Sign Up Failed")
+                view.showToast("فشل التسجيل")
             }
         }
     }
@@ -59,11 +65,10 @@ class AuthPresenter(view: AuthView, model: AuthModel) {
     fun signInWithGoogle(account: GoogleSignInAccount) {
         model.signInWithGoogle(account) { task ->
             if (task.isSuccessful()) {
-                model.saveLoginState(account.email)
                 view.navigateToHome(account.email)
-                view.showToast("Welcome " + account.displayName)
+                view.showToast("مرحباً " + account.displayName)
             } else {
-                view.showToast("Google sign-in failed.")
+                view.showToast("فشل تسجيل الدخول باستخدام جوجل.")
             }
         }
     }

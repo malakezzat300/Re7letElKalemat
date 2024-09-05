@@ -13,10 +13,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [Profile.newInstance] factory method to
+ * Use the [ProfileFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Profile : Fragment() {
+class ProfileFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class Profile : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            Profile().apply {
+            ProfileFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
