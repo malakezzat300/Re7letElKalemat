@@ -13,7 +13,7 @@
         android:icon="@drawable/mysettisvg"
         android:title="" />
     <item
-        android:id="@+id/myCardsFragment"
+        android:id="@+id/myCardFragment"
         android:icon="@drawable/cards"
         android:title="" />
 </menu>
