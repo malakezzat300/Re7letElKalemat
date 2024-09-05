@@ -18,7 +18,6 @@ class HomeActivity : AppCompatActivity() {
     lateinit var db: ActivityHomeBinding
     private lateinit var navController: NavController
     lateinit var  bottomNavigationView: BottomNavigationView
-    private lateinit var mediaPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +26,7 @@ class HomeActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_home_fragment)
         bottomNavigationView = db.bottomNavigation
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-        mediaPlayer = MediaPlayer.create(this, R.raw.mosta3ed)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mediaPlayer.start()
     }
 
 }
