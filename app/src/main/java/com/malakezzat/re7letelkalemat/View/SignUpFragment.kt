@@ -89,7 +89,7 @@ class SignUpFragment : Fragment(), AuthView {
             }
         }
         else
-            showToast("فشل")
+            showToast("فشل تسجيل الدخول بحساب جوجل")
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,6 +109,10 @@ class SignUpFragment : Fragment(), AuthView {
         db.loginButton.isEnabled = true
     }
 
+    override fun showToast(message: String?) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun navigateToHome(email: String?) {
         val intent = Intent(requireContext(), HomeActivity::class.java)
         email?.let {
@@ -118,17 +122,12 @@ class SignUpFragment : Fragment(), AuthView {
         requireActivity().finish()
     }
 
-
-    override fun setEmailError(error: String) {
+    override fun setEmailError(error: String?) {
         db.usernameEditText.error = error
     }
 
-    override fun setPasswordError(error: String) {
+    override fun setPasswordError(error: String?) {
         db.passwordEditText.error = error
-    }
-
-    override fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
 }
