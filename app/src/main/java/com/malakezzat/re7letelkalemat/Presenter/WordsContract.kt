@@ -4,11 +4,15 @@ import com.malakezzat.re7letelkalemat.Model.Word
 
 interface WordsContract {
     interface View {
-        fun showWords(words: List<Word>)
+        fun showWords(words:Word)
         fun showError(message: String)
+        fun showSuccess()
+        fun showFail()
+        fun check()
     }
 
     interface Presenter {
         fun loadWords()
+        fun check(v:List<String>)
     }
 }
