@@ -39,6 +39,8 @@
     <string name="klma">" الكلمة : "</string>
     <string name="worng_answer">"خطأ في الكلمة "</string>
     <string name="right_answer">"الكلمة صحيحة "</string>
+    <string name="after_failing_in_game">لقد خسرت هذه المرة.\nيمكنك مراجعة الكلمات والعودة مرة أخرى عند انتهاء الوقت المحدد.</string>
+    <string name="congrates">مبارك نجاحك يا  </string>
 
 
 </resources>
