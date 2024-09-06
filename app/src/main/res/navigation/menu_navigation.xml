@@ -16,7 +16,7 @@
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/profileFragment2"
-        android:name="com.malakezzat.re7letelkalemat.ProfileFragment"
+        android:name="com.malakezzat.re7letelkalemat.View.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment

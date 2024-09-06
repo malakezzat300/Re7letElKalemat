@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -30,14 +33,21 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
 
+        Glide.with(view.context).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
+            .apply(com.bumptech.glide.request.RequestOptions().override(200, 200))
+            .placeholder(R.drawable.vector__1_)
+            .into(db.profileImg)
+        db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
+
         db.levelButton.setOnClickListener {
-            TODO("nav to level screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
         db.friendsButton.setOnClickListener {
-            TODO("nav to friends screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
         db.editButton.setOnClickListener {
-            TODO("nav to edit name and photo screen")
+            val intent = Intent(context, EditProfileActivity::class.java)
+            startActivity(intent)
         }
         db.logoutButton.setOnClickListener {
             auth.signOut()
@@ -45,8 +55,22 @@ class ProfileFragment : Fragment() {
                 view.context,
                 AuthActivity::class.java
             )
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            activity?.finish()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.let {
+            Glide.with(it).load(FirebaseAuth.getInstance().currentUser?.photoUrl)
+                .apply(com.bumptech.glide.request.RequestOptions().override(200, 200))
+                .placeholder(R.drawable.vector__1_)
+                .into(db.profileImg)
+        }
+        db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
+
     }
 }

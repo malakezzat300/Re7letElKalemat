@@ -92,6 +92,10 @@ class EditProfileActivity : AppCompatActivity() {
             }
         }
 
+        db.backImage.setOnClickListener {
+            finish()
+        }
+
 
     }
 
