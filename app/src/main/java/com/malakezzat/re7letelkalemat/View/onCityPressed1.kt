@@ -5,14 +5,10 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityOnCityPressed1Binding
-import com.malakezzat.re7letelkalemat.databinding.ActivitySplashBinding
 
 class onCityPressed1 : AppCompatActivity() {
     private lateinit var db: ActivityOnCityPressed1Binding
@@ -44,7 +40,7 @@ class onCityPressed1 : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
                 splashAnimation.cancelAnimation()
-                val intent = Intent(this@onCityPressed1, HomeActivity::class.java)
+                val intent = Intent(this@onCityPressed1, OnCityPressed2::class.java)
                 startActivity(intent)
                 finish()
             }
