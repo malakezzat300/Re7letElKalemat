@@ -31,7 +31,7 @@ class OnCityPressed2 : AppCompatActivity() {
             val intent = Intent(this@OnCityPressed2, HomeActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+        }, 9000)
 
 
     }
