@@ -19,7 +19,13 @@
 
         </activity>
         <activity
-            android:name=".onCityPressed2"
+            android:name=".View.AfterSuccessInGame"
+            android:exported="false" />
+        <activity
+            android:name=".View.AfterFailingInGameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".View.OnCityPressed2"
             android:exported="false" />
         <activity
             android:name=".View.EditProfileActivity"

@@ -5,6 +5,16 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onCityPressed2">
-
+    android:background="@drawable/background"
+    tools:context=".View.OnCityPressed2">
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationCity2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_rawRes="@raw/plane"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

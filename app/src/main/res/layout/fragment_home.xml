@@ -9,45 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Custom Diagonal ScrollView -->
-        <com.malakezzat.re7letelkalemat.View.DiagonalScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never">
+            android:layout_height="match_parent">
 
-            <!-- HorizontalScrollView for horizontal scrolling -->
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="matrix"
+                android:src="@drawable/home"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/home"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/lottieAnimation1"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:lottie_rawRes="@raw/pin"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </HorizontalScrollView>
-        </com.malakezzat.re7letelkalemat.View.DiagonalScrollView>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimation1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_rawRes="@raw/pin"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
