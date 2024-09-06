@@ -35,6 +35,7 @@
     <string name="change_name_failed">فشل تغيير الأسم</string>
     <string name="my_personal_card">الكروت الخاصة بك </string>
     <string name="after_failing_in_game">لقد خسرت هذه المرة.\nيمكنك مراجعة الكلمات والعودة مرة أخرى عند انتهاء الوقت المحدد.</string>
+    <string name="congrates">مبارك نجاحك يا  </string>
 
 
 </resources>
