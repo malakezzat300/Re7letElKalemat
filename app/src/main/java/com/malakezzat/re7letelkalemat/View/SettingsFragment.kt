@@ -30,23 +30,19 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db.notificationButton.setOnClickListener {
-            Toast.makeText(context,"notification",Toast.LENGTH_SHORT).show()
-            TODO("notification screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
         db.nightButton.setOnClickListener {
-            Toast.makeText(context,"night",Toast.LENGTH_SHORT).show()
-            TODO("night screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
         db.helpCenterButton.setOnClickListener {
-            Toast.makeText(context,"helpCenter",Toast.LENGTH_SHORT).show()
-            TODO("helpCenter screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
         db.contactUsButton.setOnClickListener {
-            Toast.makeText(context,"contactUs",Toast.LENGTH_SHORT).show()
-            TODO("contactUs screen")
+            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
         }
     }
 }

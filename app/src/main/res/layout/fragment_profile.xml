@@ -5,19 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background"
-    tools:context=".ProfileFragment">
+    tools:context=".View.ProfileFragment">
 
-    <ImageView
-        android:id="@+id/ProfilebackImage"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="32dp"
-        android:src="@drawable/back"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImg"
         android:layout_width="100dp"
