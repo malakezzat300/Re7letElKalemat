@@ -34,5 +34,11 @@
     <string name="change_name_done">تم تغيير الأسم</string>
     <string name="change_name_failed">فشل تغيير الأسم</string>
     <string name="my_personal_card">الكروت الخاصة بك </string>
+    <string name="make_sentance">كون جملة مفيدة</string>
+    <string name="ma3na">"المعني : "</string>
+    <string name="klma">" الكلمة : "</string>
+    <string name="worng_answer">"خطأ في الكلمة "</string>
+    <string name="right_answer">"الكلمة صحيحة "</string>
+
 
 </resources>
