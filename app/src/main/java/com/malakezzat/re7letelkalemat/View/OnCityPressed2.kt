@@ -20,18 +20,19 @@ class OnCityPressed2 : AppCompatActivity() {
         binding = ActivityOnCityPressed2Binding.inflate(layoutInflater)
         setContentView(binding.root)
         lottieAnimation = binding.animationCity2
+        lottieAnimation.playAnimation()
+        Handler(Looper.getMainLooper()).postDelayed({
 
+            val intent = Intent(this@OnCityPressed2, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }, 4000)
 
     }
 
     override fun onResume() {
         super.onResume()
-        Handler().postDelayed({
-          lottieAnimation.playAnimation()
-            val intent = Intent(this@OnCityPressed2, HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 9000)
+
 
 
     }
