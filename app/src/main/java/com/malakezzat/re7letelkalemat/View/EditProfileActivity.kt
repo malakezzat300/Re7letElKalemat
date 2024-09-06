@@ -1,14 +1,16 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.content.ContentResolver
+import android.content.Context
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly
+import androidx.annotation.AnyRes
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -17,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityEditProfileBinding
-import androidx.activity.result.PickVisualMediaRequest.Builder
+
 
 class EditProfileActivity : AppCompatActivity() {
     lateinit var db: ActivityEditProfileBinding
@@ -96,6 +98,85 @@ class EditProfileActivity : AppCompatActivity() {
             finish()
         }
 
+        db.girl1Button.setOnClickListener {
+            val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + '/' + getResources().getResourceTypeName(R.drawable.girl1) + '/' + getResources().getResourceEntryName(R.drawable.girl1) )
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_done), Toast.LENGTH_SHORT).show()
+                        Glide.with(applicationContext)
+                            .load(user.photoUrl)
+                            .apply(RequestOptions().override(200, 200))
+                            .placeholder(R.drawable.vector__1_)
+                            .into(db.profileImg)
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        db.girl2Button.setOnClickListener {
+            val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + '/' + getResources().getResourceTypeName(R.drawable.girl2) + '/' + getResources().getResourceEntryName(R.drawable.girl2) )
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_done), Toast.LENGTH_SHORT).show()
+                        Glide.with(applicationContext)
+                            .load(user.photoUrl)
+                            .apply(RequestOptions().override(200, 200))
+                            .placeholder(R.drawable.vector__1_)
+                            .into(db.profileImg)
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        db.boy1Button.setOnClickListener {
+            val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + '/' + getResources().getResourceTypeName(R.drawable.boy1) + '/' + getResources().getResourceEntryName(R.drawable.boy1) )
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_done), Toast.LENGTH_SHORT).show()
+                        Glide.with(applicationContext)
+                            .load(user.photoUrl)
+                            .apply(RequestOptions().override(200, 200))
+                            .placeholder(R.drawable.vector__1_)
+                            .into(db.profileImg)
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+
+        db.boy2Button.setOnClickListener {
+            val uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + '/' + getResources().getResourceTypeName(R.drawable.boy2) + '/' + getResources().getResourceEntryName(R.drawable.boy2) )
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build()
+            user?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_done), Toast.LENGTH_SHORT).show()
+                        Glide.with(applicationContext)
+                            .load(user.photoUrl)
+                            .apply(RequestOptions().override(200, 200))
+                            .placeholder(R.drawable.vector__1_)
+                            .into(db.profileImg)
+                    } else {
+                        Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
 
     }
 
