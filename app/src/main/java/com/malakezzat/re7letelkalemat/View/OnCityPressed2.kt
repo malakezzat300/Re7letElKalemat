@@ -27,13 +27,8 @@ class OnCityPressed2 : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Handler().postDelayed({
-            // Start the MainActivity
-//            val intent: Intent = if (currentUser != null) {
-//                
-//                Intent(this@OnCityPressed2, HomeActivity::class.java)
-//            } else {
-//                Intent(this@OnCityPressed2, MainActivity::class.java)
-//            }
+          lottieAnimation.playAnimation()
+            val intent = Intent(this@OnCityPressed2, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }, 3000)
