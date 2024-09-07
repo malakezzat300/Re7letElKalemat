@@ -4,8 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "words")
 data class Word(
-    val word: String,
+    @PrimaryKey val word: String,
     val meaning: String,
     val exampleSentence: String
 ) : Parcelable {

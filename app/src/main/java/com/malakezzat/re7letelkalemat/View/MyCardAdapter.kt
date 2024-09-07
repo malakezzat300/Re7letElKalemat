@@ -5,36 +5,36 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.databinding.ItemPersonalCardBinding
 
-class MyCardAdapter(val e:(cardTitle:String)->Unit) : ListAdapter<String, MyCardAdapter.MyCardViewHolder> (mydiff()){
+class MyCardAdapter(val onItemClick: (Word) -> Unit) : ListAdapter<Word, MyCardAdapter.MyCardViewHolder>(MyDiffCallback()) {
 
-
-    class mydiff:DiffUtil.ItemCallback<String>(){
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-            return oldItem==newItem
+    class MyDiffCallback : DiffUtil.ItemCallback<Word>() {
+        override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
+            return oldItem.word == newItem.word
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
             return oldItem == newItem
         }
-
     }
-    class MyCardViewHolder(val db: ItemPersonalCardBinding): RecyclerView.ViewHolder(db.root)
-    {
-        fun bind(data:String,e:(cardTitle:String)->Unit){
-            db.cardTitle.text=data
-            db.root.setOnClickListener{
-                e(data)
+
+    class MyCardViewHolder(private val binding: ItemPersonalCardBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(wordEntity: Word, onItemClick: (Word) -> Unit) {
+            binding.cardTitle.text = wordEntity.word
+            binding.root.setOnClickListener {
+                onItemClick(wordEntity)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCardViewHolder {
-       return MyCardViewHolder(ItemPersonalCardBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        val binding = ItemPersonalCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyCardViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyCardViewHolder, position: Int) {
-        holder.bind(getItem(position),e)
+        holder.bind(getItem(position), onItemClick)
     }
 }

@@ -71,4 +71,12 @@ dependencies {
     //circle image
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    val room_version = "2.6.1"
+    implementation ("androidx.room:room-ktx:2.6.1")
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
 }
