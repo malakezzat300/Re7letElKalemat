@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Re7letElKalemat"
         tools:targetApi="31" >
         <activity
-            android:name=".View.TestGameActivity"
+            android:name=".View.RearrangeWordGameActivity"
             android:exported="true" >
 
         </activity>
