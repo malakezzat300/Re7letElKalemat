@@ -7,16 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import com.malakezzat.re7letelkalemat.Model.Word
+import com.malakezzat.re7letelkalemat.Model.WordRepository
+import com.malakezzat.re7letelkalemat.Model.wordsList
+import com.malakezzat.re7letelkalemat.Presenter.DatabaseContract
+import com.malakezzat.re7letelkalemat.Presenter.DatabasePresenter
 import com.malakezzat.re7letelkalemat.Presenter.ViewWordsPresenter
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentMyCardBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MyCardFragment : Fragment(), WordsContract.ViewWords {
+class MyCardFragment : Fragment(), DatabaseContract.View {
 
     private lateinit var binding: FragmentMyCardBinding
-    private lateinit var presenter: ViewWordsPresenter
+    private lateinit var presenter: DatabasePresenter
+    private lateinit var wordRepository: WordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,31 +39,19 @@ class MyCardFragment : Fragment(), WordsContract.ViewWords {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize the presenter with this fragment as the view
-        presenter = ViewWordsPresenter(this)
+        wordRepository = WordRepository(requireContext())
+        presenter = DatabasePresenter(this,wordRepository)
 
-        // Load words
-        presenter.loadWords()
-
-        // Setting up RecyclerView with spacing
-        val spacing = resources.displayMetrics.widthPixels / 7
-        binding.myCardRecycler.addItemDecoration(SpacesItemDecoration(spacing, spacing))
-    }
-
-    // Implementing the WordsContract.ViewWords interface methods
-    override fun showWords(words: List<Word>) {
-        val wordStrings = words.map { it.word } // Convert List<Word> to List<String>
-
-        val adapter = MyCardAdapter { word ->
-            // Handle card click
+        val adapter = MyCardAdapter { wordEntity ->
             val intent = Intent(context, CardDetailsActivity::class.java)
             startActivity(intent)
         }
         binding.myCardRecycler.adapter = adapter
-        adapter.submitList(wordStrings) // Submit the list of word strings
-    }
+        presenter.loadAllWords().observe(viewLifecycleOwner){
+            adapter.submitList(it)
+        }
 
-    override fun showError(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        val spacing = resources.displayMetrics.widthPixels / 7
+        binding.myCardRecycler.addItemDecoration(SpacesItemDecoration(spacing, spacing))
     }
 }
