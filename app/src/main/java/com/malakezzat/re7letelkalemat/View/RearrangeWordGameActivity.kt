@@ -35,7 +35,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         set_data()
     }
 
-    override fun showWords(words:Word) {
+    override fun showWord(words:Word) {
         w=words
         db.sentacetextviw.text= w!!.word
         db.m3na.text= w!!.meaning

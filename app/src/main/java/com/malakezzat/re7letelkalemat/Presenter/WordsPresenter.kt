@@ -9,7 +9,7 @@ class WordsPresenter(private val view: WordsContract.View, var w:Word? =null) : 
         try {
             if (w==null)
                     w = wordsList.random()
-            view.showWords(w!!)
+            view.showWord(w!!)
         } catch (e: Exception) {
             view.showError("Error loading words: ${e.message}")
         }
