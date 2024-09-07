@@ -10,4 +10,5 @@
     <color name="my_on_secondary_color">#1F1F1F</color>
     <color name="darkGray">#1F1F1F</color>
     <color name="semi_transparent_white">#99FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
