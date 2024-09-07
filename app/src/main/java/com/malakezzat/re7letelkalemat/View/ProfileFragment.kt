@@ -40,10 +40,10 @@ class ProfileFragment : Fragment() {
         db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
 
         db.levelButton.setOnClickListener {
-            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "قريباً", Toast.LENGTH_SHORT).show()
         }
         db.friendsButton.setOnClickListener {
-            Toast.makeText(context, "Coming soon", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "قريباً", Toast.LENGTH_SHORT).show()
         }
         db.editButton.setOnClickListener {
             val intent = Intent(context, EditProfileActivity::class.java)
