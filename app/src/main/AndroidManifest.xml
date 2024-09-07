@@ -29,7 +29,7 @@
             android:name=".View.AfterSuccessInGame"
             android:exported="false" />
         <activity
-            android:name=".Mecca"
+            android:name=".View.MeccaActivity"
             android:exported="false" />
         <activity
             android:name=".View.SaudiArabiaActivity"

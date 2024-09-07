@@ -5,11 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.malakezzat.re7letelkalemat.Mecca
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivitySaudiArabiaBinding
 
@@ -27,7 +23,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
         },1000)
         Handler(Looper.getMainLooper()).postDelayed({
 
-            val intent = Intent(this@SaudiArabiaActivity, Mecca::class.java)
+            val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
             startActivity(intent)
             finish()
         }, 11800)
