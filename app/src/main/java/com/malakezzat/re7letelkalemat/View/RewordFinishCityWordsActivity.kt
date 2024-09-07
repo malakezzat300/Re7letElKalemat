@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -17,6 +18,9 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
     private lateinit var db: ActivityRewordFinishCityWordsBinding
     private lateinit var splashAnimation: LottieAnimationView
     private lateinit var splashAnimation2: LottieAnimationView
+    private lateinit var button1: Button
+    private lateinit var button2: Button
+
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
 
@@ -26,7 +30,20 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         setContentView(db.root)
         splashAnimation = db.viewAnimator
         splashAnimation2 = db.viewAnimator2
+        button1 = db.firstButton
+        button2 = db.secondButton
         mediaPlayer = MediaPlayer.create(this, R.raw.ready)
+
+        button1.setOnClickListener{
+            val intent = Intent(this, RearrangeWordGameActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        button2.setOnClickListener{
+            val intent = Intent(this, OnCityPressed2::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
     override fun onResume() {
         super.onResume()
@@ -46,11 +63,8 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
                 splashAnimation.cancelAnimation()
-                val intent = Intent(this, OnCityPressed2::class.java)
-                startActivity(intent)
-                finish()
             }
-        }, 9500) // 10.5 seconds total delay
+        }, 7500) // 10.5 seconds total delay
     }
 
     override fun onDestroy() {

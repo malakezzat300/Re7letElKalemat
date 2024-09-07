@@ -2,6 +2,7 @@ package com.malakezzat.re7letelkalemat.View
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -49,10 +50,16 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
     override fun showSuccess() {
         Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.right_answer), Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, AfterSuccessInGame::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun showFail() {
         Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.worng_answer), Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, AfterFailingInGameActivity::class.java)
+        startActivity(intent)
+        finish()
     }
     override fun check() {
         if (chosed.size==data.size){

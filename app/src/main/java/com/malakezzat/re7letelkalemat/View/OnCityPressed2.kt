@@ -23,7 +23,7 @@ class OnCityPressed2 : AppCompatActivity() {
         lottieAnimation.playAnimation()
         Handler(Looper.getMainLooper()).postDelayed({
 
-            val intent = Intent(this@OnCityPressed2, HomeActivity::class.java)
+            val intent = Intent(this@OnCityPressed2, RewordFinishCityWordsActivity::class.java)
             startActivity(intent)
             finish()
         }, 4300)
