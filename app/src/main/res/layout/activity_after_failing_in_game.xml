@@ -28,6 +28,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:layout_height="wrap_content"
         android:paddingHorizontal="16dp"
         android:layout_marginBottom="128dp"
+        android:textColor="@color/darkGray"
         android:text="@string/after_failing_in_game"
         android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
