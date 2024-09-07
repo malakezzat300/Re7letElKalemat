@@ -41,6 +41,8 @@
     <string name="right_answer">"الكلمة صحيحة "</string>
     <string name="after_failing_in_game">لقد خسرت هذه المرة.\nيمكنك مراجعة الكلمات والعودة مرة أخرى عند انتهاء الوقت المحدد.</string>
     <string name="congrates">مبارك نجاحك يا  </string>
+    <string name="next">التالي</string>
+    <string name="meaning_placeholder">معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها معناها</string>
 
 
 </resources>
