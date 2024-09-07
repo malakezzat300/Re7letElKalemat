@@ -6,9 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintProperties
 import androidx.core.animation.doOnEnd
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
@@ -75,6 +78,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             for (i in data) {
                 if (chosed.contains(i)) {
                     val b2 = Button(this@RearrangeWordGameActivity).apply {
+
+                        width= ConstraintProperties.WRAP_CONTENT
+                        background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
                         text = i
                         tag = i
                         visibility = View.VISIBLE
@@ -85,6 +91,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
                             db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
                             val test = Button(this@RearrangeWordGameActivity).apply {
+
+                                background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+
                                 text = i
                                 x = loc[0].toFloat() - l1[0] // Relative X position
                                 y = loc[1].toFloat() - l1[1] // Relative Y position
@@ -113,6 +122,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                     db.sentace.addView(b2)
                 }
                 val btn = Button(this@RearrangeWordGameActivity).apply {
+
+                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+
                     if (chosed.contains(i)) {
                         isEnabled = false
                     } else {
@@ -126,6 +138,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                         db.root.getLocationOnScreen(l1)
                         // Create the second button dynamically
                         val b2 = Button(this@RearrangeWordGameActivity).apply {
+
+                            background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+
                             text = i
                             tag = i
                             visibility = View.INVISIBLE
@@ -136,6 +151,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
                                 db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
                                 val test = Button(this@RearrangeWordGameActivity).apply {
+
+                                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                                    setPadding(0, 0, 0, 0)
                                     text = i
                                     x = loc[0].toFloat() - l1[0] // Relative X position
                                     y = loc[1].toFloat() - l1[1] // Relative Y position
@@ -170,10 +188,11 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                         // Create the test button and set its initial position
                         val test = Button(this@RearrangeWordGameActivity).apply {
+                          background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
                             text = i
                             x = loc[0].toFloat() - l1[0] // Relative X position
                             y = loc[1].toFloat() - l1[1] // Relative Y position
-
+                            setPadding(0, 0, 0, 0)
                         }
                         db.main.addView(test)
 
