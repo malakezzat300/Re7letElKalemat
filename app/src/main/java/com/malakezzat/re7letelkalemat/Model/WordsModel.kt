@@ -1,10 +1,46 @@
 package com.malakezzat.re7letelkalemat.Model
 
+import android.os.Parcel
+import android.os.Parcelable
+
+
 data class Word(
     val word: String,
     val meaning: String,
     val exampleSentence: String
-)
+) : Parcelable {
+    // Reading data from the parcel
+    constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",   // Handle potential nulls
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
+    )
+
+    // Describe any special content types (file descriptors, etc.)
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    // Writing data to the parcel
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(word)
+        dest.writeString(meaning)
+        dest.writeString(exampleSentence)
+    }
+
+
+    // Parcelable.Creator implementation to generate instances from Parcel
+    companion object CREATOR : Parcelable.Creator<Word> {
+        override fun createFromParcel(parcel: Parcel): Word {
+            return Word(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Word?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
 
 val wordsList = listOf(
     Word(
