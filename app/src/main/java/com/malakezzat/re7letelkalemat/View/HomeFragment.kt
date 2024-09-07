@@ -1,6 +1,7 @@
 package com.malakezzat.re7letelkalemat.View
 
-import android.animation.ValueAnimator
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ class HomeFragment : Fragment() {
     private lateinit var lottiePin: LottieAnimationView
     private lateinit var scaleGestureDetector: ScaleGestureDetector
     private var scaleFactor = 1.0f // Initial scale is 1 (original size)
-    private var scaleAnimator: ValueAnimator? = null
+    private var scaleAnimator: ObjectAnimator? = null
     private var scaleX = 1.0f
     private var scaleY = 1.0f
 
@@ -62,27 +63,31 @@ class HomeFragment : Fragment() {
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             val scaleFactor = detector.scaleFactor
-            val minScaleFactor = 1.0f
+            val minScaleFactor = 0.9f
             val maxScaleFactor = 3.5f
             val newScaleFactor = (this@HomeFragment.scaleFactor * scaleFactor).coerceIn(minScaleFactor, maxScaleFactor)
 
+            // Use ObjectAnimator for smoother animation
             if (scaleAnimator == null) {
-                scaleAnimator = ValueAnimator.ofFloat(scaleX, newScaleFactor).apply {
-                    duration = 500
+                scaleAnimator = ObjectAnimator.ofPropertyValuesHolder(
+                    db.root,
+                    PropertyValuesHolder.ofFloat("scaleX", scaleX, newScaleFactor),
+                    PropertyValuesHolder.ofFloat("scaleY", scaleY, newScaleFactor)
+                ).apply {
+                    duration = 300
                     interpolator = AccelerateDecelerateInterpolator()
                     addUpdateListener { animation ->
-                        val animatedScale = animation.animatedValue as Float
-                        // Update scale around the focal point
+                        // Update pivotX and pivotY to be the focal point
                         db.root.pivotX = scaleFocusX
                         db.root.pivotY = scaleFocusY
-                        db.root.scaleX = animatedScale
-                        db.root.scaleY = animatedScale
                     }
                 }
             } else {
-                // Update the existing ValueAnimator with new values
                 scaleAnimator?.apply {
-                    setFloatValues(scaleX, newScaleFactor)
+                    setValues(
+                        PropertyValuesHolder.ofFloat("scaleX", scaleX, newScaleFactor),
+                        PropertyValuesHolder.ofFloat("scaleY", scaleY, newScaleFactor)
+                    )
                     start()
                 }
             }
