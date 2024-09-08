@@ -20,29 +20,29 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
-    var w: Word?=null
+    var w: Word? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db=FragmentRearrangeWordGameBinding.inflate(layoutInflater)
-        setContentView( db.root)
+        db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
+        setContentView(db.root)
         if (savedInstanceState != null) {
-            data=savedInstanceState.getStringArrayList("data")!!
-            chosed=savedInstanceState.getStringArrayList("chosed")!!
-            w=savedInstanceState.getParcelable("word")!!
+            data = savedInstanceState.getStringArrayList("data")!!
+            chosed = savedInstanceState.getStringArrayList("chosed")!!
+            w = savedInstanceState.getParcelable("word")!!
         }
-        presenter = WordsPresenter(this,w)
+        presenter = WordsPresenter(this, w)
         presenter.loadWords()
-        Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: "+chosed.size)
+        Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
     }
 
-    override fun showWord(words:Word) {
-        w=words
-        db.sentacetextviw.text= w!!.word
-        db.m3na.text= w!!.meaning
-        val temp= words.exampleSentence.split(" ").toMutableList()
+    override fun showWord(words: Word) {
+        w = words
+        db.sentacetextviw.text = w!!.word
+        db.m3na.text = w!!.meaning
+        val temp = words.exampleSentence.split(" ").toMutableList()
         temp.shuffle()
-        data=temp
+        data = temp
     }
 
     override fun showError(message: String) {
@@ -50,26 +50,36 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showSuccess() {
-        Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.right_answer), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@RearrangeWordGameActivity,
+            getString(R.string.right_answer),
+            Toast.LENGTH_SHORT
+        ).show()
         val intent = Intent(this, AfterSuccessInGame::class.java)
         startActivity(intent)
         finish()
     }
 
     override fun showFail() {
-        Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.worng_answer), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@RearrangeWordGameActivity,
+            getString(R.string.worng_answer),
+            Toast.LENGTH_SHORT
+        ).show()
         val intent = Intent(this, AfterFailingInGameActivity::class.java)
         startActivity(intent)
         finish()
     }
+
     override fun check() {
-        if (chosed.size==data.size){
+        if (chosed.size == data.size) {
             presenter.check(chosed)
         }
     }
-    var data= mutableListOf<String>("a","b","c","d")
-    var chosed= mutableListOf<String>()
-    fun set_data(){
+
+    var data = mutableListOf<String>("a", "b", "c", "d")
+    var chosed = mutableListOf<String>()
+    fun set_data() {
         db.root.post {
             val l1 = IntArray(2)
             db.root.getLocationOnScreen(l1)
@@ -78,7 +88,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                     val b2 = Button(this@RearrangeWordGameActivity).apply {
                         setTextColor(R.color.darkGray)
 
-                        background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                        background = AppCompatResources.getDrawable(
+                            this@RearrangeWordGameActivity,
+                            R.drawable.word_btn
+                        )
                         text = i
                         tag = i
                         visibility = View.VISIBLE
@@ -91,7 +104,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             val test = Button(this@RearrangeWordGameActivity).apply {
                                 setTextColor(R.color.darkGray)
 
-                                background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                                background = AppCompatResources.getDrawable(
+                                    this@RearrangeWordGameActivity,
+                                    R.drawable.word_btn
+                                )
 
                                 text = i
                                 x = loc[0].toFloat() - l1[0] // Relative X position
@@ -123,7 +139,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                 val btn = Button(this@RearrangeWordGameActivity).apply {
                     setTextColor(R.color.darkGray)
 
-                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                    background = AppCompatResources.getDrawable(
+                        this@RearrangeWordGameActivity,
+                        R.drawable.word_btn
+                    )
 
                     if (chosed.contains(i)) {
                         isEnabled = false
@@ -140,7 +159,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                         val b2 = Button(this@RearrangeWordGameActivity).apply {
                             setTextColor(R.color.darkGray)
 
-                            background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                            background = AppCompatResources.getDrawable(
+                                this@RearrangeWordGameActivity,
+                                R.drawable.word_btn
+                            )
 
                             text = i
                             tag = i
@@ -154,7 +176,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 val test = Button(this@RearrangeWordGameActivity).apply {
                                     setTextColor(R.color.darkGray)
 
-                                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                                    background = AppCompatResources.getDrawable(
+                                        this@RearrangeWordGameActivity,
+                                        R.drawable.word_btn
+                                    )
                                     setPadding(0, 0, 0, 0)
                                     text = i
                                     x = loc[0].toFloat() - l1[0] // Relative X position
@@ -190,7 +215,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                         // Create the test button and set its initial position
                         val test = Button(this@RearrangeWordGameActivity).apply {
-                           background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                            background = AppCompatResources.getDrawable(
+                                this@RearrangeWordGameActivity,
+                                R.drawable.word_btn
+                            )
                             setTextColor(R.color.darkGray)
 
                             text = i
@@ -237,7 +265,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         super.onSaveInstanceState(outState)
         outState.putStringArrayList("chosed", ArrayList(chosed))
         outState.putStringArrayList("data", ArrayList(data))
-        outState.putParcelable("word",w)
+        outState.putParcelable("word", w)
     }
 
 }
