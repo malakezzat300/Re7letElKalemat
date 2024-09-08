@@ -42,7 +42,7 @@ class MeccaActivity : AppCompatActivity() {
             words.add(wordsList[it].word)
             meanings.add(wordsList[it].meaning)
             examples.add(wordsList[it].exampleSentence)
-            sounds.add(R.raw.mecca)
+            sounds.add(wordsList[it].soundResId)
         }
 
         Handler(Looper.getMainLooper()).postDelayed({

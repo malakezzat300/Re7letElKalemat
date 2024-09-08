@@ -59,11 +59,14 @@ class CardWordActivity : AppCompatActivity() {
         db.exampleText.text = exampleList?.get(position)
         db.main.setBackgroundResource(background)
 
+        db.nextButton.isEnabled = false
+
         mediaPlayer = MediaPlayer.create(this, soundList?.get(position) ?: R.raw.ready).apply {
             setOnPreparedListener {
                 Handler(Looper.getMainLooper()).postDelayed({
                         start()
                     lottieAnimation.playAnimation()
+                    db.nextButton.isEnabled = true
                 }, 500)
             }
         }
