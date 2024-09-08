@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ class CardWordActivity : AppCompatActivity() {
     private lateinit var lottieAnimation: LottieAnimationView
     private lateinit var mediaPlayer: MediaPlayer
     private var length : Int = 0
+    var position : Int = 0
     var isReleased : Boolean = false
     companion object{
         const val WORDS_LIST : String = "wordsList"
@@ -47,7 +49,7 @@ class CardWordActivity : AppCompatActivity() {
         val exampleList : List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
         val soundList : List<Int>? = intent.getIntegerArrayListExtra(SOUND_LIST)
         val background : Int = intent.getIntExtra(BACKGROUND,R.drawable.background)
-        val position : Int = intent.getIntExtra(POSITION,0)
+        position = intent.getIntExtra(POSITION,0)
         isReleased = false
 
         lottieAnimation = db.viewAnimator
@@ -57,11 +59,14 @@ class CardWordActivity : AppCompatActivity() {
         db.exampleText.text = exampleList?.get(position)
         db.main.setBackgroundResource(background)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            mediaPlayer = MediaPlayer.create(this, soundList?.get(position) ?: R.raw.ready)
-            mediaPlayer.start()
-            lottieAnimation.playAnimation()
-        }, 1000)
+        mediaPlayer = MediaPlayer.create(this, soundList?.get(position) ?: R.raw.ready).apply {
+            setOnPreparedListener {
+                Handler(Looper.getMainLooper()).postDelayed({
+                        start()
+                    lottieAnimation.playAnimation()
+                }, 500)
+            }
+        }
 
         if(position == wordsList?.size?.minus(1)) {
             db.nextButton.text = "انهاء"
@@ -104,30 +109,32 @@ class CardWordActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        --position
+        super.onBackPressed()
+    }
+
     override fun onPause() {
         super.onPause()
-        if(!isReleased) {
-            if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                length = mediaPlayer.currentPosition
-            }
+        if (!isReleased && ::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (::mediaPlayer.isInitialized) {
-            //if (!mediaPlayer.isPlaying) {
-                mediaPlayer.seekTo(length)
-                mediaPlayer.start()
-            //}
+        if (!isReleased && ::mediaPlayer.isInitialized) {
+            mediaPlayer.seekTo(length)
+            mediaPlayer.start()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::mediaPlayer.isInitialized) {
+        if (::mediaPlayer.isInitialized && !isReleased) {
             mediaPlayer.release()
+            isReleased = true
         }
     }
 }
