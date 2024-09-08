@@ -30,7 +30,7 @@ class EditProfileActivity : AppCompatActivity() {
         db = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(db.root)
         val user = FirebaseAuth.getInstance().currentUser
-
+        db.usernameChangeEditText.setText(user?.displayName)
         Glide.with(applicationContext).load(user?.photoUrl)
             .apply(RequestOptions().override(200, 200))
             .placeholder(R.drawable.vector__1_)
@@ -81,6 +81,7 @@ class EditProfileActivity : AppCompatActivity() {
                                 getString(R.string.change_name_done),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            finish()
                         } else {
                             Toast.makeText(
                                 applicationContext,

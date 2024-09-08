@@ -18,5 +18,9 @@
 <item name="android:textSize">24sp</item>
 <item name="android:fontFamily">@font/app</item>
 </style>
+    <style name="GeneralText">
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
 
     </resources>

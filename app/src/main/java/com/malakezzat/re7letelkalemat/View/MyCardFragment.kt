@@ -26,7 +26,6 @@ class MyCardFragment : Fragment(), DatabaseContract.View {
 
     private lateinit var binding: FragmentMyCardBinding
     private lateinit var presenter: DatabasePresenter
-    private lateinit var wordRepository: WordRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,11 +38,14 @@ class MyCardFragment : Fragment(), DatabaseContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        wordRepository = WordRepository(requireContext())
-        presenter = DatabasePresenter(this,wordRepository)
+        presenter = DatabasePresenter(this,WordRepository(requireContext()))
 
         val adapter = MyCardAdapter { wordEntity ->
             val intent = Intent(context, CardDetailsActivity::class.java)
+            intent.putExtra("word",wordEntity.word)
+            intent.putExtra("meaning",wordEntity.meaning)
+            intent.putExtra("example",wordEntity.exampleSentence)
+            intent.putExtra("sound",wordEntity.soundResId)
             startActivity(intent)
         }
         binding.myCardRecycler.adapter = adapter
