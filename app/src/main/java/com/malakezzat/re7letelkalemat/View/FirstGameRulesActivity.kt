@@ -12,36 +12,24 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
+import com.malakezzat.re7letelkalemat.databinding.ActivityFirstGameRulsBinding
 import com.malakezzat.re7letelkalemat.databinding.ActivityRewordFinishCityWordsBinding
 
-class RewordFinishCityWordsActivity : AppCompatActivity() {
-    private lateinit var db: ActivityRewordFinishCityWordsBinding
-    private lateinit var splashAnimation: LottieAnimationView
-    private lateinit var splashAnimation2: LottieAnimationView
-    private lateinit var button1: Button
-    private lateinit var button2: Button
-
+class FirstGameRulesActivity : AppCompatActivity() {
+    lateinit var db : ActivityFirstGameRulsBinding
+    private lateinit var animation: LottieAnimationView
+    private lateinit var startNowBtn: Button
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = ActivityRewordFinishCityWordsBinding.inflate(layoutInflater)
+        db = ActivityFirstGameRulsBinding.inflate(layoutInflater)
         setContentView(db.root)
-        splashAnimation = db.viewAnimator
-        splashAnimation2 = db.viewAnimator2
-        button1 = db.ready
-        button2 = db.secondButton
-        mediaPlayer = MediaPlayer.create(this, R.raw.ready)
-
-        button1.setOnClickListener{
-            val intent = Intent(this, FirstGameRulesActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-        button2.setOnClickListener{
-            //go to my cards
-            val intent = Intent(this, OnCityPressed2::class.java)
+        animation = db.viewAnimator
+        startNowBtn = db.startNow
+        mediaPlayer = MediaPlayer.create(this, R.raw.start_first_game)
+        startNowBtn.setOnClickListener {
+            val intent = Intent(this, RearrangeWordGameActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -53,19 +41,17 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
                 mediaPlayer.start()
-                splashAnimation.loop(true)
-                splashAnimation.playAnimation()
-                splashAnimation2.loop(true)
-                splashAnimation2.playAnimation()
+                animation.loop(true)
+                animation.playAnimation()
             }
-        }, 1000) // 2-second delay
+        }, 2000) // 2-second delay
 
         // Delay for transitioning to the HomeActivity
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
-                splashAnimation.cancelAnimation()
+                animation.cancelAnimation()
             }
-        }, 7500) // 10.5 seconds total delay
+        }, 3500) // 10.5 seconds total delay
     }
 
     override fun onDestroy() {

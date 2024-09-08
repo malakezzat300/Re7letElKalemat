@@ -14,17 +14,20 @@
         android:theme="@style/Theme.Re7letElKalemat"
         tools:targetApi="31">
         <activity
+            android:name=".View.FirstGameRulesActivity"
+            android:exported="false" />
+        <activity
             android:name=".View.CardWordActivity"
             android:exported="false" />
         <activity
             android:name=".View.RearrangeWordGameActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".View.RewordFinishCityWordsActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".View.CardDetailsActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".View.AfterSuccessInGame"
             android:exported="false" />
