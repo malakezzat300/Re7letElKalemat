@@ -24,7 +24,7 @@
             android:id="@+id/viewAnimator2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/firstButton"
+            app:layout_constraintBottom_toTopOf="@+id/ready"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
             app:lottie_rawRes="@raw/after_group_of_words" />
 
         <Button
-            android:id="@+id/firstButton"
+            android:id="@+id/ready"
             style="@style/GeneralButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             android:text="المراجعة اولاً"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/firstButton"
+            app:layout_constraintStart_toEndOf="@+id/ready"
             app:layout_constraintTop_toBottomOf="@id/viewAnimator2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
