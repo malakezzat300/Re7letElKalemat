@@ -30,7 +30,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         setContentView(db.root)
         splashAnimation = db.viewAnimator
         splashAnimation2 = db.viewAnimator2
-        button1 = db.firstButton
+        button1 = db.ready
         button2 = db.secondButton
         mediaPlayer = MediaPlayer.create(this, R.raw.ready)
 
@@ -40,6 +40,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
             finish()
         }
         button2.setOnClickListener{
+            //go to my cards
             val intent = Intent(this, OnCityPressed2::class.java)
             startActivity(intent)
             finish()
