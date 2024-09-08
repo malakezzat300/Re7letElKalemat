@@ -7,10 +7,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnEnd
+import androidx.core.view.marginEnd
+import androidx.core.view.marginStart
+import com.google.android.flexbox.FlexboxLayout
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -21,7 +26,22 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
     var w: Word?=null
+    var margin1 = FlexboxLayout.LayoutParams(
+        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+        )
+    var margin2 = FlexboxLayout.LayoutParams(
+        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+        FlexboxLayout.LayoutParams.WRAP_CONTENT,
+
+        )
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        margin1.marginEnd=5
+        margin1.marginStart=5
+        margin2.marginEnd=32
+        margin2.marginStart=32
+
         super.onCreate(savedInstanceState)
         db=FragmentRearrangeWordGameBinding.inflate(layoutInflater)
         setContentView( db.root)
@@ -75,9 +95,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             db.root.getLocationOnScreen(l1)
             for (i in data) {
                 if (chosed.contains(i)) {
-                    val b2 = Button(this@RearrangeWordGameActivity).apply {
-                        setTextColor(R.color.darkGray)
-
+                    val b2 = TextView(this@RearrangeWordGameActivity).apply {
+                        layoutParams=margin1
+                        textSize=30f
                         background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
                         text = i
                         tag = i
@@ -86,19 +106,18 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             chosed.remove(i)
                             val loc = IntArray(2)
                             val loc2 = IntArray(2)
-                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
-                            db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
-                            val test = Button(this@RearrangeWordGameActivity).apply {
-                                setTextColor(R.color.darkGray)
-
+                            db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
+                            db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc2)
+                            val test = TextView(this@RearrangeWordGameActivity).apply {
+                                textSize=30f
                                 background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
-
+                                layoutParams=margin2
                                 text = i
                                 x = loc[0].toFloat() - l1[0] // Relative X position
                                 y = loc[1].toFloat() - l1[1] // Relative Y position
                             }
                             db.main.addView(test)
-                            db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
+                            db.sentace.findViewWithTag<TextView>(i).visibility = View.INVISIBLE
                             val x1 = loc2[0].toFloat() - l1[0]
                             val y1 = loc2[1].toFloat() - l1[1]
 
@@ -114,14 +133,16 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 test.visibility = View.GONE
                                 db.main.removeView(test)
                                 db.sentace.removeView(db.sentace.findViewWithTag(i))
-                                db.words.findViewWithTag<Button>(i).isEnabled = true
+                                db.words.findViewWithTag<TextView>(i).isEnabled = true
                             }
                         }
                     }
                     db.sentace.addView(b2)
                 }
-                val btn = Button(this@RearrangeWordGameActivity).apply {
-                    setTextColor(R.color.darkGray)
+                val btn = TextView(this@RearrangeWordGameActivity).apply {
+                    textSize=30f
+                    layoutParams=margin2
+
 
                     background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
 
@@ -137,8 +158,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                         chosed.add(i)
                         db.root.getLocationOnScreen(l1)
                         // Create the second button dynamically
-                        val b2 = Button(this@RearrangeWordGameActivity).apply {
-                            setTextColor(R.color.darkGray)
+                        val b2 = TextView(this@RearrangeWordGameActivity).apply {
+                            textSize=30f
+
+                            layoutParams=margin1
 
                             background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
 
@@ -149,19 +172,19 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 chosed.remove(i)
                                 val loc = IntArray(2)
                                 val loc2 = IntArray(2)
-                                db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
-                                db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
-                                val test = Button(this@RearrangeWordGameActivity).apply {
-                                    setTextColor(R.color.darkGray)
+                                db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
+                                db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc2)
+                                val test = TextView(this@RearrangeWordGameActivity).apply {
+                                    textSize=30f
+                                    layoutParams=margin2
 
                                     background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
-                                    setPadding(0, 0, 0, 0)
                                     text = i
                                     x = loc[0].toFloat() - l1[0] // Relative X position
                                     y = loc[1].toFloat() - l1[1] // Relative Y position
                                 }
                                 db.main.addView(test)
-                                db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
+                                db.sentace.findViewWithTag<TextView>(i).visibility = View.INVISIBLE
                                 val x1 = loc2[0].toFloat() - l1[0]
                                 val y1 = loc2[1].toFloat() - l1[1]
 
@@ -186,24 +209,25 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                         // Get the location of the clicked button
                         val loc = IntArray(2)
-                        db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc)
+                        db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
 
                         // Create the test button and set its initial position
-                        val test = Button(this@RearrangeWordGameActivity).apply {
-                           background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
-                            setTextColor(R.color.darkGray)
+                        val test = TextView(this@RearrangeWordGameActivity).apply {
+                            layoutParams=margin1
+
+                            background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                            textSize=30f
 
                             text = i
                             x = loc[0].toFloat() - l1[0] // Relative X position
                             y = loc[1].toFloat() - l1[1] // Relative Y position
-                            setPadding(0, 0, 0, 0)
                         }
                         db.main.addView(test)
 
                         // Post a layout update to ensure the layout has finished measuring
                         db.sentace.post {
                             val lloc = IntArray(2)
-                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(lloc)
+                            db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(lloc)
 
                             // Calculate the final translation position
                             val finalX = lloc[0].toFloat() - l1[0]
@@ -220,7 +244,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                             an.doOnEnd {
                                 test.visibility = View.GONE
-                                db.sentace.findViewWithTag<Button>(i).visibility = View.VISIBLE
+                                db.sentace.findViewWithTag<TextView>(i).visibility = View.VISIBLE
                                 db.main.removeView(test)
                                 check()
                             }
