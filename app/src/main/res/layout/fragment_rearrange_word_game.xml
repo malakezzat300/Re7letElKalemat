@@ -10,6 +10,53 @@
         android:background="@drawable/background"
         tools:context=".View.RearrangeWordGameFragment">
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="18dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="18sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/heart_ic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="18dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:progress="50"
+                android:progressDrawable="@drawable/progress_drawable"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+        </LinearLayout>
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/words"
             android:layout_width="0dp"
@@ -27,7 +74,6 @@
             app:flexWrap="wrap"
             app:flexDirection="row_reverse"
             android:layoutDirection="rtl"
-
             app:layout_constraintBottom_toTopOf="@+id/words"
             app:layout_constraintEnd_toEndOf="@+id/textView8"
             app:layout_constraintHorizontal_bias="0.0"
@@ -39,15 +85,14 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/adamina"
             android:text="@string/make_sentance"
-            android:textColor="@color/darkGray"
-            android:textSize="36sp"
-            android:textStyle="bold"
+            android:padding="16dp"
+            android:textSize="32sp"
+            style="@style/GeneralText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
             app:layout_constraintVertical_bias="0.048" />
 
         <TextView
