@@ -119,6 +119,7 @@ class SignUpFragment : Fragment(), AuthView {
             intent.putExtra("user_email", it)
         }
         startActivity(intent)
+        requireActivity().overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
         requireActivity().finish()
     }
 

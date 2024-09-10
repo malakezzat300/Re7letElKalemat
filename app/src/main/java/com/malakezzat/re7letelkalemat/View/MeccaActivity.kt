@@ -90,6 +90,7 @@ class MeccaActivity : AppCompatActivity() {
 //                    intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
                     intent.putExtra(BACKGROUND,R.drawable.medina)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                     finish()
                 }
             }, 9500)

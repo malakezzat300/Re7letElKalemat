@@ -57,6 +57,7 @@ class ProfileFragment : Fragment() {
             )
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             activity?.finish()
         }
 

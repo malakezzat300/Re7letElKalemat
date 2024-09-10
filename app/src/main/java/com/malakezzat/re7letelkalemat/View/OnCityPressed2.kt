@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityOnCityPressed2Binding
 
 
@@ -27,6 +28,8 @@ class OnCityPressed2 : AppCompatActivity() {
             val intent = Intent(this@OnCityPressed2, SaudiArabiaActivity::class.java)
 
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+
             finish()
         }, 4300)
 

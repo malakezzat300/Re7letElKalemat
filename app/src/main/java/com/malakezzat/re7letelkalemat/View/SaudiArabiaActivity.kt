@@ -29,6 +29,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
             if(isSaudiArabiaActivityRunning){
                 val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
 
