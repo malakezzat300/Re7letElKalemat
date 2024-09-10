@@ -28,7 +28,8 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     var an1:AnimatorSet?=null
     var an2:AnimatorSet?=null
     var an3:AnimatorSet?=null
-
+    private var progressBarValue = 0
+    private var heartsCount = 5
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
@@ -86,12 +87,24 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             getString(R.string.right_answer),
             Toast.LENGTH_SHORT
         ).show()
-        if (current < games) {
-            restData()
-        } else {
+
+        // Increase the progress bar value
+        progressBarValue = (progressBarValue + 20).coerceAtMost(100)  // Ensure it does not exceed 100
+        db.progressBar.progress = progressBarValue
+
+        if (progressBarValue >= 100) {
+            // Handle the case when progress is complete (e.g., show a victory message)
             val intent = Intent(this, AfterSuccessInGame::class.java)
             startActivity(intent)
             finish()
+        } else {
+            if (current < games) {
+                restData()
+            } else {
+                val intent = Intent(this, AfterSuccessInGame::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -101,12 +114,24 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             getString(R.string.worng_answer),
             Toast.LENGTH_SHORT
         ).show()
-        if (current < games) {
-            restData()
-        } else {
+
+        // Decrease the hearts count
+        heartsCount = (heartsCount - 1).coerceAtLeast(0)  // Ensure it does not go below 0
+        db.hearts.text = heartsCount.toString()
+
+        if (heartsCount <= 0) {
+            // Handle the case when hearts are exhausted (e.g., show a game over message)
             val intent = Intent(this, AfterFailingInGameActivity::class.java)
             startActivity(intent)
             finish()
+        } else {
+            if (current < games) {
+                restData()
+            } else {
+                val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
@@ -159,7 +184,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             an3 = AnimatorSet()
 
                             an3!!.playTogether(anim, anim2)
-                            an3!!.duration = 100
+                            an3!!.duration = 300
                             an3!!.start()
                             an3!!.doOnCancel {
                                 db.main.removeView(test)
@@ -235,7 +260,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                     db.main.removeView(test)
                                 }
                                 an2!!.playTogether(anim, anim2)
-                                an2!!.duration = 100
+                                an2!!.duration = 300
                                 an2!!.start()
                                 an2!!.doOnEnd {
                                     test.visibility = View.GONE
@@ -284,7 +309,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 db.main.removeView(test)
                             }
                             an1!!.playTogether(anim, anim2)
-                            an1!!.duration = 100
+                            an1!!.duration = 300
                             an1!!.start()
 
                             an1!!.doOnEnd {
