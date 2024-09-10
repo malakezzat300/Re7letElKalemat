@@ -37,12 +37,14 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         button1.setOnClickListener{
             val intent = Intent(this, FirstGameRulesActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
         }
         button2.setOnClickListener{
             //go to my cards
             val intent = Intent(this, OnCityPressed2::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_pop_in, R.anim.fragment_slide_out_left)
             finish()
         }
     }

@@ -8,6 +8,8 @@ interface WordsContract {
         fun showError(message: String)
         fun showSuccess()
         fun showFail()
+        fun showlistWords(words: List<Word>){}
+
         fun check()
     }
     interface ViewWords{
@@ -17,7 +19,9 @@ interface WordsContract {
 
     interface Presenter {
         fun restWords()
+        fun genrateRandomWords(){}
         fun loadWords()
+        fun check(v:String , s:String){}
         fun check(v:List<String>)
     }
     interface WordPreseneter {

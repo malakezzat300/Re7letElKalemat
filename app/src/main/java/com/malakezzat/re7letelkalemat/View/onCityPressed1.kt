@@ -42,6 +42,7 @@ class onCityPressed1 : AppCompatActivity() {
                 splashAnimation.cancelAnimation()
                 val intent = Intent(this@onCityPressed1, OnCityPressed2::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
         }, 9500) // 10.5 seconds total delay

@@ -34,4 +34,21 @@ class WordsPresenter(private val view: WordsContract.View, var w:Word? =null) : 
             }
         view.showSuccess()
     }
+    override fun genrateRandomWords(){
+        val r1=wordsList.random()
+        var r2=wordsList.random()
+        var r3=wordsList.random()
+        var r4=wordsList.random()
+        while (r1 == r2)r2=wordsList.random()
+        while (r3 == r2||r3==r1)r3=wordsList.random()
+        while (r4 == r2||r4==r1||r4==r3)r3=wordsList.random()
+        view.showlistWords(listOf(r1,r2,r3,r4))
+    }
+
+    override fun check(v:String , s:String) {
+        if (v == s)
+             view.showSuccess()
+        else
+            view.showFail()
+    }
 }
