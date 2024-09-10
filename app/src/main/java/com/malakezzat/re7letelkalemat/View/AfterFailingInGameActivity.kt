@@ -17,7 +17,7 @@ class AfterFailingInGameActivity : AppCompatActivity() {
     private lateinit var lottieAnimation: LottieAnimationView
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
-
+    private var length : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityAfterFailingInGameBinding.inflate(layoutInflater)
@@ -31,6 +31,7 @@ class AfterFailingInGameActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
+                mediaPlayer.seekTo(length)
                 mediaPlayer.start()
                 lottieAnimation.loop(true)
                 lottieAnimation.playAnimation()
@@ -47,9 +48,20 @@ class AfterFailingInGameActivity : AppCompatActivity() {
         }, 8000)
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         isActivityRunning = false
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
+
 }

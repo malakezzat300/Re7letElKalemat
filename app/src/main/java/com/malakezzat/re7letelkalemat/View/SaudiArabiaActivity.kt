@@ -12,6 +12,8 @@ import com.malakezzat.re7letelkalemat.databinding.ActivitySaudiArabiaBinding
 class SaudiArabiaActivity : AppCompatActivity() {
     lateinit var binding : ActivitySaudiArabiaBinding
     lateinit var mediaPlayer : MediaPlayer
+    private var length : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySaudiArabiaBinding.inflate(layoutInflater)
@@ -19,6 +21,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this,R.raw.saudi_arabia_sound)
 
         Handler(Looper.getMainLooper()).postDelayed({
+            mediaPlayer.seekTo(length)
             mediaPlayer.start()
         },1000)
         Handler(Looper.getMainLooper()).postDelayed({
@@ -30,8 +33,19 @@ class SaudiArabiaActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
+
 }
