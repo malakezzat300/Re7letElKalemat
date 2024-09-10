@@ -87,7 +87,7 @@ val wordsList = listOf(
         soundResId = R.raw.mecca
     ),
     Word(
-        word = "تعلم",
+        word = "التعلم",
         meaning = "اكتساب المعرفة أو المهارات من خلال الدراسة أو الخبرة.",
         exampleSentence = "التعلم المستمر يساعد على تطوير الذات وتحقيق النجاح.",
         soundResId = R.raw.mecca
