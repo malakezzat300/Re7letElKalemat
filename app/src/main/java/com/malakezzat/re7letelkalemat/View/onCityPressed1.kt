@@ -46,7 +46,7 @@ class onCityPressed1 : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-        }, mediaPlayer.duration.toLong() + 1000) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 2000) // 10.5 seconds total delay
     }
 
     override fun onPause() {
