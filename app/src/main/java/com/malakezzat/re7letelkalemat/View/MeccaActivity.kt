@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.malakezzat.re7letelkalemat.Model.wordsList
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.BACKGROUND
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.EXAMPLE_LIST
@@ -18,22 +19,39 @@ import com.malakezzat.re7letelkalemat.databinding.ActivityMeccaBinding
 class MeccaActivity : AppCompatActivity() {
     lateinit var binding: ActivityMeccaBinding
     lateinit var mediaPlayer : MediaPlayer
+    lateinit var words : ArrayList<String>
+    lateinit var meanings : ArrayList<String>
+    lateinit var examples : ArrayList<String>
+    lateinit var sounds : ArrayList<Int>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        binding = ActivityMeccaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mediaPlayer = MediaPlayer.create(this, R.raw.mecca)
 
+        words = arrayListOf()
+        meanings = arrayListOf()
+        examples = arrayListOf()
+        sounds = arrayListOf()
+
         Handler(Looper.getMainLooper()).postDelayed({
             mediaPlayer.start()
         },1000)
+
+        repeat(5){
+            words.add(wordsList[it].word)
+            meanings.add(wordsList[it].meaning)
+            examples.add(wordsList[it].exampleSentence)
+            sounds.add(wordsList[it].soundResId)
+        }
+
         Handler(Looper.getMainLooper()).postDelayed({
 
             val intent = Intent(this@MeccaActivity, CardWordActivity::class.java)
-            intent.putStringArrayListExtra(WORDS_LIST, arrayListOf("كلمة 1","كلمة 2","كلمة 3")) // not real
-            intent.putStringArrayListExtra(MEANING_LIST,arrayListOf(" معني 1","معني 2","معني 3")) // not real
-            intent.putStringArrayListExtra(EXAMPLE_LIST,arrayListOf("مثال 1","مثال 2","مثال 3")) // not real
-            intent.putIntegerArrayListExtra(SOUND_LIST,arrayListOf(R.raw.mecca,R.raw.mecca,R.raw.mecca)) // not real
+            intent.putStringArrayListExtra(WORDS_LIST, words)
+            intent.putStringArrayListExtra(MEANING_LIST,meanings)
+            intent.putStringArrayListExtra(EXAMPLE_LIST,examples)
+            intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
             intent.putExtra(BACKGROUND,R.drawable.mecca)
             startActivity(intent)
             finish()

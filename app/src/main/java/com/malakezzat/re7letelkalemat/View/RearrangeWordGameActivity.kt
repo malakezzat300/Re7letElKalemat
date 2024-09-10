@@ -7,15 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnEnd
-import androidx.core.view.marginEnd
-import androidx.core.view.marginStart
-import com.google.android.flexbox.FlexboxLayout
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -25,44 +20,29 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
-    var w: Word?=null
-    var margin1 = FlexboxLayout.LayoutParams(
-        FlexboxLayout.LayoutParams.WRAP_CONTENT,
-        FlexboxLayout.LayoutParams.WRAP_CONTENT,
-        )
-    var margin2 = FlexboxLayout.LayoutParams(
-        FlexboxLayout.LayoutParams.WRAP_CONTENT,
-        FlexboxLayout.LayoutParams.WRAP_CONTENT,
-
-        )
-
+    var w: Word? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-        margin1.marginEnd=5
-        margin1.marginStart=5
-        margin2.marginEnd=32
-        margin2.marginStart=32
-
         super.onCreate(savedInstanceState)
-        db=FragmentRearrangeWordGameBinding.inflate(layoutInflater)
-        setContentView( db.root)
+        db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
+        setContentView(db.root)
         if (savedInstanceState != null) {
-            data=savedInstanceState.getStringArrayList("data")!!
-            chosed=savedInstanceState.getStringArrayList("chosed")!!
-            w=savedInstanceState.getParcelable("word")!!
+            data = savedInstanceState.getStringArrayList("data")!!
+            chosed = savedInstanceState.getStringArrayList("chosed")!!
+            w = savedInstanceState.getParcelable("word")!!
         }
-        presenter = WordsPresenter(this,w)
+        presenter = WordsPresenter(this, w)
         presenter.loadWords()
-        Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: "+chosed.size)
+        Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
     }
 
-    override fun showWord(words:Word) {
-        w=words
-        db.sentacetextviw.text= w!!.word
-        db.m3na.text= w!!.meaning
-        val temp= words.exampleSentence.split(" ").toMutableList()
+    override fun showWord(words: Word) {
+        w = words
+        db.sentacetextviw.text = w!!.word
+        db.m3na.text = w!!.meaning
+        val temp = words.exampleSentence.split(" ").toMutableList()
         temp.shuffle()
-        data=temp
+        data = temp
     }
 
     override fun showError(message: String) {
@@ -70,35 +50,48 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showSuccess() {
-        Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.right_answer), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@RearrangeWordGameActivity,
+            getString(R.string.right_answer),
+            Toast.LENGTH_SHORT
+        ).show()
         val intent = Intent(this, AfterSuccessInGame::class.java)
         startActivity(intent)
         finish()
     }
 
     override fun showFail() {
-        Toast.makeText(this@RearrangeWordGameActivity, getString(R.string.worng_answer), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@RearrangeWordGameActivity,
+            getString(R.string.worng_answer),
+            Toast.LENGTH_SHORT
+        ).show()
         val intent = Intent(this, AfterFailingInGameActivity::class.java)
         startActivity(intent)
         finish()
     }
+
     override fun check() {
-        if (chosed.size==data.size){
+        if (chosed.size == data.size) {
             presenter.check(chosed)
         }
     }
-    var data= mutableListOf<String>("a","b","c","d")
-    var chosed= mutableListOf<String>()
-    fun set_data(){
+
+    var data = mutableListOf<String>("a", "b", "c", "d")
+    var chosed = mutableListOf<String>()
+    fun set_data() {
         db.root.post {
             val l1 = IntArray(2)
             db.root.getLocationOnScreen(l1)
             for (i in data) {
                 if (chosed.contains(i)) {
-                    val b2 = TextView(this@RearrangeWordGameActivity).apply {
-                        layoutParams=margin1
-                        textSize=30f
-                        background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                    val b2 = Button(this@RearrangeWordGameActivity).apply {
+                        setTextColor(R.color.darkGray)
+
+                        background = AppCompatResources.getDrawable(
+                            this@RearrangeWordGameActivity,
+                            R.drawable.word_btn
+                        )
                         text = i
                         tag = i
                         visibility = View.VISIBLE
@@ -106,18 +99,22 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             chosed.remove(i)
                             val loc = IntArray(2)
                             val loc2 = IntArray(2)
-                            db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
-                            db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc2)
-                            val test = TextView(this@RearrangeWordGameActivity).apply {
-                                textSize=30f
-                                background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
-                                layoutParams=margin2
+                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
+                            db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
+                            val test = Button(this@RearrangeWordGameActivity).apply {
+                                setTextColor(R.color.darkGray)
+
+                                background = AppCompatResources.getDrawable(
+                                    this@RearrangeWordGameActivity,
+                                    R.drawable.word_btn
+                                )
+
                                 text = i
                                 x = loc[0].toFloat() - l1[0] // Relative X position
                                 y = loc[1].toFloat() - l1[1] // Relative Y position
                             }
                             db.main.addView(test)
-                            db.sentace.findViewWithTag<TextView>(i).visibility = View.INVISIBLE
+                            db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
                             val x1 = loc2[0].toFloat() - l1[0]
                             val y1 = loc2[1].toFloat() - l1[1]
 
@@ -133,18 +130,19 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 test.visibility = View.GONE
                                 db.main.removeView(test)
                                 db.sentace.removeView(db.sentace.findViewWithTag(i))
-                                db.words.findViewWithTag<TextView>(i).isEnabled = true
+                                db.words.findViewWithTag<Button>(i).isEnabled = true
                             }
                         }
                     }
                     db.sentace.addView(b2)
                 }
-                val btn = TextView(this@RearrangeWordGameActivity).apply {
-                    textSize=30f
-                    layoutParams=margin2
+                val btn = Button(this@RearrangeWordGameActivity).apply {
+                    setTextColor(R.color.darkGray)
 
-
-                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                    background = AppCompatResources.getDrawable(
+                        this@RearrangeWordGameActivity,
+                        R.drawable.word_btn
+                    )
 
                     if (chosed.contains(i)) {
                         isEnabled = false
@@ -158,12 +156,13 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                         chosed.add(i)
                         db.root.getLocationOnScreen(l1)
                         // Create the second button dynamically
-                        val b2 = TextView(this@RearrangeWordGameActivity).apply {
-                            textSize=30f
+                        val b2 = Button(this@RearrangeWordGameActivity).apply {
+                            setTextColor(R.color.darkGray)
 
-                            layoutParams=margin1
-
-                            background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                            background = AppCompatResources.getDrawable(
+                                this@RearrangeWordGameActivity,
+                                R.drawable.word_btn
+                            )
 
                             text = i
                             tag = i
@@ -172,19 +171,22 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 chosed.remove(i)
                                 val loc = IntArray(2)
                                 val loc2 = IntArray(2)
-                                db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
-                                db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc2)
-                                val test = TextView(this@RearrangeWordGameActivity).apply {
-                                    textSize=30f
-                                    layoutParams=margin2
+                                db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
+                                db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
+                                val test = Button(this@RearrangeWordGameActivity).apply {
+                                    setTextColor(R.color.darkGray)
 
-                                    background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
+                                    background = AppCompatResources.getDrawable(
+                                        this@RearrangeWordGameActivity,
+                                        R.drawable.word_btn
+                                    )
+                                    setPadding(0, 0, 0, 0)
                                     text = i
                                     x = loc[0].toFloat() - l1[0] // Relative X position
                                     y = loc[1].toFloat() - l1[1] // Relative Y position
                                 }
                                 db.main.addView(test)
-                                db.sentace.findViewWithTag<TextView>(i).visibility = View.INVISIBLE
+                                db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
                                 val x1 = loc2[0].toFloat() - l1[0]
                                 val y1 = loc2[1].toFloat() - l1[1]
 
@@ -209,25 +211,27 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                         // Get the location of the clicked button
                         val loc = IntArray(2)
-                        db.words.findViewWithTag<TextView>(i).getLocationOnScreen(loc)
+                        db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc)
 
                         // Create the test button and set its initial position
-                        val test = TextView(this@RearrangeWordGameActivity).apply {
-                            layoutParams=margin1
-
-                            background= AppCompatResources.getDrawable(this@RearrangeWordGameActivity,R.drawable.word_btn)
-                            textSize=30f
+                        val test = Button(this@RearrangeWordGameActivity).apply {
+                            background = AppCompatResources.getDrawable(
+                                this@RearrangeWordGameActivity,
+                                R.drawable.word_btn
+                            )
+                            setTextColor(R.color.darkGray)
 
                             text = i
                             x = loc[0].toFloat() - l1[0] // Relative X position
                             y = loc[1].toFloat() - l1[1] // Relative Y position
+                            setPadding(0, 0, 0, 0)
                         }
                         db.main.addView(test)
 
                         // Post a layout update to ensure the layout has finished measuring
                         db.sentace.post {
                             val lloc = IntArray(2)
-                            db.sentace.findViewWithTag<TextView>(i).getLocationOnScreen(lloc)
+                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(lloc)
 
                             // Calculate the final translation position
                             val finalX = lloc[0].toFloat() - l1[0]
@@ -244,7 +248,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                             an.doOnEnd {
                                 test.visibility = View.GONE
-                                db.sentace.findViewWithTag<TextView>(i).visibility = View.VISIBLE
+                                db.sentace.findViewWithTag<Button>(i).visibility = View.VISIBLE
                                 db.main.removeView(test)
                                 check()
                             }
@@ -261,7 +265,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         super.onSaveInstanceState(outState)
         outState.putStringArrayList("chosed", ArrayList(chosed))
         outState.putStringArrayList("data", ArrayList(data))
-        outState.putParcelable("word",w)
+        outState.putParcelable("word", w)
     }
 
 }
