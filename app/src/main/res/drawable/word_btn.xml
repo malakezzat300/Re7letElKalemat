@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
+        <item>
+                <inset
+                    android:insetLeft="10dp"
+                    android:insetRight="10dp"
+                    android:insetTop="10dp"
+                    >
+                <shape
+                    android:shape="rectangle">
+                        android:tint="@color/kalma_color"
+                        <corners android:radius="10dp" />
+                        <solid android:color="@color/my_primary_color"/>
+                        <gradient
+                            android:startColor="#22000000"
+                            android:endColor="#00000000"
+                            android:angle="90"/>
+                </shape>
+        </inset>
 
-    android:tint="@color/kalma_color"
-    android:shape="rectangle">
-        <corners android:radius="10dp" />
-        <solid android:color="#00E1E1E1"/>
+        </item>
+        <item android:bottom="2dp">
+                <shape
+                    android:shape="rectangle">
+                        <corners android:radius="10dp" />
+                        <solid android:color="#E1E1E1"/>
 
-</shape>
+                </shape>
+        </item>
+
+</layer-list>

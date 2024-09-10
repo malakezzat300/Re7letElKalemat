@@ -14,6 +14,15 @@ class WordsPresenter(private val view: WordsContract.View, var w:Word? =null) : 
             view.showError("Error loading words: ${e.message}")
         }
     }
+    override fun restWords() {
+        try {
+
+            w = wordsList.random()
+            view.showWord(w!!)
+        } catch (e: Exception) {
+            view.showError("Error loading words: ${e.message}")
+        }
+    }
 
     override fun check(v: List<String>) {
             val ans= w!!.exampleSentence.split(" ")
