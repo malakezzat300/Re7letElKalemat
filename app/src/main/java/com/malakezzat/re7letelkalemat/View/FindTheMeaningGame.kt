@@ -160,8 +160,8 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     }
     private fun animateToBack(view: TextView){
         val loc3=IntArray(2)
-        val v=db.main.findViewWithTag<TextView>(db.choosed.text)
-        v.getLocationOnScreen(loc3)
+        val target=db.main.findViewWithTag<TextView>(db.choosed.text)
+        target.getLocationOnScreen(loc3)
         val xs=(loc3[0].toFloat()-loc[0])
         val ys=(loc3[1].toFloat()-loc[1])
         val x=ObjectAnimator.ofFloat(view,"x",xs)
@@ -174,7 +174,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         }
         set.doOnEnd {
             db.main.removeView(view)
-            v.isEnabled=true
+            target.isEnabled=true
         }
         set.start()
     }
