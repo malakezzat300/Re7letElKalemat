@@ -16,6 +16,7 @@ interface WordsContract {
     }
 
     interface Presenter {
+        fun restWords()
         fun loadWords()
         fun check(v:List<String>)
     }

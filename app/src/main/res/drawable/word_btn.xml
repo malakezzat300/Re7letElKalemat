@@ -2,17 +2,24 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item>
+                <inset
+                    android:insetLeft="10dp"
+                    android:insetRight="10dp"
+                    android:insetTop="10dp"
+                    >
                 <shape
                     android:shape="rectangle">
+                        android:tint="@color/kalma_color"
                         <corners android:radius="10dp" />
-                        <solid android:color="#00000000"/>
+                        <solid android:color="@color/my_primary_color"/>
                         <gradient
                             android:startColor="#22000000"
                             android:endColor="#00000000"
                             android:angle="90"/>
                 </shape>
-        </item>
+        </inset>
 
+        </item>
         <item android:bottom="2dp">
                 <shape
                     android:shape="rectangle">
