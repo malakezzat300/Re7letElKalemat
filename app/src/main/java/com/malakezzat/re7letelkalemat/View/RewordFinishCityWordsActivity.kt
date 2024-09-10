@@ -68,7 +68,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
             if (isActivityRunning) {
                 splashAnimation.cancelAnimation()
             }
-        }, 7500) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 1000) // 10.5 seconds total delay
     }
 
     override fun onPause() {

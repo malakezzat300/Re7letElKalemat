@@ -29,7 +29,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
             val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
             startActivity(intent)
             finish()
-        }, 11800)
+        }, mediaPlayer.duration.toLong() + 1000)
 
     }
 

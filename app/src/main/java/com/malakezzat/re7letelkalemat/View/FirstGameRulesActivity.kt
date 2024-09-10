@@ -53,7 +53,7 @@ class FirstGameRulesActivity : AppCompatActivity() {
             if (isActivityRunning) {
                 animation.cancelAnimation()
             }
-        }, 3500) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 2000) // 10.5 seconds total delay
     }
 
     override fun onPause() {

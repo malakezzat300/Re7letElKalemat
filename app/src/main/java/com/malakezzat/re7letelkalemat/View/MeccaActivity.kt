@@ -55,6 +55,6 @@ class MeccaActivity : AppCompatActivity() {
             intent.putExtra(BACKGROUND,R.drawable.mecca)
             startActivity(intent)
             finish()
-        }, 9500)
+        }, mediaPlayer.duration.toLong() + 1000)
     }
 }

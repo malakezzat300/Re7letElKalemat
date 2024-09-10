@@ -45,7 +45,7 @@ class AfterFailingInGameActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-        }, 8000)
+        }, mediaPlayer.duration.toLong() + 1000)
     }
 
     override fun onPause() {
