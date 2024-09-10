@@ -32,8 +32,10 @@ class OnCityPressed2 : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onPause() {
+        super.onPause()
+
+
 
 
 
