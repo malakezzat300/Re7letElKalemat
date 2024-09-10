@@ -125,7 +125,7 @@ val wordsList = listOf(
     Word(
         word = "رحلة",
         meaning = "الانتقال من مكان إلى آخر بغرض الترفيه أو التعلم أو العمل.",
-        exampleSentence = "كانت الرحلة إلى مراكش مليئة بالمغامرات والمفاجآت.",
+        exampleSentence = "كانت الرحلة إلى مصر مليئة بالمغامرات والمفاجآت.",
         soundResId = R.raw.mecca
     ),
     Word(
