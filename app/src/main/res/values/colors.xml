@@ -16,4 +16,6 @@
     <color name="green">#31C500</color>
     <color name="LightGreen">#D2FFC3</color>
     <color name="LightRed">#FCE3E3</color>
+    <color name="no_background">#00FFFFFF</color>
+
 </resources>
