@@ -20,7 +20,7 @@
             android:name=".View.CardWordActivity"
             android:exported="false" />
         <activity
-            android:name=".View.RearrangeWordGameActivity"
+            android:name=".View.SplashActivity"
             android:exported="false" />
         <activity
             android:name=".View.RewordFinishCityWordsActivity"
@@ -56,7 +56,7 @@
             android:name=".View.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".View.SplashActivity"
+            android:name=".View.RearrangeWordGameActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

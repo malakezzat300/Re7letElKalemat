@@ -38,8 +38,8 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
     override fun showWord(words: Word) {
         w = words
-        db.sentacetextviw.text = w!!.word
-        db.m3na.text = w!!.meaning
+        //db.sentenceTextView .text = w!!.word
+        //db.m3na.text = w!!.meaning
         val temp = words.exampleSentence.split(" ").toMutableList()
         temp.shuffle()
         data = temp
@@ -99,7 +99,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             chosed.remove(i)
                             val loc = IntArray(2)
                             val loc2 = IntArray(2)
-                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
+                            db.sentence.findViewWithTag<Button>(i).getLocationOnScreen(loc)
                             db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
                             val test = Button(this@RearrangeWordGameActivity).apply {
                                 setTextColor(R.color.darkGray)
@@ -114,7 +114,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 y = loc[1].toFloat() - l1[1] // Relative Y position
                             }
                             db.main.addView(test)
-                            db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
+                            db.sentence.findViewWithTag<Button>(i).visibility = View.INVISIBLE
                             val x1 = loc2[0].toFloat() - l1[0]
                             val y1 = loc2[1].toFloat() - l1[1]
 
@@ -129,12 +129,12 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                             an.doOnEnd {
                                 test.visibility = View.GONE
                                 db.main.removeView(test)
-                                db.sentace.removeView(db.sentace.findViewWithTag(i))
+                                db.sentence.removeView(db.sentence.findViewWithTag(i))
                                 db.words.findViewWithTag<Button>(i).isEnabled = true
                             }
                         }
                     }
-                    db.sentace.addView(b2)
+                    db.sentence.addView(b2)
                 }
                 val btn = Button(this@RearrangeWordGameActivity).apply {
                     setTextColor(R.color.darkGray)
@@ -171,7 +171,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 chosed.remove(i)
                                 val loc = IntArray(2)
                                 val loc2 = IntArray(2)
-                                db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(loc)
+                                db.sentence.findViewWithTag<Button>(i).getLocationOnScreen(loc)
                                 db.words.findViewWithTag<Button>(i).getLocationOnScreen(loc2)
                                 val test = Button(this@RearrangeWordGameActivity).apply {
                                     setTextColor(R.color.darkGray)
@@ -186,7 +186,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                     y = loc[1].toFloat() - l1[1] // Relative Y position
                                 }
                                 db.main.addView(test)
-                                db.sentace.findViewWithTag<Button>(i).visibility = View.INVISIBLE
+                                db.sentence.findViewWithTag<Button>(i).visibility = View.INVISIBLE
                                 val x1 = loc2[0].toFloat() - l1[0]
                                 val y1 = loc2[1].toFloat() - l1[1]
 
@@ -201,12 +201,12 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                     test.visibility = View.GONE
                                     db.main.removeView(test)
                                     e.isEnabled = true
-                                    db.sentace.removeView(db.sentace.findViewWithTag(i))
+                                    db.sentence.removeView(db.sentence.findViewWithTag(i))
 
                                 }
                             }
                         }
-                        db.sentace.addView(b2)
+                        db.sentence.addView(b2)
                         e.isEnabled = false
 
                         // Get the location of the clicked button
@@ -229,9 +229,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                         db.main.addView(test)
 
                         // Post a layout update to ensure the layout has finished measuring
-                        db.sentace.post {
+                        db.sentence.post {
                             val lloc = IntArray(2)
-                            db.sentace.findViewWithTag<Button>(i).getLocationOnScreen(lloc)
+                            db.sentence.findViewWithTag<Button>(i).getLocationOnScreen(lloc)
 
                             // Calculate the final translation position
                             val finalX = lloc[0].toFloat() - l1[0]
@@ -248,7 +248,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
                             an.doOnEnd {
                                 test.visibility = View.GONE
-                                db.sentace.findViewWithTag<Button>(i).visibility = View.VISIBLE
+                                db.sentence.findViewWithTag<Button>(i).visibility = View.VISIBLE
                                 db.main.removeView(test)
                                 check()
                             }
