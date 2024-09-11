@@ -47,6 +47,8 @@
     <string name="gomla">استخرج المعني المرادف لهذه الفقرة</string>
     <string name="fkra">"الفقرة : "</string>
     <string name="check">"تحقق"</string>
+    <string name="good_jop">أحسنت عملاً</string>
+    <string name="follow_up">المتابعة</string>
 
 
 </resources>
