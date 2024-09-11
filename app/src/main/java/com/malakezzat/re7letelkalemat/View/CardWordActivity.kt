@@ -60,9 +60,9 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
         lottieAnimation = db.viewAnimator
 
-        db.wordText.text = wordsList?.get(position)
-        db.meaningText.text = meaningList?.get(position)
-        db.exampleText.text = exampleList?.get(position)
+        db.wordText.text = getString(R.string.klma) + " " + wordsList?.get(position)
+        db.meaningText.text = getString(R.string.ma3na) + " " + meaningList?.get(position)
+        db.exampleText.text = getString(R.string.example) + " " + exampleList?.get(position)
         db.main.setBackgroundResource(background)
         lifecycleScope.launch {
             favWord = withContext(Dispatchers.IO) {
@@ -126,9 +126,9 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
         db.favoriteButton.setOnClickListener {
             val word = Word(
-                word = db.wordText.text.toString(),
-                meaning = db.meaningText.text.toString(),
-                exampleSentence = db.exampleText.text.toString(),
+                word = wordsList?.get(position).toString(),
+                meaning = meaningList?.get(position).toString(),
+                exampleSentence = exampleList?.get(position).toString(),
                 soundResId = soundList?.get(position) ?: R.raw.ready
             )
             if(!favWord) {
