@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -159,6 +160,14 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             .setView(dialogView)
             .create()
 
+        dialog.window?.apply {
+            // Set the dialog to appear from below
+            attributes = attributes.apply {
+                gravity = Gravity.BOTTOM
+              //  windowAnimations = R.style.DialogAnimation
+            }
+        }
+
         button.setOnClickListener {
             onPositiveClick()
             dialog.dismiss()
@@ -166,6 +175,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
         dialog.show()
     }
+
 
     override fun check() {
         if (chosed.size == data.size) {
