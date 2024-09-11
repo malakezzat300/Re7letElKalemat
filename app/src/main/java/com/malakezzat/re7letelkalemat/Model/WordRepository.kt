@@ -26,6 +26,10 @@ class WordRepository(context: Context) {
 
     }
 
+    fun getFavWords(): List<Word> {
+        return wordDao.getFavWords()
+    }
+
     suspend fun getWord(word: String): Word? {
         return withContext(Dispatchers.IO) {
             wordDao.getWord(word)

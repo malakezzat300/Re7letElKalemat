@@ -18,6 +18,9 @@ interface WordDao {
     @Query("SELECT * FROM words")
      fun getAllWords(): LiveData<List<Word>>
 
+    @Query("SELECT * FROM words")
+    fun getFavWords(): List<Word>
+
     @Query("SELECT * FROM words WHERE word = :word")
     suspend fun getWord(word: String): Word?
 }
