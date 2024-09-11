@@ -32,6 +32,7 @@ class FirstGameRulesActivity : AppCompatActivity() {
         startNowBtn.setOnClickListener {
             val intent = Intent(this, RearrangeWordGameActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
         }
     }

@@ -12,7 +12,9 @@ import com.malakezzat.re7letelkalemat.databinding.ActivitySaudiArabiaBinding
 class SaudiArabiaActivity : AppCompatActivity() {
     lateinit var binding : ActivitySaudiArabiaBinding
     lateinit var mediaPlayer : MediaPlayer
+
     private var length : Int = 0
+    private var isSaudiArabiaActivityRunning = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +25,17 @@ class SaudiArabiaActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             mediaPlayer.seekTo(length)
             mediaPlayer.start()
+            //if(isSaudiArabiaActivityRunning){
+            //    mediaPlayer.start()
+            //}
         },1000)
         Handler(Looper.getMainLooper()).postDelayed({
+            if(isSaudiArabiaActivityRunning){
+                val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+                finish()
+            }
 
             val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
             startActivity(intent)
@@ -32,6 +43,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
         }, mediaPlayer.duration.toLong() + 1000)
 
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -41,11 +53,18 @@ class SaudiArabiaActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.pause()
+        isSaudiArabiaActivityRunning=false
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
         if (::mediaPlayer.isInitialized) {
             mediaPlayer.release()
         }
+        isSaudiArabiaActivityRunning=false
     }
 
 }

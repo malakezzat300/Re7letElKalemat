@@ -98,6 +98,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             if (position == wordsList?.size?.minus(1)) {
                 val intent2 = Intent(this, RewordFinishCityWordsActivity::class.java)
                 startActivity(intent2)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 mediaPlayer.release()
                 isReleased = true
                 isBack = true
@@ -111,6 +112,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 intent2.putExtra(BACKGROUND, intent.getIntExtra(BACKGROUND, R.drawable.background))
                 intent2.putExtra(POSITION, intent.getIntExtra(POSITION, 0) + 1)
                 startActivity(intent2)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 mediaPlayer.release()
                 isReleased = true
                 isBack = true

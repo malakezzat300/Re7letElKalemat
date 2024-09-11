@@ -43,6 +43,7 @@ class AfterFailingInGameActivity : AppCompatActivity() {
                 lottieAnimation.cancelAnimation()
                 val intent = Intent(this@AfterFailingInGameActivity, HomeActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
         }, mediaPlayer.duration.toLong() + 1000)
