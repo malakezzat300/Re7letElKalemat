@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/good_jop"
-        android:textSize="24sp"
+        android:textSize="30sp"
+        android:textColor="@color/green"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
