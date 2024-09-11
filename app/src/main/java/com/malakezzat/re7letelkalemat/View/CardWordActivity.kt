@@ -7,6 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Model.WordRepository
@@ -14,6 +16,9 @@ import com.malakezzat.re7letelkalemat.Presenter.DatabaseContract
 import com.malakezzat.re7letelkalemat.Presenter.DatabasePresenter
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityCardWordBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
@@ -24,6 +29,9 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
     private var length: Int = 0
     private var position: Int = 0
     private var isReleased: Boolean = false
+    private var isBack: Boolean = false
+    private var currentSound : Int = 0
+    private var favWord : Boolean = false
 
     companion object {
         const val WORDS_LIST: String = "wordsList"
@@ -52,10 +60,19 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
         lottieAnimation = db.viewAnimator
 
-        db.wordText.text = wordsList?.get(position)
-        db.meaningText.text = meaningList?.get(position)
-        db.exampleText.text = exampleList?.get(position)
+        db.wordText.text = getString(R.string.klma) + " " + wordsList?.get(position)
+        db.meaningText.text = getString(R.string.ma3na) + " " + meaningList?.get(position)
+        db.exampleText.text = getString(R.string.example) + " " + exampleList?.get(position)
         db.main.setBackgroundResource(background)
+        lifecycleScope.launch {
+            favWord = withContext(Dispatchers.IO) {
+                isFavorite(wordsList?.get(position))
+            }
+            if(favWord){
+                db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
+            }
+        }
+
 
         db.nextButton.isEnabled = false
 
@@ -73,6 +90,10 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             db.nextButton.text = "انهاء"
         }
 
+        mediaPlayer.setOnCompletionListener {
+            lottieAnimation.cancelAnimation()
+        }
+
         db.nextButton.setOnClickListener {
             if (position == wordsList?.size?.minus(1)) {
                 val intent2 = Intent(this, RewordFinishCityWordsActivity::class.java)
@@ -80,6 +101,8 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 mediaPlayer.release()
                 isReleased = true
+                isBack = true
+                currentSound = intent.getIntegerArrayListExtra(SOUND_LIST)?.get(position) ?: R.raw.ready
             } else {
                 val intent2 = Intent(this, CardWordActivity::class.java)
                 intent2.putStringArrayListExtra(WORDS_LIST, intent.getStringArrayListExtra(WORDS_LIST))
@@ -92,17 +115,33 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 mediaPlayer.release()
                 isReleased = true
+                isBack = true
+                currentSound = intent.getIntegerArrayListExtra(SOUND_LIST)?.get(position) ?: R.raw.ready
             }
         }
 
+
+
+
+
         db.favoriteButton.setOnClickListener {
             val word = Word(
-                word = db.wordText.text.toString(),
-                meaning = db.meaningText.text.toString(),
-                exampleSentence = db.exampleText.text.toString(),
+                word = wordsList?.get(position).toString(),
+                meaning = meaningList?.get(position).toString(),
+                exampleSentence = exampleList?.get(position).toString(),
                 soundResId = soundList?.get(position) ?: R.raw.ready
             )
-            presenter.addWord(word)
+            if(!favWord) {
+                presenter.addWord(word)
+                db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
+                Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show()
+                favWord = true
+            } else {
+                presenter.removeWord(word)
+                db.favoriteButton.setImageResource(R.drawable.favorite_button)
+                Toast.makeText(this, "Removed from Favorite", Toast.LENGTH_SHORT).show()
+                favWord = false
+            }
         }
     }
 
@@ -133,6 +172,17 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             mediaPlayer.seekTo(length)
             mediaPlayer.start()
         }
+        if(isBack){
+            mediaPlayer = MediaPlayer.create(this, currentSound).apply {
+                setOnPreparedListener {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        start()
+                        lottieAnimation.playAnimation()
+                        db.nextButton.isEnabled = true
+                    }, 500)
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -141,5 +191,17 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             mediaPlayer.release()
             isReleased = true
         }
+    }
+
+    fun isFavorite(word : String?) : Boolean{
+        val favList : List<Word>? = presenter.loadFavWords()
+        if (favList != null) {
+            for(w in favList){
+                if(w?.word == word){
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

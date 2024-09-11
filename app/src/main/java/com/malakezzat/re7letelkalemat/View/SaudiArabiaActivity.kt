@@ -36,10 +36,6 @@ class SaudiArabiaActivity : AppCompatActivity() {
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
-
-            val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
-            startActivity(intent)
-            finish()
         }, mediaPlayer.duration.toLong() + 1000)
 
     }
@@ -51,6 +47,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
             mediaPlayer.pause()
             length = mediaPlayer.currentPosition
         }
+        isSaudiArabiaActivityRunning=false
     }
     
     override fun onDestroy() {

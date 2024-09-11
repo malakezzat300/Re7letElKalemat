@@ -13,6 +13,7 @@ interface DatabaseContract {
 
     interface Presenter {
         fun loadAllWords():LiveData<List<Word>>
+        fun loadFavWords():List<Word>
         fun loadWord(word: String)
         fun addWord(word: Word)
         fun removeWord(word: Word)

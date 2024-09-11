@@ -47,7 +47,7 @@ class onCityPressed1 : AppCompatActivity() {
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
-        }, mediaPlayer.duration.toLong() + 2000) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 1000) // 10.5 seconds total delay
     }
 
     override fun onPause() {
