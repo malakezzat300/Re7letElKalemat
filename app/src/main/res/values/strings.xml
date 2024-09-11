@@ -50,6 +50,7 @@
     <string name="good_jop">أحسنت عملاً</string>
     <string name="follow_up">المتابعة</string>
     <string name="wrong_answer">اجابة غير صحيح</string>
+    <string name="rearrange_words_title">رتب الكلمات الأتية لتكوين جملة مفيدة</string>
 
 
 </resources>

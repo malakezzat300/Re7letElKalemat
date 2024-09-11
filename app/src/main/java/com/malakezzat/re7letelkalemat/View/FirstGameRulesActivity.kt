@@ -21,6 +21,7 @@ class FirstGameRulesActivity : AppCompatActivity() {
     private lateinit var startNowBtn: Button
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
+    private var length : Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityFirstGameRulsBinding.inflate(layoutInflater)
@@ -41,6 +42,7 @@ class FirstGameRulesActivity : AppCompatActivity() {
         // Add a delay before starting the media player and animation
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
+                mediaPlayer.seekTo(length)
                 mediaPlayer.start()
                 animation.loop(true)
                 animation.playAnimation()
@@ -52,12 +54,24 @@ class FirstGameRulesActivity : AppCompatActivity() {
             if (isActivityRunning) {
                 animation.cancelAnimation()
             }
-        }, 3500) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 2000) // 10.5 seconds total delay
     }
+
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         isActivityRunning = false
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
+
 }
