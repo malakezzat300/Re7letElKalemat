@@ -18,6 +18,7 @@ interface WordsContract {
     }
 
     interface Presenter {
+         fun restWords() {}
         fun genrateRandomWords(){}
         fun loadWords()
         fun check(v:String , s:String){}
