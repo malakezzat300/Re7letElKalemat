@@ -47,8 +47,6 @@ data class Word(
     }
 }
 
-
-
 val wordsList = listOf(
     Word(
         word = "كَلِمَةٌ",
