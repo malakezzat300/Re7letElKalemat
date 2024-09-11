@@ -52,12 +52,6 @@ class SaudiArabiaActivity : AppCompatActivity() {
             length = mediaPlayer.currentPosition
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        mediaPlayer.pause()
-        isSaudiArabiaActivityRunning=false
-    }
     
     override fun onDestroy() {
         super.onDestroy()
