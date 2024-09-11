@@ -7,11 +7,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
@@ -82,57 +86,85 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
     }
     override fun showSuccess() {
-        Toast.makeText(
-            this@RearrangeWordGameActivity,
-            getString(R.string.right_answer),
-            Toast.LENGTH_SHORT
-        ).show()
+        showCustomDialog(
+            layoutResId = R.layout.success_dialog_custom,
+            title = getString(R.string.good_jop),
+            imageResId = R.drawable.correct_ic,
+            backgroundColor = R.color.LightGreen,
+            onPositiveClick = {
+                progressBarValue = (progressBarValue + 20).coerceAtMost(100)
+                db.progressBar.progress = progressBarValue
 
-        // Increase the progress bar value
-        progressBarValue = (progressBarValue + 20).coerceAtMost(100)  // Ensure it does not exceed 100
-        db.progressBar.progress = progressBarValue
-
-        if (progressBarValue >= 100) {
-            // Handle the case when progress is complete (e.g., show a victory message)
-            val intent = Intent(this, AfterSuccessInGame::class.java)
-            startActivity(intent)
-            finish()
-        } else {
-            if (current < games) {
-                restData()
-            } else {
-                val intent = Intent(this, AfterSuccessInGame::class.java)
-                startActivity(intent)
-                finish()
+                if (progressBarValue >= 100) {
+                    val intent = Intent(this, AfterSuccessInGame::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    if (current < games) {
+                        restData()
+                    } else {
+                        val intent = Intent(this, AfterSuccessInGame::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
-        }
+        )
     }
 
     override fun showFail() {
-        Toast.makeText(
-            this@RearrangeWordGameActivity,
-            getString(R.string.worng_answer),
-            Toast.LENGTH_SHORT
-        ).show()
+        showCustomDialog(
+            layoutResId = R.layout.failer_dialog_custom,
+            title = getString(R.string.wrong_answer),
+            imageResId = R.drawable.cross_ic,
+            backgroundColor = R.color.LightRed,
+            onPositiveClick = {
+                heartsCount = (heartsCount - 1).coerceAtLeast(0)
+                db.hearts.text = heartsCount.toString()
 
-        // Decrease the hearts count
-        heartsCount = (heartsCount - 1).coerceAtLeast(0)  // Ensure it does not go below 0
-        db.hearts.text = heartsCount.toString()
-
-        if (heartsCount <= 0) {
-            // Handle the case when hearts are exhausted (e.g., show a game over message)
-            val intent = Intent(this, AfterFailingInGameActivity::class.java)
-            startActivity(intent)
-            finish()
-        } else {
-            if (current < games) {
-                restData()
-            } else {
-                val intent = Intent(this, AfterFailingInGameActivity::class.java)
-                startActivity(intent)
-                finish()
+                if (heartsCount <= 0) {
+                    val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    if (current < games) {
+                        restData()
+                    } else {
+                        val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
+        )
+    }
+
+    private fun showCustomDialog(
+        layoutResId: Int,
+        title: String,
+        imageResId: Int,
+        backgroundColor: Int,
+        onPositiveClick: () -> Unit
+    ) {
+        val dialogView = layoutInflater.inflate(layoutResId, null)
+        val titleView = dialogView.findViewById<TextView>(R.id.dialog_title)
+        val imageView = dialogView.findViewById<ImageView>(R.id.imageView)
+        val button = dialogView.findViewById<Button>(R.id.follow_up_button)
+
+        titleView.text = title
+        imageView.setImageResource(imageResId)
+        dialogView.setBackgroundColor(ContextCompat.getColor(this, backgroundColor))
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        button.setOnClickListener {
+            onPositiveClick()
+            dialog.dismiss()
         }
+
+        dialog.show()
     }
 
     override fun check() {
