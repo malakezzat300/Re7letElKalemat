@@ -35,12 +35,10 @@ class OnCityPressed2 : AppCompatActivity() {
 
     }
 
+
     override fun onPause() {
         super.onPause()
 
-
-
-
-
     }
+
 }

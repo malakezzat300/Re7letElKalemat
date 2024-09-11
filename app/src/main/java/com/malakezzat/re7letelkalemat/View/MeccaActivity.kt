@@ -71,7 +71,7 @@ class MeccaActivity : AppCompatActivity() {
                 }
             }, 9500)
         }
-
+        
         else if(city == "medina"){
             mediaPlayer = MediaPlayer.create(this, R.raw.mecca)
             layout.setBackgroundResource(R.drawable.medina)
@@ -93,7 +93,7 @@ class MeccaActivity : AppCompatActivity() {
                     overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                     finish()
                 }
-            }, 9500)
+            }, mediaPlayer.duration.toLong() + 1000)
         }
 
 
@@ -107,5 +107,6 @@ class MeccaActivity : AppCompatActivity() {
         super.onDestroy()
         mediaPlayer.release()
         isMeccaActivityRunning=false
+
     }
 }
