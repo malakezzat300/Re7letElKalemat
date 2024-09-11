@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/LightRed"
+    android:backgroundTint="@color/LightRed"
     android:padding="36dp">
 
 
@@ -14,6 +15,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@id/follow_up_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cross_ic" />
@@ -36,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
         style="@style/RedButton"
         android:text="@string/follow_up"
         app:layout_constraintBottom_toBottomOf="parent"

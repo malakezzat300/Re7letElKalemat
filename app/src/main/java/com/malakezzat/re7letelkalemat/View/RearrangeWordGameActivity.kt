@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
-import androidx.core.content.ContextCompat
-import com.google.android.flexbox.FlexboxLayout
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -154,7 +153,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
         titleView.text = title
         imageView.setImageResource(imageResId)
-        dialogView.setBackgroundColor(ContextCompat.getColor(this, backgroundColor))
+        dialogView.setBackgroundResource(R.drawable.dialog_background)
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -162,9 +161,13 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
         dialog.window?.apply {
             // Set the dialog to appear from below
+            setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,  // Full width
+                ViewGroup.LayoutParams.WRAP_CONTENT  // Wrap content height
+            )
             attributes = attributes.apply {
                 gravity = Gravity.BOTTOM
-              //  windowAnimations = R.style.DialogAnimation
+                windowAnimations = R.style.DialogAnimation
             }
         }
 
