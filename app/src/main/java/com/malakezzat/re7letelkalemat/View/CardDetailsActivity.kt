@@ -3,6 +3,7 @@ package com.malakezzat.re7letelkalemat.View
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
@@ -26,12 +27,17 @@ class CardDetailsActivity : AppCompatActivity() {
     lateinit var example:String
      var sound:Int=0
     lateinit var handler:Handler
+    private  val TAG = "CardDetailsActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityCardDetailsBinding.inflate(layoutInflater)
         if (savedInstanceState != null) {
-            pos = savedInstanceState.getInt("position",0)
+            pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
+        }else{
+            getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
         }
+
+        pos =getSharedPreferences("position", MODE_PRIVATE).getInt("position",0)
        word= intent.getStringExtra("word").toString()
        meaning= intent.getStringExtra("meaning").toString()
        example= intent.getStringExtra("example").toString()
@@ -95,19 +101,19 @@ class CardDetailsActivity : AppCompatActivity() {
         }
         db.viewAnimator.cancelAnimation()
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val pos=myService!!.getCurrentPosition()
-        outState.putInt("position", pos)
+    fun savePos(){
+         pos=myService!!.getCurrentPosition()
+        getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
     }
 
     override fun onPause() {
         super.onPause()
+        savePos()
         myService?.stopSound()
     }
     override fun onResume() {
         super.onResume()
+        pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         myService?.playSound(sound)
         myService?.seekTo(pos)
         handler.sendEmptyMessage(0)

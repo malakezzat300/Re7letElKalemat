@@ -48,7 +48,6 @@ class MyCardFragment : Fragment(), DatabaseContract.View {
             intent.putExtra("sound",wordEntity.soundResId)
             startActivity(intent)
             requireActivity().overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-
         }
         binding.myCardRecycler.adapter = adapter
         presenter.loadAllWords().observe(viewLifecycleOwner){
