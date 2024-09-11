@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -134,6 +135,27 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             }
         }
     }
+
+    /*private fun showCustomDialog(title: String, message: String, onPositiveClick: () -> Unit) {
+        val dialogView = layoutInflater.inflate(R.layout.success_dialog_custom, null)
+        val titleView = dialogView.findViewById<TextView>(R.id.dialog_title)
+        val messageView = dialogView.findViewById<TextView>(R.id.dialog_message)
+        val button = dialogView.findViewById<Button>(R.id.dialog_button)
+
+        titleView.text = title
+        messageView.text = message
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        button.setOnClickListener {
+            onPositiveClick()
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }*/
 
     override fun check() {
         if (chosed.size == data.size) {

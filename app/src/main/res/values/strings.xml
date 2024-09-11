@@ -49,6 +49,7 @@
     <string name="check">"تحقق"</string>
     <string name="good_jop">أحسنت عملاً</string>
     <string name="follow_up">المتابعة</string>
+    <string name="wrong_answer">اجابة غير صحيح</string>
 
 
 </resources>
