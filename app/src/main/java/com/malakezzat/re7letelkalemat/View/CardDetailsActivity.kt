@@ -101,4 +101,15 @@ class CardDetailsActivity : AppCompatActivity() {
         val pos=myService!!.getCurrentPosition()
         outState.putInt("position", pos)
     }
+
+    override fun onPause() {
+        super.onPause()
+        myService?.stopSound()
+    }
+    override fun onResume() {
+        super.onResume()
+        myService?.playSound(sound)
+        myService?.seekTo(pos)
+        handler.sendEmptyMessage(0)
+    }
 }
