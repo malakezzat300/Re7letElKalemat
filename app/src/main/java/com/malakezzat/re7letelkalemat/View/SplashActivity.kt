@@ -9,6 +9,7 @@ import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -41,6 +42,7 @@ class SplashActivity : AppCompatActivity() {
 
             val intent = Intent(this@SplashActivity, AuthActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
         }, 5000)
     }}
