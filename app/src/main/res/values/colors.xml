@@ -12,6 +12,7 @@
     <color name="gray">#717171</color>
     <color name="semi_transparent_white">#99FFFFFF</color>
     <color name="transparent_white">#D9D9D9</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="LightGray">#CBCBCB</color>
     <color name="red">#FF0000</color>
     <color name="green">#31C500</color>
