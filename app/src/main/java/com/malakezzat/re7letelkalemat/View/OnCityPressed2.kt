@@ -12,7 +12,7 @@ import com.malakezzat.re7letelkalemat.databinding.ActivityOnCityPressed2Binding
 
 class OnCityPressed2 : AppCompatActivity() {
     private lateinit var binding: ActivityOnCityPressed2Binding
-
+    private var isActivityRunning = true
     private lateinit var lottieAnimation: LottieAnimationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,14 +23,15 @@ class OnCityPressed2 : AppCompatActivity() {
         lottieAnimation = binding.animationCity2
         lottieAnimation.playAnimation()
         Handler(Looper.getMainLooper()).postDelayed({
+            if(isActivityRunning)
+            {
+                val intent = Intent(this@OnCityPressed2, SaudiArabiaActivity::class.java)
 
+                startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
 
-            val intent = Intent(this@OnCityPressed2, SaudiArabiaActivity::class.java)
-
-            startActivity(intent)
-            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-
-            finish()
+                finish()
+            }
         }, 4300)
 
     }
@@ -38,7 +39,11 @@ class OnCityPressed2 : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isActivityRunning = false
     }
 
 }

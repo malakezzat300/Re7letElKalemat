@@ -40,7 +40,10 @@ class SaudiArabiaActivity : AppCompatActivity() {
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        isSaudiArabiaActivityRunning = true
+    }
     override fun onPause() {
         super.onPause()
         if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
