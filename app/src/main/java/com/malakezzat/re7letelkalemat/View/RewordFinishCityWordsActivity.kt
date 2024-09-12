@@ -17,14 +17,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
+import com.malakezzat.re7letelkalemat.View.Interfaces.CityView
 import com.malakezzat.re7letelkalemat.databinding.ActivityRewordFinishCityWordsBinding
 
-class RewordFinishCityWordsActivity : AppCompatActivity() {
+class RewordFinishCityWordsActivity : AppCompatActivity(),CityView{
     private lateinit var db: ActivityRewordFinishCityWordsBinding
 
     private lateinit var button1: Button
     private lateinit var button2: Button
     lateinit var handler: Handler
+    lateinit var city: String
     private var myService: MyCardDetailService? = null
     private var isBound = false
     var pos:Int=0
@@ -54,7 +56,8 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         }
         button2.setOnClickListener{
             tear_down()
-            val intent = Intent(this, OnCityPressed2::class.java)
+            val intent = Intent(this, MeccaActivity::class.java)
+            intent.putExtra("city",city)
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_pop_in, R.anim.fragment_slide_out_left)
             finish()
@@ -143,6 +146,10 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
             isBound = false
         }
         db.viewAnimator.cancelAnimation()
+    }
+
+    override fun getCityName(city: String) {
+        this.city = city
     }
 
 }
