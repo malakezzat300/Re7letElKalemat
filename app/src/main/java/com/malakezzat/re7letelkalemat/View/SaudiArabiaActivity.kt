@@ -44,6 +44,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
             val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
             intent.putExtra("city","mecca")
             startActivity(intent)
+            finish()
         })
         if (savedInstanceState != null) {
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
