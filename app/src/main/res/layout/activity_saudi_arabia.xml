@@ -6,4 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/saudi_arabia"
-    tools:context=".View.SaudiArabiaActivity"/>
+    tools:context=".View.SaudiArabiaActivity">
+</androidx.constraintlayout.widget.ConstraintLayout>
