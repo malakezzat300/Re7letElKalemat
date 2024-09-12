@@ -87,6 +87,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
                             db.viewAnimator.cancelAnimation()
+                            db.viewAnimator2.cancelAnimation()
                             tear_down()
                         } else {
                             handler.sendEmptyMessageDelayed(0, 5)
