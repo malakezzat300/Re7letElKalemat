@@ -16,6 +16,8 @@
         <activity
             android:name=".View.FindTheMeaningGame"
             android:exported="false"/>
+        <service android:name=".View.MyCardDetailService"
+            android:exported="true" />
 
         <activity
             android:name=".View.FirstGameRulesActivity"

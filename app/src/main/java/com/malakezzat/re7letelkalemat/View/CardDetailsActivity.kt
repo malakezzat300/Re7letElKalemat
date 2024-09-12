@@ -16,18 +16,17 @@ import com.malakezzat.re7letelkalemat.Model.wordsList
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityCardDetailsBinding
 
-
 class CardDetailsActivity : AppCompatActivity() {
     private lateinit var db: ActivityCardDetailsBinding
     private lateinit var backButton: ImageView
-    private var myService: MyCardDetailService ? = null
+    private var myService: MyCardDetailService? = null
     private var isBound = false
     var pos:Int=0
     lateinit var word:String
     lateinit var meaning:String
     lateinit var example:String
     var sound:Int=0
-    lateinit var handler: Handler
+    lateinit var handler:Handler
     private  val TAG = "CardDetailsActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class CardDetailsActivity : AppCompatActivity() {
         }else{
             getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
         }
-        pos =getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
+
         word= intent.getStringExtra("word").toString()
         meaning= intent.getStringExtra("meaning").toString()
         example= intent.getStringExtra("example").toString()
@@ -51,12 +50,13 @@ class CardDetailsActivity : AppCompatActivity() {
             override fun handleMessage(msg: Message) {
                 myService?.let { service ->
                     val mediaPlayer = service.mdiaPlayeer // Assuming it's `mediaPlayer`?
+                    Log.i("CardDetailsActivity", "handler called "+pos)
                     if (mediaPlayer != null) {
                         pos = service.getCurrentPosition()
                         if (pos >= mediaPlayer.duration) {
                             db.viewAnimator.cancelAnimation()
                         } else {
-                            handler.sendEmptyMessageDelayed(0, 500)
+                            handler.sendEmptyMessage(0)
                         }
                     } else {
                         Log.e("CardDetailsActivity", "MediaPlayer is null")
@@ -80,8 +80,8 @@ class CardDetailsActivity : AppCompatActivity() {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             myService = (service as MyCardDetailService.myBinder).getService()
             isBound = true
-            myService?.playSound(sound)
-            myService?.seekTo(pos)
+            myService!!.playSound(sound)
+            myService!!.seekTo(pos)
             handler.sendEmptyMessage(0)
         }
 
@@ -110,14 +110,12 @@ class CardDetailsActivity : AppCompatActivity() {
         super.onPause()
         savePos()
         myService?.stopSound()
-        db.viewAnimator.pauseAnimation()
     }
     override fun onResume() {
         super.onResume()
         pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         myService?.playSound(sound)
         myService?.seekTo(pos)
-        db.viewAnimator.resumeAnimation()
         handler.sendEmptyMessage(0)
     }
 }
