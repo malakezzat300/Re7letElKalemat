@@ -55,7 +55,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         setContentView(db.root)
         if (savedInstanceState!=null){
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
-            Log.i("eeeeeeeeeeeeeeeeeeeeeeeeeee","$pos  $position")
         }else{
             getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
             pos=0
@@ -91,13 +90,11 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         }
 
         db.nextButton.setOnClickListener {
-            Log.i("eeeeeeeeeeeeeee","called")
             getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
             if (isBound) {
                 myService?.stopSound(3)
                 unbindService(connection)
                 isBound = false
-                Log.i("cccccccccccccccccc","called")
             }
             db.viewAnimator.cancelAnimation()
             if (position == wordsList?.size?.minus(1)) {
@@ -129,12 +126,12 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             if(!favWord) {
                 presenter.addWord(word)
                 db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
-                Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "تمت الإضافة بنجاح", Toast.LENGTH_SHORT).show()
                 favWord = true
             } else {
                 presenter.removeWord(word)
                 db.favoriteButton.setImageResource(R.drawable.favorite_button)
-                Toast.makeText(this, "Removed from Favorite", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "تمت الإزالة بنجاح", Toast.LENGTH_SHORT).show()
                 favWord = false
             }
         }
@@ -144,7 +141,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
     }
 
     override fun showWord(word: Word) {
-        // Handle showing a single word, not needed here
     }
 
     override fun showError(message: String) {
@@ -168,7 +164,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
                             pos=myService!!.getCurrentPosition()
-                            Log.d("rrrrrrrrrrrrrrrrrrrrrrrrrrrr", "handleMessageed:" + pos)
 
                             if (isBound) {
                                 myService?.stopSound()
@@ -205,7 +200,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             myService?.stopSound(3)
             unbindService(connection)
             isBound = false
-            Log.i("cccccccccccccccccc","called")
         }
         db.viewAnimator.cancelAnimation()
     }
