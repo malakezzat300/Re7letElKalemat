@@ -5,6 +5,7 @@ import com.malakezzat.re7letelkalemat.Model.Word
 interface WordsContract {
     interface View {
         fun showWord(words:Word)
+        fun showSentence(sentence:String)
         fun showError(message: String)
         fun showSuccess()
         fun showFail()

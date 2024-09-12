@@ -26,7 +26,7 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
-    var w: Word? = null
+    var sentenceGame : String? = null
     var current=0
     var games=5
     var an1:AnimatorSet?=null
@@ -42,19 +42,20 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             current = savedInstanceState.getInt("current")
             data = savedInstanceState.getStringArrayList("data")!!
             chosed = savedInstanceState.getStringArrayList("chosed")!!
-            w = savedInstanceState.getParcelable("word")!!
+            sentenceGame = savedInstanceState.getString("word")!!
         }
-        presenter = WordsPresenter(this, w)
+        presenter = WordsPresenter(this, null,sentenceGame)
         presenter.loadWords()
         Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
     }
 
     override fun showWord(words: Word) {
-        w = words
-       // db.sentacetextviw.text = w!!.word
-        //  db.m3na.text = w!!.meaning
-        val temp = words.exampleSentence.split(" ").toMutableList()
+    }
+
+    override fun showSentence(sentence: String) {
+        sentenceGame = sentence
+        val temp = sentence.split(" ").toMutableList()
         temp.shuffle()
         data = temp
     }
@@ -377,7 +378,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         outState.putInt("current", current)
         outState.putStringArrayList("chosed", ArrayList(chosed))
         outState.putStringArrayList("data", ArrayList(data))
-        outState.putParcelable("word", w)
+        outState.putString("word", sentenceGame)
     }
 
 }
