@@ -47,6 +47,7 @@ class onCityPressed1 : AppCompatActivity() {
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
                             db.viewAnimator.cancelAnimation()
+
                             Log.d("eeeeeeeeeeeeeeeeeeeeeeeeee", "handleMessage:")
                             val intent = Intent(this@onCityPressed1, OnCityPressed2::class.java)
                             startActivity(intent)
