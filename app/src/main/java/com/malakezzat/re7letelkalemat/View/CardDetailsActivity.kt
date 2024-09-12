@@ -36,8 +36,7 @@ class CardDetailsActivity : AppCompatActivity() {
         }else{
             getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
         }
-
-        pos =getSharedPreferences("position", MODE_PRIVATE).getInt("position",0)
+        pos =getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
        word= intent.getStringExtra("word").toString()
        meaning= intent.getStringExtra("meaning").toString()
        example= intent.getStringExtra("example").toString()
@@ -110,12 +109,14 @@ class CardDetailsActivity : AppCompatActivity() {
         super.onPause()
         savePos()
         myService?.stopSound()
+        db.viewAnimator.pauseAnimation()
     }
     override fun onResume() {
         super.onResume()
         pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         myService?.playSound(sound)
         myService?.seekTo(pos)
+        db.viewAnimator.resumeAnimation()
         handler.sendEmptyMessage(0)
     }
 }
