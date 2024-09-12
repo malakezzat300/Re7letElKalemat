@@ -8,6 +8,7 @@
     android:background="@drawable/saudi_arabia"
     tools:context=".View.SaudiArabiaActivity">
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationSaudi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:lottie_rawRes="@raw/smiling_boy"

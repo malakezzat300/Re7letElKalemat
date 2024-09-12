@@ -16,6 +16,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
+import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.Model.wordsList
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.BACKGROUND
@@ -35,6 +36,7 @@ class MeccaActivity : AppCompatActivity() {
     lateinit var examples : ArrayList<String>
     lateinit var sounds : ArrayList<Int>
     lateinit var skip : Button
+    lateinit var anim : LottieAnimationView
     private  val TAG = "MeccaActivity"
     var city = ""
     private var myService: MyCardDetailService? = null
@@ -49,10 +51,13 @@ class MeccaActivity : AppCompatActivity() {
         binding = ActivityMeccaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         skip = binding.skipBtn
+        anim = binding.animationMecca
+        anim.playAnimation()
         skip.setOnClickListener(View.OnClickListener {
             if (isBound) {
                 myService?.stopSound()
                 unbindService(connection)
+                anim.pauseAnimation()
                 isBound = false
             }
             if(city == "mecca"){
@@ -161,6 +166,7 @@ class MeccaActivity : AppCompatActivity() {
         Log.d("eeeeeeeeeeeeeeeeeeeeeeeeee", "onPause: "+myService?.mdiaPlayeer?.isPlaying)
         savePos()
         myService?.stopSound()
+        anim.pauseAnimation()
     }
 
     fun savePos(){
@@ -204,6 +210,7 @@ class MeccaActivity : AppCompatActivity() {
             myService?.stopSound()
             unbindService(connection)
             isBound = false
+            anim.pauseAnimation()
         }
     }
 }
