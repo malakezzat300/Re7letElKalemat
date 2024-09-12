@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/semi_transparent_white"
-        android:layout_margin="8dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        android:layout_width="125dp"
+        android:layout_height="100dp"
+        app:cardBackgroundColor="@color/semi_transparent_white"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false">
+
         <TextView
             android:id="@+id/card_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            style="@style/GeneralText"
-            tools:text="الكروت الخاصة بكالكروت الخاصة بكالكروت الخاصة بكالكروت الخاصة بكالكروت الخاصة بك"
             android:layout_gravity="center"
-            android:layout_margin="8dp" />
+            android:gravity="center"
+            android:fontFamily="@font/adamina"
+            android:textSize="36sp"
+            android:textAlignment="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
+
     </androidx.cardview.widget.CardView>
 
 </layout>

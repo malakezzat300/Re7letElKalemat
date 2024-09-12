@@ -11,6 +11,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -52,7 +53,11 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         const val BACKGROUND: String = "background"
         const val POSITION: String = "position"
     }
+    val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
 
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityCardWordBinding.inflate(layoutInflater)
@@ -127,6 +132,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 isBack = true
                 currentSound = intent.getIntegerArrayListExtra(SOUND_LIST)?.get(position) ?: R.raw.ready
             }
+            finish()
         }
 
 

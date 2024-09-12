@@ -54,7 +54,7 @@ class MyCardFragment : Fragment(), DatabaseContract.View {
             adapter.submitList(it)
         }
 
-        val spacing = resources.displayMetrics.widthPixels / 7
+        val spacing = resources.displayMetrics.widthPixels / 9
         binding.myCardRecycler.addItemDecoration(SpacesItemDecoration(spacing, spacing))
     }
 }
