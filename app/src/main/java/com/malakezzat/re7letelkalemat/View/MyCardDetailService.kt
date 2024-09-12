@@ -27,6 +27,12 @@ class MyCardDetailService : Service() {
         mdiaPlayeer?.release()
         mdiaPlayeer = null
     }
+    fun stopSound(int:Int) {
+        Log.i("mdialplaer","stopped called "+int)
+        mdiaPlayeer?.stop()
+        mdiaPlayeer?.release()
+        mdiaPlayeer = null
+    }
     fun getCurrentPosition():Int {
         return mdiaPlayeer?.currentPosition ?: 0
     }

@@ -30,20 +30,15 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
     private lateinit var db: ActivityCardWordBinding
     private lateinit var lottieAnimation: LottieAnimationView
-    private lateinit var mediaPlayer: MediaPlayer
     private lateinit var presenter: DatabasePresenter
-    private var length: Int = 0
     private var position: Int = 0
     private var isReleased: Boolean = false
-    private var isBack: Boolean = false
-    private var currentSound : Int = 0
     private var favWord : Boolean = false
     private var myService: MyCardDetailService? = null
     private var isBound = false
     var pos:Int=0
     private var e:Boolean=true
     var soundList: List<Int>? =null
-    lateinit var handler: Handler
     private  val TAG = "CardWordActivity"
     companion object {
         const val WORDS_LIST: String = "wordsList"
@@ -53,17 +48,20 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         const val BACKGROUND: String = "background"
         const val POSITION: String = "position"
     }
-    val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-
-        }
-    }
+    lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityCardWordBinding.inflate(layoutInflater)
         setContentView(db.root)
+        if (savedInstanceState!=null){
+            pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
+            Log.i("eeeeeeeeeeeeeeeeeeeeeeeeeee","$pos  $position")
+        }else{
+            getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
+            pos=0
+            position=0
+        }
 
-        // Initialize the presenter
         presenter = DatabasePresenter(this, WordRepository(this))
 
         val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
@@ -73,9 +71,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
         position = intent.getIntExtra(POSITION, 0)
         isReleased = false
-
         lottieAnimation = db.viewAnimator
-
         db.wordText.text = getString(R.string.klma) + " " + wordsList?.get(position)
         db.meaningText.text = getString(R.string.ma3na) + " " + meaningList?.get(position)
         db.exampleText.text = getString(R.string.example) + " " + exampleList?.get(position)
@@ -90,33 +86,17 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         }
         db.nextButton.isEnabled = false
 
-        mediaPlayer = MediaPlayer.create(this, soundList?.get(position) ?: R.raw.ready).apply {
-            setOnPreparedListener {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    start()
-                    lottieAnimation.playAnimation()
-                    db.nextButton.isEnabled = true
-                }, 500)
-            }
-        }
-
         if (position == wordsList?.size?.minus(1)) {
             db.nextButton.text = "انهاء"
         }
 
-        mediaPlayer.setOnCompletionListener {
-            lottieAnimation.cancelAnimation()
-        }
-
         db.nextButton.setOnClickListener {
+            Log.i("eeeeeeeeeeeeeee","called")
             if (position == wordsList?.size?.minus(1)) {
                 val intent2 = Intent(this, RewordFinishCityWordsActivity::class.java)
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-                mediaPlayer.release()
-                isReleased = true
-                isBack = true
-                currentSound = intent.getIntegerArrayListExtra(SOUND_LIST)?.get(position) ?: R.raw.ready
+                finish()
             } else {
                 val intent2 = Intent(this, CardWordActivity::class.java)
                 intent2.putStringArrayListExtra(WORDS_LIST, intent.getStringArrayListExtra(WORDS_LIST))
@@ -124,20 +104,11 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 intent2.putStringArrayListExtra(EXAMPLE_LIST, intent.getStringArrayListExtra(EXAMPLE_LIST))
                 intent2.putIntegerArrayListExtra(SOUND_LIST, intent.getIntegerArrayListExtra(SOUND_LIST))
                 intent2.putExtra(BACKGROUND, intent.getIntExtra(BACKGROUND, R.drawable.background))
-                intent2.putExtra(POSITION, intent.getIntExtra(POSITION, 0) + 1)
+                intent2.putExtra(POSITION, position + 1)
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-                mediaPlayer.release()
-                isReleased = true
-                isBack = true
-                currentSound = intent.getIntegerArrayListExtra(SOUND_LIST)?.get(position) ?: R.raw.ready
             }
-            finish()
         }
-
-
-
-
 
         db.favoriteButton.setOnClickListener {
             val word = Word(
@@ -162,6 +133,22 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         val intent = Intent(this, MyCardDetailService::class.java)
         bindService(intent, connection, BIND_AUTO_CREATE)
     }
+
+    override fun showWord(word: Word) {
+        // Handle showing a single word, not needed here
+    }
+
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        savePos()
+        myService?.stopSound()
+        db.viewAnimator.pauseAnimation()
+    }
+
     fun setup_handler(){
         handler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
@@ -171,76 +158,55 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                         pos = service.getCurrentPosition()
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
-                            if (position < soundList?.size!!){
+                            Log.d("rrrrrrrrrrrrrrrrrrrrrrrrrrrr", "handleMessageed:")
+                            pos=myService!!.getCurrentPosition()
+                            if (isBound) {
                                 myService?.stopSound()
-                                myService?.playSound(soundList!!.get(position+1))
-                                pos=0
-                                myService?.seekTo(pos)
-                                handler.sendEmptyMessage(0)
-                                e=true
-                                savePos()
-                            }else{
-
+                                unbindService(connection)
+                                isBound = false
                             }
+                            db.nextButton.isEnabled = true
                         } else {
-                            handler.sendEmptyMessageDelayed(0, 5)
+                            handler.sendEmptyMessageDelayed(0,100)
+
                         }
                     } else {
+                        handler.sendEmptyMessageDelayed(0,100)
                     }
                 } ?: run {
                 }
             }
         }
-
     }
-    override fun showWord(word: Word) {
-        // Handle showing a single word, not needed here
-    }
-
-    override fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onBackPressed() {
-        --position
-        pos=0
-        handler.sendEmptyMessage(0)
-        super.onBackPressed()
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        super.onPause()
-        savePos()
-        myService?.stopSound()
-    }
-
     override fun onResume() {
         super.onResume()
         pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
-        myService?.playSound(soundList!!.get(position))
+        myService?.playSound(soundList!![position])
         myService?.seekTo(pos)
+        db.viewAnimator.resumeAnimation()
         handler.sendEmptyMessage(0)
     }
     fun savePos(){
+        if (myService!=null){
         pos=myService!!.getCurrentPosition()
+        }
         getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
-        getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("isBack", position).apply()
     }
     override fun onDestroy() {
         super.onDestroy()
         if (isBound) {
-            myService?.stopSound()
+            myService?.stopSound(3)
             unbindService(connection)
             isBound = false
+            Log.i("cccccccccccccccccc","called")
         }
+        db.viewAnimator.cancelAnimation()
     }
     fun isFavorite(word : String?) : Boolean{
         val favList : List<Word>? = presenter.loadFavWords()
         if (favList != null) {
             for(w in favList){
-                if(w?.word == word){
+                if(w.word == word){
                     return true
                 }
             }
@@ -251,7 +217,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             myService = (service as MyCardDetailService.myBinder).getService()
             isBound = true
-            myService?.playSound(soundList!!.get(position))
+            myService?.playSound(soundList!![position])
             myService?.seekTo(pos)
             handler.sendEmptyMessage(0)
         }
