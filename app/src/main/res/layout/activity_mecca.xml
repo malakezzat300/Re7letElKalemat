@@ -8,5 +8,25 @@
     tools:context=".View.MeccaActivity"
     android:background="@drawable/mecca"
     >
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_rawRes="@raw/smiling_boy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <Button
+        android:id="@+id/skip_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="50dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/my_primary_color"
+        android:textSize="30dp"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

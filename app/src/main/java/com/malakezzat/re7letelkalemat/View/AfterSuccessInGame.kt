@@ -31,6 +31,8 @@ class AfterSuccessInGame : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
 
             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+           var intent = Intent(this@AfterSuccessInGame,MeccaActivity::class.java)
+            intent.putExtra("city","Medina")
             finish()
         }, 5000)
     }

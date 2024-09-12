@@ -1,5 +1,6 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -10,6 +11,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
@@ -31,18 +34,34 @@ class MeccaActivity : AppCompatActivity() {
     lateinit var meanings : ArrayList<String>
     lateinit var examples : ArrayList<String>
     lateinit var sounds : ArrayList<Int>
+    lateinit var skip : Button
     private  val TAG = "MeccaActivity"
+    var city = ""
     private var myService: MyCardDetailService? = null
     private var isBound = false
     var pos:Int=0
     var res=0
-    var city:String=""
+
     private var e:Boolean=true
     lateinit var handler: Handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMeccaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        skip = binding.skipBtn
+        skip.setOnClickListener(View.OnClickListener {
+            if (isBound) {
+                myService?.stopSound()
+                unbindService(connection)
+                isBound = false
+            }
+            if(city == "mecca"){
+                startMecca()
+            }else if(city == "medina"){
+                startMadina()
+            }
+
+        })
         if (savedInstanceState != null) {
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         }else{
@@ -52,16 +71,16 @@ class MeccaActivity : AppCompatActivity() {
 
         layout = binding.main
 
-        city = "mecca" //intent.getStringExtra("name")
-
+        city = intent.getStringExtra("city") ?: ""
+        words = arrayListOf()
+        meanings = arrayListOf()
+        examples = arrayListOf()
+        sounds = arrayListOf()
 
         if(city == "mecca"){
             res = R.raw.mecca
             layout.setBackgroundResource(R.drawable.mecca)
-            words = arrayListOf()
-            meanings = arrayListOf()
-            examples = arrayListOf()
-            sounds = arrayListOf()
+
 
 
             repeat(5){
@@ -75,6 +94,12 @@ class MeccaActivity : AppCompatActivity() {
         else if(city == "medina"){
             mediaPlayer = MediaPlayer.create(this, R.raw.mecca)
             layout.setBackgroundResource(R.drawable.medina)
+            for (it in 5 until 10){
+                words.add(wordsList[it].word)
+                meanings.add(wordsList[it].meaning)
+                examples.add(wordsList[it].exampleSentence)
+                sounds.add(wordsList[it].soundResId)
+            }
         }
 
 
@@ -92,12 +117,13 @@ class MeccaActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    @SuppressLint("SuspiciousIndentation")
     fun startMadina(){
         val intent = Intent(this@MeccaActivity, CardWordActivity::class.java)
-//                    intent.putStringArrayListExtra(WORDS_LIST, words)
-//                    intent.putStringArrayListExtra(MEANING_LIST,meanings)
-//                    intent.putStringArrayListExtra(EXAMPLE_LIST,examples)
-//                    intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
+                   intent.putStringArrayListExtra(WORDS_LIST, words)
+                    intent.putStringArrayListExtra(MEANING_LIST,meanings)
+                   intent.putStringArrayListExtra(EXAMPLE_LIST,examples)
+                    intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
         intent.putExtra(BACKGROUND,R.drawable.medina)
         startActivity(intent)
         overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
