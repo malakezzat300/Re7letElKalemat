@@ -181,6 +181,10 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     override fun showWord(words: Word) {
     }
 
+    override fun showSentence(sentence: String) {
+
+    }
+
     override fun showlistWords(words: List<Word>) {
         listWord=words
         w=listWord.random()

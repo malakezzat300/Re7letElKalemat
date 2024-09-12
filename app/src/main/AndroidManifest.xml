@@ -16,6 +16,8 @@
         <activity
             android:name=".View.FindTheMeaningGame"
             android:exported="false"/>
+        <service android:name=".View.MyCardDetailService"
+            android:exported="true" />
 
         <activity
             android:name=".View.FirstGameRulesActivity"
@@ -62,6 +64,7 @@
         <activity
             android:name=".View.SplashActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

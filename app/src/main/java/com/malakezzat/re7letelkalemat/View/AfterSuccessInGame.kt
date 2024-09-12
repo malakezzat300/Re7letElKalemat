@@ -30,8 +30,6 @@ class AfterSuccessInGame : AppCompatActivity() {
         lottieAnimation.playAnimation()
         Handler(Looper.getMainLooper()).postDelayed({
 
-            val intent = Intent(this@AfterSuccessInGame, HomeActivity::class.java)
-            startActivity(intent)
             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
         }, 5000)
