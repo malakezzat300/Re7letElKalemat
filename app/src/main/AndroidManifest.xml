@@ -17,6 +17,7 @@
             android:name=".View.FindTheMeaningGame"
             android:exported="false"
             android:screenOrientation="portrait"/>
+
         <service android:name=".View.MyCardDetailService"
             android:exported="true" />
 
@@ -80,7 +81,6 @@
             android:name=".View.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

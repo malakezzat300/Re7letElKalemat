@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.addListener
+import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
@@ -38,7 +39,10 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     val presenter :WordsPresenter by lazy {
         WordsPresenter(this)
     }
-    var prvText=""
+    var current=0;
+    val limte=5
+    var set1:AnimatorSet?=null
+    var set2:AnimatorSet?=null
     lateinit var listWord:List<Word>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +50,10 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             w=savedInstanceState.getParcelable<Word>("w")
             listWord=savedInstanceState.getParcelableArrayList<Word>("list")!!.toList()
             val choosed=savedInstanceState.getString("choosed")
+            current=savedInstanceState.getInt("current",0)
             set_data_from_saved_state(choosed!!)
         }else{
+            current=0
         presenter.genrateRandomWords()
         }
         setContentView(db.root)
@@ -56,7 +62,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             db.main.getLocationOnScreen(loc)
             setupChosesTextViews()
             db.button.setOnClickListener {
-                presenter.check(w!!.word,db.choosed.text.toString())
+               if (current<limte) presenter.check(w!!.word,db.choosed.text.toString())
             }
         }
 
@@ -140,23 +146,26 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val ys=(loc3[1].toFloat()-loc[1])+(db.choosed.height/2)-view.height/2
         val x=ObjectAnimator.ofFloat(view,"x",xs)
         val y=ObjectAnimator.ofFloat(view,"y",ys)
-        val set=AnimatorSet()
+         set2=AnimatorSet()
 
-        set.duration=300
-        set.playTogether(x,y)
-        set.doOnStart {
+        set2!!.duration=300
+        set2!!.playTogether(x,y)
+        set2!!.doOnStart {
             db.main.findViewWithTag<TextView>(db.choosed.text)?.let {
                 val loc2 = IntArray(2)
                 db.choosed.getLocationOnScreen(loc2)
                 sendToChsTextViews(db.choosed, loc2)
             }
         }
-        set.doOnEnd {
+        set2!!.doOnCancel {
+            db.main.removeView(view)
+        }
+        set2!!.doOnEnd {
             db.main.removeView(view)
             db.choosed.text=view.text
             db.choosed.isEnabled=true
         }
-        set.start()
+        set2!!.start()
     }
     private fun animateToBack(view: TextView){
         val loc3=IntArray(2)
@@ -166,17 +175,17 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val ys=(loc3[1].toFloat()-loc[1])
         val x=ObjectAnimator.ofFloat(view,"x",xs)
         val y=ObjectAnimator.ofFloat(view,"y",ys)
-        val set=AnimatorSet()
-        set.duration=300
-        set.playTogether(x,y)
-        set.doOnStart {
+        set1=AnimatorSet()
+        set1!!.duration=300
+        set1!!.playTogether(x,y)
+        set1!!.doOnStart {
             db.choosed.text=""
         }
-        set.doOnEnd {
+        set1!!.doOnEnd {
             db.main.removeView(view)
             target.isEnabled=true
         }
-        set.start()
+        set1!!.start()
     }
     override fun showWord(words: Word) {
     }
@@ -184,8 +193,21 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     override fun showSentence(sentence: String) {
 
     }
-
+    fun clear(){
+        if(set1!=null){
+            set1!!.cancel()
+        }
+        if(set2!=null){
+            set2!!.cancel()
+        }
+        db.choosed.text=""
+        db.ch1.isEnabled=true
+        db.ch2.isEnabled=true
+        db.ch3.isEnabled=true
+        db.ch4.isEnabled=true
+    }
     override fun showlistWords(words: List<Word>) {
+
         listWord=words
         w=listWord.random()
         db.fakra.text=w!!.meaning
@@ -199,14 +221,32 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showSuccess() {
-        Toast.makeText(this,"Success", Toast.LENGTH_SHORT).show()
+        current++
+        if(current<limte){
+            presenter.genrateRandomWords()
+            Toast.makeText(this,"Success", Toast.LENGTH_SHORT).show()
+
+        }else{
+            // navigate here
+            Toast.makeText(this,"Congratulation", Toast.LENGTH_SHORT).show()
+        }
+        clear()
     }
 
     override fun showFail() {
-        Toast.makeText(this,"Fail", Toast.LENGTH_SHORT).show()
+        current++
+        if(current<limte){
+            presenter.genrateRandomWords()
+            Toast.makeText(this,"Fail", Toast.LENGTH_SHORT).show()
 
+
+        }else{
+            // navigate here
+
+            Toast.makeText(this,"Failed", Toast.LENGTH_SHORT).show()
+        }
+        clear()
     }
-
     override fun check() {
     }
 
@@ -215,6 +255,6 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         outState.putParcelable("w",w)
         outState.putParcelableArrayList("list",ArrayList(listWord))
         outState.putString("choosed",db.choosed.text.toString())
-
+        outState.putInt("current",current)
     }
 }
