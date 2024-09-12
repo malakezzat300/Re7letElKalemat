@@ -15,6 +15,7 @@ class onCityPressed1 : AppCompatActivity() {
     private lateinit var splashAnimation: LottieAnimationView
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
+    private var length : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class onCityPressed1 : AppCompatActivity() {
         // Add a delay before starting the media player and animation
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
+                mediaPlayer.seekTo(length)
                 mediaPlayer.start()
                 splashAnimation.loop(true)
                 splashAnimation.playAnimation()
@@ -42,14 +44,26 @@ class onCityPressed1 : AppCompatActivity() {
                 splashAnimation.cancelAnimation()
                 val intent = Intent(this@onCityPressed1, OnCityPressed2::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
             }
-        }, 9500) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 1000) // 10.5 seconds total delay
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         isActivityRunning = false
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
+
 }

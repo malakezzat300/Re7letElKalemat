@@ -24,24 +24,29 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
 
+    private var length : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityRewordFinishCityWordsBinding.inflate(layoutInflater)
         setContentView(db.root)
         splashAnimation = db.viewAnimator
         splashAnimation2 = db.viewAnimator2
-        button1 = db.firstButton
+        button1 = db.ready
         button2 = db.secondButton
         mediaPlayer = MediaPlayer.create(this, R.raw.ready)
 
         button1.setOnClickListener{
-            val intent = Intent(this, RearrangeWordGameActivity::class.java)
+            val intent = Intent(this, FirstGameRulesActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
         }
         button2.setOnClickListener{
+            //go to my cards
             val intent = Intent(this, OnCityPressed2::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.fragment_pop_in, R.anim.fragment_slide_out_left)
             finish()
         }
     }
@@ -51,6 +56,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
         // Add a delay before starting the media player and animation
         Handler(Looper.getMainLooper()).postDelayed({
             if (isActivityRunning) {
+                mediaPlayer.seekTo(length)
                 mediaPlayer.start()
                 splashAnimation.loop(true)
                 splashAnimation.playAnimation()
@@ -64,12 +70,23 @@ class RewordFinishCityWordsActivity : AppCompatActivity() {
             if (isActivityRunning) {
                 splashAnimation.cancelAnimation()
             }
-        }, 7500) // 10.5 seconds total delay
+        }, mediaPlayer.duration.toLong() + 1000) // 10.5 seconds total delay
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         isActivityRunning = false
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
+
 }

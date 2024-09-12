@@ -12,6 +12,10 @@ import com.malakezzat.re7letelkalemat.databinding.ActivitySaudiArabiaBinding
 class SaudiArabiaActivity : AppCompatActivity() {
     lateinit var binding : ActivitySaudiArabiaBinding
     lateinit var mediaPlayer : MediaPlayer
+
+    private var length : Int = 0
+    private var isSaudiArabiaActivityRunning = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySaudiArabiaBinding.inflate(layoutInflater)
@@ -19,19 +23,42 @@ class SaudiArabiaActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer.create(this,R.raw.saudi_arabia_sound)
 
         Handler(Looper.getMainLooper()).postDelayed({
+            mediaPlayer.seekTo(length)
             mediaPlayer.start()
+            //if(isSaudiArabiaActivityRunning){
+            //    mediaPlayer.start()
+            //}
         },1000)
         Handler(Looper.getMainLooper()).postDelayed({
-
-            val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
-            startActivity(intent)
-            finish()
-        }, 11800)
+            if(isSaudiArabiaActivityRunning){
+                val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+                finish()
+            }
+        }, mediaPlayer.duration.toLong() + 1000)
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        isSaudiArabiaActivityRunning = true
+    }
+    override fun onPause() {
+        super.onPause()
+        if (::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            length = mediaPlayer.currentPosition
+        }
+        isSaudiArabiaActivityRunning=false
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
+        isSaudiArabiaActivityRunning=false
     }
+
 }

@@ -13,11 +13,14 @@ import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.databinding.FragmentHomeBinding
 
-
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var lottiePin: LottieAnimationView
+    private lateinit var lottiePin1: LottieAnimationView
+    private lateinit var lottiePin2: LottieAnimationView
+    private lateinit var lottiePin3: LottieAnimationView
+    private lateinit var lottiePin4: LottieAnimationView
+
     private lateinit var imageView: ImageView
     private lateinit var scaleGestureDetector: ScaleGestureDetector
     private val matrix = Matrix()
@@ -29,11 +32,17 @@ class HomeFragment : Fragment() {
     private var lastTouchY = 0f
     private var isDragging = false
 
-    private val imageViewWidth get() = imageView.width
-    private val imageViewHeight get() = imageView.height
+    private val pin1X = 235f // X coordinate of the first pin relative to the image in dp
+    private val pin1Y = 210f // Y coordinate of the first pin relative to the image in dp
 
-    private val imageViewDrawableWidth get() = imageView.drawable.intrinsicWidth
-    private val imageViewDrawableHeight get() = imageView.drawable.intrinsicHeight
+    private val pin2X = 575f // X coordinate of the second pin relative to the image in dp
+    private val pin2Y = 700f // Y coordinate of the second pin relative to the image in dp
+
+    private val pin3X = 740f // X coordinate of the second pin relative to the image in dp
+    private val pin3Y = 180f // Y coordinate of the second pin relative to the image in dp
+
+    private val pin4X = 565f // X coordinate of the second pin relative to the image in dp
+    private val pin4Y = 220f // Y coordinate of the second pin relative to the image in dp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +59,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lottiePin = binding.lottieAnimation1
+        lottiePin1 = binding.lottieAnimation1
+        lottiePin2 = binding.lottieAnimation2
+        lottiePin3 = binding.lottieAnimation3
+        lottiePin4 = binding.lottieAnimation4
         imageView = binding.imageView
 
         // Set up scale gesture detector
@@ -62,6 +74,7 @@ class HomeFragment : Fragment() {
                 matrix.setScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
                 constrainMatrix()
                 imageView.imageMatrix = matrix
+                updateLottiePinPositions()
                 return true
             }
         })
@@ -84,6 +97,7 @@ class HomeFragment : Fragment() {
                         matrix.postTranslate(deltaX, deltaY)
                         constrainMatrix()
                         imageView.imageMatrix = matrix
+                        updateLottiePinPositions()
 
                         lastTouchX = event.x
                         lastTouchY = event.y
@@ -97,7 +111,12 @@ class HomeFragment : Fragment() {
             true
         }
 
-        lottiePin.setOnClickListener {
+//        lottiePin1.setOnClickListener {
+//            val intent = Intent(requireContext(), onCityPressed1::class.java)
+//            startActivity(intent)
+//        }
+
+        lottiePin2.setOnClickListener {
             val intent = Intent(requireContext(), onCityPressed1::class.java)
             startActivity(intent)
         }
@@ -132,6 +151,49 @@ class HomeFragment : Fragment() {
         matrix.postTranslate(constrainedTransX, constrainedTransY)
     }
 
+    private fun updateLottiePinPositions() {
+        val values = FloatArray(9)
+        matrix.getValues(values)
+        val scaleX = values[Matrix.MSCALE_X]
+        val scaleY = values[Matrix.MSCALE_Y]
+        val transX = values[Matrix.MTRANS_X]
+        val transY = values[Matrix.MTRANS_Y]
 
+        // Convert pin coordinates from dp to pixels
+        val pin1XInPx = dpToPx(pin1X)
+        val pin1YInPx = dpToPx(pin1Y)
+        val pin2XInPx = dpToPx(pin2X)
+        val pin2YInPx = dpToPx(pin2Y)
+        val pin3XInPx = dpToPx(pin3X)
+        val pin3YInPx = dpToPx(pin3Y)
+        val pin4XInPx = dpToPx(pin4X)
+        val pin4YInPx = dpToPx(pin4Y)
 
+        // Calculate the transformed position of the pins
+        val transformedX1 = (pin1XInPx * scaleX) + transX
+        val transformedY1 = (pin1YInPx * scaleY) + transY
+        val transformedX2 = (pin2XInPx * scaleX) + transX
+        val transformedY2 = (pin2YInPx * scaleY) + transY
+        val transformedX3 = (pin3XInPx * scaleX) + transX
+        val transformedY3 = (pin3YInPx * scaleY) + transY
+        val transformedX4 = (pin4XInPx * scaleX) + transX
+        val transformedY4 = (pin4YInPx * scaleY) + transY
+
+        // Update the positions of the LottieAnimationViews
+        lottiePin1.x = transformedX1 - (lottiePin1.width / 2)
+        lottiePin1.y = transformedY1 - (lottiePin1.height / 2)
+
+        lottiePin2.x = transformedX2 - (lottiePin2.width / 2)
+        lottiePin2.y = transformedY2 - (lottiePin2.height / 2)
+
+        lottiePin3.x = transformedX3 - (lottiePin3.width / 2)
+        lottiePin3.y = transformedY3 - (lottiePin3.height / 2)
+
+        lottiePin4.x = transformedX4 - (lottiePin4.width / 2)
+        lottiePin4.y = transformedY4 - (lottiePin4.height / 2)
+    }
+
+    private fun dpToPx(dp: Float): Float {
+        return dp * requireContext().resources.displayMetrics.density
+    }
 }

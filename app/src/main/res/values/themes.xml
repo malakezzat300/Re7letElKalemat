@@ -11,12 +11,38 @@
     <style name="Theme.Re7letElKalemat" parent="Base.Theme.Re7letElKalemat" />
 
 
+    <style name="GeneralButton">
+        <item name="android:textColor">@color/my_primary_color</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
+    <style name="UnClickableButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/LightGray</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
+    <style name="GreenButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
+    <style name="RedButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/red</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
+    <style name="GeneralText">
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:fontFamily">@font/app</item>
+    </style>
 
-<style name="GeneralButton">
-<item name="android:textColor">@color/my_primary_color</item>
-<item name="android:backgroundTint">@color/white</item>
-<item name="android:textSize">24sp</item>
-<item name="android:fontFamily">@font/app</item>
-</style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_up</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_down</item>
+    </style>
 
     </resources>

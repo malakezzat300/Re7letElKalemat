@@ -16,6 +16,10 @@ class DatabasePresenter(
         return repository.getAllWords()
     }
 
+    override fun loadFavWords():List<Word> {
+        return repository.getFavWords()
+    }
+
     override fun loadWord(word: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {

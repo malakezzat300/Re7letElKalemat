@@ -20,7 +20,8 @@ abstract class WordDatabase : RoomDatabase() {
                     context.applicationContext,
                     WordDatabase::class.java,
                     "word_database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
