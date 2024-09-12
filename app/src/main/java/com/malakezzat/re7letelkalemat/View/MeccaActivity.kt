@@ -153,14 +153,18 @@ class MeccaActivity : AppCompatActivity() {
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
                             Log.d("zzzzzzzzzzzzzzzzzzzzz", "handleMessageed:")
-
+                            if (isBound) {
+                                myService?.stopSound()
+                                unbindService(connection)
+                                isBound = false
+                            }
                             when(city){
                                 "mecca"->startMecca()
                                 "medina"->startMadina()
                                 else->{}
                             }
                         } else {
-                            handler.sendEmptyMessageDelayed(0,400)
+                            handler.sendEmptyMessageDelayed(0,0)
                         }
                     } else {
 
