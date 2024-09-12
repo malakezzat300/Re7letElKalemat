@@ -7,13 +7,17 @@ import com.malakezzat.re7letelkalemat.Model.wordsList
 class WordsPresenter(private val view: WordsContract.View, var w:Word? =null,var sentence:String? =null) : WordsContract.Presenter {
     override fun loadWords() {
         try {
-            if (sentence==null)
-                    sentence = sentences.random()
+            if (sentence == null) {
+                //val nextTenSentences = sentences.drop(10).take(10) // Get the next 10 sentences (11 to 20)
+                val firstTenSentences = sentences.take(10) // Get the first 10 sentences
+                sentence = firstTenSentences.random() // Randomly select from the first 10
+            }
             view.showSentence(sentence!!)
         } catch (e: Exception) {
             view.showError("Error loading words: ${e.message}")
         }
     }
+
     override fun restWords() {
         try {
 
