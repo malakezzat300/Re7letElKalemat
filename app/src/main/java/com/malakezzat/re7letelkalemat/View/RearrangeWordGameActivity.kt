@@ -34,6 +34,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     var an3:AnimatorSet?=null
     private var progressBarValue = 0
     private var heartsCount = 5
+    private var isDialogShown = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
@@ -96,18 +97,12 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                 progressBarValue = (progressBarValue + 20).coerceAtMost(100)
                 db.progressBar.progress = progressBarValue
 
-                if (progressBarValue >= 100) {
+                if (progressBarValue == 100) {
                     val intent = Intent(this, AfterSuccessInGame::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    if (current < games) {
                         restData()
-                    } else {
-                        val intent = Intent(this, AfterSuccessInGame::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
                 }
             }
         )
@@ -128,13 +123,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                     startActivity(intent)
                     finish()
                 } else {
-                    if (current < games) {
                         restData()
-                    } else {
-                        val intent = Intent(this, AfterFailingInGameActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
                 }
             }
         )
@@ -147,6 +136,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         backgroundColor: Int,
         onPositiveClick: () -> Unit
     ) {
+        if (isDialogShown) return // Prevent showing the dialog if it's already shown
+
+        isDialogShown = true
+
         val dialogView = layoutInflater.inflate(layoutResId, null)
         val titleView = dialogView.findViewById<TextView>(R.id.dialog_title)
         val imageView = dialogView.findViewById<ImageView>(R.id.imageView)
@@ -175,6 +168,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         button.setOnClickListener {
             onPositiveClick()
             dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            isDialogShown = false // Reset the flag when the dialog is dismissed
         }
 
         dialog.show()
