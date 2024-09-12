@@ -39,7 +39,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
     var pos:Int=0
     private var e:Boolean=true
     var soundList: List<Int>? =null
-    private  var TAG = "CardWordActivity"
+    private  val TAG = "CardWordActivity"
     companion object {
         const val WORDS_LIST: String = "wordsList"
         const val MEANING_LIST: String = "meaningList"
@@ -53,15 +53,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         super.onCreate(savedInstanceState)
         db = ActivityCardWordBinding.inflate(layoutInflater)
         setContentView(db.root)
-        presenter = DatabasePresenter(this, WordRepository(this))
-
-        val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
-        val meaningList: List<String>? = intent.getStringArrayListExtra(MEANING_LIST)
-        val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
-        soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
-        val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
-        position = intent.getIntExtra(POSITION, 0)
-        TAG="${TAG} ${position}"
         if (savedInstanceState!=null){
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
             Log.i("eeeeeeeeeeeeeeeeeeeeeeeeeee","$pos  $position")
@@ -71,6 +62,14 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             position=0
         }
 //
+        presenter = DatabasePresenter(this, WordRepository(this))
+
+        val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
+        val meaningList: List<String>? = intent.getStringArrayListExtra(MEANING_LIST)
+        val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
+        soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
+        val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
+        position = intent.getIntExtra(POSITION, 0)
 
         isReleased = false
         lottieAnimation = db.viewAnimator
@@ -86,7 +85,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
             }
         }
-        db.nextButton.isEnabled = false
 
         if (position == wordsList?.size?.minus(1)) {
             db.nextButton.text = "انهاء"
@@ -94,6 +92,14 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
         db.nextButton.setOnClickListener {
             Log.i("eeeeeeeeeeeeeee","called")
+            getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
+            if (isBound) {
+                myService?.stopSound(3)
+                unbindService(connection)
+                isBound = false
+                Log.i("cccccccccccccccccc","called")
+            }
+            db.viewAnimator.cancelAnimation()
             if (position == wordsList?.size?.minus(1)) {
                 val intent2 = Intent(this, RewordFinishCityWordsActivity::class.java)
                 startActivity(intent2)
@@ -109,8 +115,8 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 intent2.putExtra(POSITION, position + 1)
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-                getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
             }
+            finish()
         }
 
         db.favoriteButton.setOnClickListener {
