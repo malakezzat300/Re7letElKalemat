@@ -39,7 +39,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
     var pos:Int=0
     private var e:Boolean=true
     var soundList: List<Int>? =null
-    private  val TAG = "CardWordActivity"
+    private  var TAG = "CardWordActivity"
     companion object {
         const val WORDS_LIST: String = "wordsList"
         const val MEANING_LIST: String = "meaningList"
@@ -53,6 +53,15 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         super.onCreate(savedInstanceState)
         db = ActivityCardWordBinding.inflate(layoutInflater)
         setContentView(db.root)
+        presenter = DatabasePresenter(this, WordRepository(this))
+
+        val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
+        val meaningList: List<String>? = intent.getStringArrayListExtra(MEANING_LIST)
+        val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
+        soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
+        val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
+        position = intent.getIntExtra(POSITION, 0)
+        TAG="${TAG} ${position}"
         if (savedInstanceState!=null){
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
             Log.i("eeeeeeeeeeeeeeeeeeeeeeeeeee","$pos  $position")
@@ -62,14 +71,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             position=0
         }
 
-        presenter = DatabasePresenter(this, WordRepository(this))
 
-        val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
-        val meaningList: List<String>? = intent.getStringArrayListExtra(MEANING_LIST)
-        val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
-        soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
-        val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
-        position = intent.getIntExtra(POSITION, 0)
         isReleased = false
         lottieAnimation = db.viewAnimator
         db.wordText.text = getString(R.string.klma) + " " + wordsList?.get(position)
@@ -107,6 +109,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 intent2.putExtra(POSITION, position + 1)
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+                getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
             }
         }
 
@@ -158,8 +161,9 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                         pos = service.getCurrentPosition()
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
-                            Log.d("rrrrrrrrrrrrrrrrrrrrrrrrrrrr", "handleMessageed:")
                             pos=myService!!.getCurrentPosition()
+                            Log.d("rrrrrrrrrrrrrrrrrrrrrrrrrrrr", "handleMessageed:" + pos)
+
                             if (isBound) {
                                 myService?.stopSound()
                                 unbindService(connection)
@@ -167,11 +171,11 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                             }
                             db.nextButton.isEnabled = true
                         } else {
-                            handler.sendEmptyMessageDelayed(0,100)
+                            handler.sendEmptyMessageDelayed(0,50)
 
                         }
                     } else {
-                        handler.sendEmptyMessageDelayed(0,100)
+                        handler.sendEmptyMessageDelayed(0,50)
                     }
                 } ?: run {
                 }
@@ -187,9 +191,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         handler.sendEmptyMessage(0)
     }
     fun savePos(){
-        if (myService!=null){
-        pos=myService!!.getCurrentPosition()
-        }
         getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
     }
     override fun onDestroy() {

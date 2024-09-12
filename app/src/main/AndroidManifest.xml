@@ -64,7 +64,6 @@
         <activity
             android:name=".View.SplashActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
