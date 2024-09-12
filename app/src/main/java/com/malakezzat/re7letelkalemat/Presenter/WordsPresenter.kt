@@ -25,7 +25,7 @@ class WordsPresenter(private val view: WordsContract.View, var w:Word? =null,var
     }
 
     override fun check(v: List<String>) {
-            val ans= sentence!!.split(" ")
+            val ans = sentence?.split(" ")  ?: listOf()
             for (i in ans.indices){
                 if (ans[i] != v[i]){
                     view.showFail()
