@@ -37,7 +37,7 @@ class DatabasePresenter(
                 repository.insertWord(word)
                 loadAllWords() // Refresh the list after adding
             } catch (e: Exception) {
-                view.showError("Failed to add word")
+                e.printStackTrace()
             }
         }
     }
