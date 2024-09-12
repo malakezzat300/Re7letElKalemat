@@ -25,6 +25,7 @@ import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.MEANING_LI
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.POSITION
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.SOUND_LIST
 import com.malakezzat.re7letelkalemat.View.CardWordActivity.Companion.WORDS_LIST
+import com.malakezzat.re7letelkalemat.View.Interfaces.CityView
 import com.malakezzat.re7letelkalemat.databinding.ActivityMeccaBinding
 
 class MeccaActivity : AppCompatActivity() {
@@ -43,6 +44,7 @@ class MeccaActivity : AppCompatActivity() {
     private var isBound = false
     var pos:Int=0
     var res=0
+    lateinit var cityView : CityView
 
     private var e:Boolean=true
     lateinit var handler: Handler
@@ -52,7 +54,9 @@ class MeccaActivity : AppCompatActivity() {
         setContentView(binding.root)
         skip = binding.skipBtn
         anim = binding.animationMecca
+        layout = binding.main
         anim.playAnimation()
+        cityView = AfterSuccessInGame()
         skip.setOnClickListener(View.OnClickListener {
             if (isBound) {
                 myService?.stopSound()
@@ -74,9 +78,10 @@ class MeccaActivity : AppCompatActivity() {
         }
 
 
-        layout = binding.main
+
 
         city = intent.getStringExtra("city") ?: ""
+        cityView.getCityName(city)
         words = arrayListOf()
         meanings = arrayListOf()
         examples = arrayListOf()
@@ -85,19 +90,14 @@ class MeccaActivity : AppCompatActivity() {
         if(city == "mecca"){
             res = R.raw.mecca
             layout.setBackgroundResource(R.drawable.mecca)
-
-
-
             repeat(5){
                 words.add(wordsList[it].word)
                 meanings.add(wordsList[it].meaning)
                 examples.add(wordsList[it].exampleSentence)
                 sounds.add(wordsList[it].soundResId)
             }
-        }
-
-        else if(city == "medina"){
-            mediaPlayer = MediaPlayer.create(this, R.raw.mecca)
+        } else if(city == "medina"){
+            res = R.raw.medina_sound
             layout.setBackgroundResource(R.drawable.medina)
             for (it in 5 until 10){
                 words.add(wordsList[it].word)
@@ -120,6 +120,7 @@ class MeccaActivity : AppCompatActivity() {
         intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
         intent.putExtra(BACKGROUND,R.drawable.mecca)
         startActivity(intent)
+        overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
         finish()
     }
     @SuppressLint("SuspiciousIndentation")
@@ -129,10 +130,10 @@ class MeccaActivity : AppCompatActivity() {
                     intent.putStringArrayListExtra(MEANING_LIST,meanings)
                    intent.putStringArrayListExtra(EXAMPLE_LIST,examples)
                     intent.putIntegerArrayListExtra(SOUND_LIST,sounds)
-        intent.putExtra(BACKGROUND,R.drawable.medina)
-        startActivity(intent)
-        overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
-        finish()
+                    intent.putExtra(BACKGROUND,R.drawable.medina)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
+                    finish()
     }
 
 
@@ -193,7 +194,9 @@ class MeccaActivity : AppCompatActivity() {
                             when(city){
                                 "mecca"->startMecca()
                                 "medina"->startMadina()
-                                else->{}
+                                else->{
+                                    Log.i(TAG, "handleMessage: invalid city name")
+                                }
                             }
                         } else {
                             handler.sendEmptyMessageDelayed(0,0)
