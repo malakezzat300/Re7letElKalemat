@@ -5,6 +5,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import androidx.lifecycle.LiveData
 
 class MyCardDetailService : Service() {
@@ -15,10 +16,13 @@ class MyCardDetailService : Service() {
         return binder
     }
     fun playSound(soundResId: Int) {
+        Log.i("mdialplaer","play called")
+
         mdiaPlayeer = MediaPlayer.create(this, soundResId)
         mdiaPlayeer?.start()
     }
     fun stopSound() {
+        Log.i("mdialplaer","stopped called")
         mdiaPlayeer?.stop()
         mdiaPlayeer?.release()
         mdiaPlayeer = null

@@ -83,6 +83,11 @@ class SaudiArabiaActivity : AppCompatActivity() {
                         pos = service.getCurrentPosition()
                         if (!mediaPlayer.isPlaying&&e) {
                             e=false
+                            if (isBound) {
+                                myService?.stopSound()
+                                unbindService(connection)
+                                isBound = false
+                            }
                             Log.d("eeeeeeeeeeeeeeeeeeeeeeeeee", "handleMessage:")
                             val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
                             startActivity(intent)

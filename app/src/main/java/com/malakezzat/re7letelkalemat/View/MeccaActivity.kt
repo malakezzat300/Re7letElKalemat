@@ -160,7 +160,7 @@ class MeccaActivity : AppCompatActivity() {
                                 else->{}
                             }
                         } else {
-                            handler.sendEmptyMessage(0)
+                            handler.sendEmptyMessageDelayed(0,400)
                         }
                     } else {
 
