@@ -17,11 +17,11 @@ import com.malakezzat.re7letelkalemat.databinding.ActivityOnCityPressed1Binding
 
 class onCityPressed1 : AppCompatActivity() {
     private lateinit var db: ActivityOnCityPressed1Binding
-    private lateinit var mediaPlayer: MediaPlayer
-    private var isActivityRunning = true
-    private var length : Int = 0
     var pos:Int=0
+    private var e:Boolean=true
     lateinit var handler: Handler
+    private var myService: MyCardDetailService? = null
+    private var isBound = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityOnCityPressed1Binding.inflate(layoutInflater)
@@ -31,6 +31,7 @@ class onCityPressed1 : AppCompatActivity() {
         }else{
             getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
         }
+
         setup_handler()
         val intent = Intent(this, MyCardDetailService::class.java)
         bindService(intent, connection, BIND_AUTO_CREATE)
@@ -43,27 +44,26 @@ class onCityPressed1 : AppCompatActivity() {
                     val mediaPlayer = service.mdiaPlayeer // Assuming it's `mediaPlayer`?
                     if (mediaPlayer != null) {
                         pos = service.getCurrentPosition()
-                        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaa", "MediaPlayer is $pos  ${mediaPlayer.duration}")
-                        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaa", "MediaPlayer is   ${mediaPlayer.isPlaying}")
-                        if (!mediaPlayer.isPlaying) {
+                         if (!mediaPlayer.isPlaying&&e) {
+                             e=false
                             db.viewAnimator.cancelAnimation()
+                             Log.d("eeeeeeeeeeeeeeeeeeeeeeeeee", "handleMessage:")
                             val intent = Intent(this@onCityPressed1, OnCityPressed2::class.java)
                             startActivity(intent)
                             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                             finish()
                         } else {
-                            handler.sendEmptyMessageDelayed(0, 0)
+                            handler.sendEmptyMessageDelayed(0, 5)
                         }
                     } else {
-                        Log.e("CardDetailsActivity", "MediaPlayer is null")
                     }
                 } ?: run {
-                    Log.e("CardDetailsActivity", "myService is null")
                 }
             }
         }
 
     }
+
     private val connection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             myService = (service as MyCardDetailService.myBinder).getService()
@@ -98,8 +98,7 @@ class onCityPressed1 : AppCompatActivity() {
         myService?.stopSound()
         db.viewAnimator.cancelAnimation()
     }
-    private var myService: MyCardDetailService? = null
-    private var isBound = false
+
     private  val TAG = "onCityPressed1"
     override fun onDestroy() {
         super.onDestroy()
@@ -110,5 +109,6 @@ class onCityPressed1 : AppCompatActivity() {
         }
         db.viewAnimator.cancelAnimation()
     }
+
 
 }

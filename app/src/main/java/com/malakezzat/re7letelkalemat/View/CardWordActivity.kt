@@ -1,10 +1,15 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
+import android.os.Message
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -32,7 +37,13 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
     private var isBack: Boolean = false
     private var currentSound : Int = 0
     private var favWord : Boolean = false
-
+    private var myService: MyCardDetailService? = null
+    private var isBound = false
+    var pos:Int=0
+    private var e:Boolean=true
+    var soundList: List<Int>? =null
+    lateinit var handler: Handler
+    private  val TAG = "CardWordActivity"
     companion object {
         const val WORDS_LIST: String = "wordsList"
         const val MEANING_LIST: String = "meaningList"
@@ -53,7 +64,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
         val meaningList: List<String>? = intent.getStringArrayListExtra(MEANING_LIST)
         val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
-        val soundList: List<Int>? = intent.getIntegerArrayListExtra(SOUND_LIST)
+        soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
         val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
         position = intent.getIntExtra(POSITION, 0)
         isReleased = false
@@ -72,8 +83,6 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
             }
         }
-
-
         db.nextButton.isEnabled = false
 
         mediaPlayer = MediaPlayer.create(this, soundList?.get(position) ?: R.raw.ready).apply {
@@ -143,8 +152,41 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 favWord = false
             }
         }
+        setup_handler()
+        val intent = Intent(this, MyCardDetailService::class.java)
+        bindService(intent, connection, BIND_AUTO_CREATE)
     }
+    fun setup_handler(){
+        handler = object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                myService?.let { service ->
+                    val mediaPlayer = service.mdiaPlayeer // Assuming it's `mediaPlayer`?
+                    if (mediaPlayer != null) {
+                        pos = service.getCurrentPosition()
+                        if (!mediaPlayer.isPlaying&&e) {
+                            e=false
+                            if (position < soundList?.size!!){
+                                myService?.stopSound()
+                                myService?.playSound(soundList!!.get(position+1))
+                                pos=0
+                                myService?.seekTo(pos)
+                                handler.sendEmptyMessage(0)
+                                e=true
+                                savePos()
+                            }else{
 
+                            }
+                        } else {
+                            handler.sendEmptyMessageDelayed(0, 5)
+                        }
+                    } else {
+                    }
+                } ?: run {
+                }
+            }
+        }
+
+    }
     override fun showWord(word: Word) {
         // Handle showing a single word, not needed here
     }
@@ -155,44 +197,39 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
 
     override fun onBackPressed() {
         --position
+        pos=0
+        handler.sendEmptyMessage(0)
         super.onBackPressed()
     }
 
+
     override fun onPause() {
         super.onPause()
-        if (!isReleased && ::mediaPlayer.isInitialized && mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            length = mediaPlayer.currentPosition
-        }
+        super.onPause()
+        savePos()
+        myService?.stopSound()
     }
 
     override fun onResume() {
         super.onResume()
-        if (!isReleased && ::mediaPlayer.isInitialized) {
-            mediaPlayer.seekTo(length)
-            mediaPlayer.start()
-        }
-        if(isBack){
-            mediaPlayer = MediaPlayer.create(this, currentSound).apply {
-                setOnPreparedListener {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        start()
-                        lottieAnimation.playAnimation()
-                        db.nextButton.isEnabled = true
-                    }, 500)
-                }
-            }
-        }
+        pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
+        myService?.playSound(soundList!!.get(position))
+        myService?.seekTo(pos)
+        handler.sendEmptyMessage(0)
     }
-
+    fun savePos(){
+        pos=myService!!.getCurrentPosition()
+        getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
+        getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("isBack", position).apply()
+    }
     override fun onDestroy() {
         super.onDestroy()
-        if (::mediaPlayer.isInitialized && !isReleased) {
-            mediaPlayer.release()
-            isReleased = true
+        if (isBound) {
+            myService?.stopSound()
+            unbindService(connection)
+            isBound = false
         }
     }
-
     fun isFavorite(word : String?) : Boolean{
         val favList : List<Word>? = presenter.loadFavWords()
         if (favList != null) {
@@ -203,5 +240,19 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             }
         }
         return false
+    }
+    private val connection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            myService = (service as MyCardDetailService.myBinder).getService()
+            isBound = true
+            myService?.playSound(soundList!!.get(position))
+            myService?.seekTo(pos)
+            handler.sendEmptyMessage(0)
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            myService = null
+            isBound = false
+        }
     }
 }
