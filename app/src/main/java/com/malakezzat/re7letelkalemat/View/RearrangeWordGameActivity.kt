@@ -109,24 +109,47 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showFail() {
-        showCustomDialog(
-            layoutResId = R.layout.failer_dialog_custom,
-            title = getString(R.string.wrong_answer),
-            imageResId = R.drawable.cross_ic,
-            backgroundColor = R.color.LightRed,
-            onPositiveClick = {
-                heartsCount = (heartsCount - 1).coerceAtLeast(0)
-                db.hearts.text = heartsCount.toString()
+        if (heartsCount == 1) {
+            // Show the sad dialog when heartsCount is 1
+            showCustomDialog(
+                layoutResId = R.layout.sad_dialog,
+                title = getString(R.string.sorry),  // Use a suitable string resource or literal text
+                imageResId = R.drawable.sad_ic,     // Use the drawable resource for the sad image
+                backgroundColor = R.color.LightRed, // Use a color resource for the background color
+                onPositiveClick = {
+                    heartsCount = (heartsCount - 1).coerceAtLeast(0)
+                    db.hearts.text = heartsCount.toString()
 
-                if (heartsCount <= 0) {
-                    val intent = Intent(this, AfterFailingInGameActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
+                    if (heartsCount <= 0) {
+                        val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
                         restData()
+                    }
                 }
-            }
-        )
+            )
+        } else {
+            // Show the existing fail dialog for other cases
+            showCustomDialog(
+                layoutResId = R.layout.failer_dialog_custom,
+                title = getString(R.string.wrong_answer),
+                imageResId = R.drawable.cross_ic,
+                backgroundColor = R.color.LightRed,
+                onPositiveClick = {
+                    heartsCount = (heartsCount - 1).coerceAtLeast(0)
+                    db.hearts.text = heartsCount.toString()
+
+                    if (heartsCount <= 0) {
+                        val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        restData()
+                    }
+                }
+            )
+        }
     }
 
     private fun showCustomDialog(

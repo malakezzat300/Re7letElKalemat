@@ -52,6 +52,8 @@
     <string name="wrong_answer">إجابة غير صحيحة</string>
     <string name="rearrange_words_title">رتب الكلمات الأتية لتكوين جملة مفيدة</string>
     <string name="example">مثال : </string>
+    <string name="sorry">للأسف لقد نفذت وحدات الصحة الخاصة بك</string>
     <string name="skip">تخطي</string>
+
 
 </resources>
