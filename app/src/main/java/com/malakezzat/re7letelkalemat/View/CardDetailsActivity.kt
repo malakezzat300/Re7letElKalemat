@@ -1,36 +1,25 @@
 package com.malakezzat.re7letelkalemat.View
 
-import android.content.ComponentName
-import android.content.Intent
-import android.content.ServiceConnection
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
-import android.os.Message
-import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.malakezzat.re7letelkalemat.Model.wordsList
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityCardDetailsBinding
+import com.malakezzat.re7letelkalemat.databinding.ActivityRewordFinishCityWordsBinding
+
 
 class CardDetailsActivity : AppCompatActivity() {
     private lateinit var db: ActivityCardDetailsBinding
     private lateinit var backButton: ImageView
-    private var myService: MyCardDetailService? = null
-    private var isBound = false
-     var pos:Int=0
-    lateinit var word:String
-    lateinit var meaning:String
-    lateinit var example:String
-     var sound:Int=0
-    lateinit var handler:Handler
-    private  val TAG = "CardDetailsActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityCardDetailsBinding.inflate(layoutInflater)
+
         if (savedInstanceState != null) {
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         }else{
@@ -68,9 +57,10 @@ class CardDetailsActivity : AppCompatActivity() {
 
         setContentView(db.root)
         backButton = db.backImage
-        backButton.setOnClickListener {
+        backButton.setOnClickListener{
             finish()
         }
+
         val intent = Intent(this, MyCardDetailService::class.java)
         bindService(intent, connection, BIND_AUTO_CREATE)
     }
@@ -118,5 +108,6 @@ class CardDetailsActivity : AppCompatActivity() {
         myService?.seekTo(pos)
         db.viewAnimator.resumeAnimation()
         handler.sendEmptyMessage(0)
+
     }
 }

@@ -13,13 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Re7letElKalemat"
         tools:targetApi="31">
-        <service
-            android:name=".View.MyCardDetailService"
-            android:enabled="true"
-            android:exported="true"/>
         <activity
             android:name=".View.FindTheMeaningGame"
-            android:exported="false" />
+            android:exported="false"/>
+
         <activity
             android:name=".View.FirstGameRulesActivity"
             android:exported="false" />
