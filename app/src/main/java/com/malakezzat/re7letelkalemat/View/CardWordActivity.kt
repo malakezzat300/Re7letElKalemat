@@ -70,7 +70,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             pos=0
             position=0
         }
-
+//
 
         isReleased = false
         lottieAnimation = db.viewAnimator
