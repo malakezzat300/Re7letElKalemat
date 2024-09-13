@@ -29,6 +29,7 @@
             android:textSize="18sp" />
 
         <ImageView
+            android:id="@+id/heart_ic"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
@@ -42,7 +43,6 @@
         android:layout_margin="18dp"
         android:layout_marginTop="24dp"
         android:orientation="horizontal"
-
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"

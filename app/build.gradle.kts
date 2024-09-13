@@ -80,4 +80,6 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
+    //TAP TARGET VIEW
+    implementation ("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
 }
