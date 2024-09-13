@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,15 +23,29 @@ class FirstGameRulesActivity : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     private var isActivityRunning = true
     private var length : Int = 0
+    lateinit var city : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = ActivityFirstGameRulsBinding.inflate(layoutInflater)
         setContentView(db.root)
+        city = intent.getStringExtra("city") ?: "medina"
+
+        Log.i("TAG", "onCreate: $city")
         animation = db.viewAnimator
         startNowBtn = db.startNow
-        mediaPlayer = MediaPlayer.create(this, R.raw.start_first_game)
+        if(city == "mecca"){
+            mediaPlayer = MediaPlayer.create(this, R.raw.start_first_game)
+        }else if(city == "medina"){
+            mediaPlayer = MediaPlayer.create(this, R.raw.game2_rules)
+        }
+
         startNowBtn.setOnClickListener {
-            val intent = Intent(this, RearrangeWordGameActivity::class.java)
+            var intent = Intent()
+            if(city == "mecca"){
+                intent = Intent(this, RearrangeWordGameActivity::class.java)
+            }else if(city == "medina"){
+                intent = Intent(this, FindTheMeaningGame::class.java)
+            }
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()

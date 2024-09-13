@@ -35,8 +35,10 @@ class RewordFinishCityWordsActivity : AppCompatActivity(),CityView {
     var pos:Int=0
     var e=true
     private  val TAG = "RewordFinishCityWordsAc"
+    lateinit var city : String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        city = intent.getStringExtra("city") ?: ""
         if (savedInstanceState!=null){
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
             e=getSharedPreferences(TAG, MODE_PRIVATE).getBoolean("e",true)
@@ -53,6 +55,8 @@ class RewordFinishCityWordsActivity : AppCompatActivity(),CityView {
         button1.setOnClickListener{
             tear_down()
             val intent = Intent(this, FirstGameRulesActivity::class.java)
+            intent.putExtra("city",city)
+            Log.i("TAG", "onCreate: RewordFinish $city")
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
@@ -60,7 +64,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity(),CityView {
         button2.setOnClickListener{
             tear_down()
             val intent = Intent(this, MeccaActivity::class.java)
-            intent.putExtra("city",currentCity)
+            intent.putExtra("city",city)
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_pop_in, R.anim.fragment_slide_out_left)
             finish()
