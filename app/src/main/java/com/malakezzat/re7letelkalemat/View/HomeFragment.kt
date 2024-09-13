@@ -26,7 +26,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var imageView: ImageView
     private lateinit var scaleGestureDetector: ScaleGestureDetector
-    private val matrix = Matrix()
+    private val matrix: Matrix by lazy {
+        Matrix().apply {
+            postTranslate(-1300f, -600f)
+        }
+    }
     private var scaleFactor = 0.81f // Adjust this value to zoom out more or less
     private val maxScaleFactor = 2f
     private val minScaleFactor = 0.81f
@@ -69,7 +73,6 @@ class HomeFragment : Fragment() {
         lottiePin4 = binding.lottieAnimation4
         imageView = binding.imageView
 
-        matrix.postTranslate(-1000f, -600f)
         constrainMatrix()
         imageView.imageMatrix = matrix
 
