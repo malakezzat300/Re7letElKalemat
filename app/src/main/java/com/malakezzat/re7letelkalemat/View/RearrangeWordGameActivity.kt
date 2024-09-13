@@ -51,10 +51,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
         ).targetRadius(60)
             .outerCircleColor(R.color.white)  // لون الدائرة الخارجية
-            .outerCircleAlpha(0.7f)  // شفافية الدائرة الخارجية
-            .titleTextSize(20)  // حجم النص في العنوان
-            .descriptionTextSize(14)  // حجم النص في الوصف
-            .textColor(R.color.black)  // لون النص
+            .outerCircleAlpha(1f)  // شفافية الدائرة الخارجية
+            .titleTextSize(26)  // حجم النص في العنوان
+            .descriptionTextSize(20)  // حجم النص في الوصف
+            .textColor(R.color.my_primary_variant_color)  // لون النص
             .drawShadow(true)  // رسم الظل
             .cancelable(true)  // إمكانية إغلاق التوجيه
             .tintTarget(true)  // تلوين الهدف
