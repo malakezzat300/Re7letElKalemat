@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityEditProfileBinding
 
@@ -195,27 +196,12 @@ class EditProfileActivity : AppCompatActivity() {
         // Attach a listener to read the data
         userRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val user2 = task.result.getValue(EditProfileActivity.User::class.java)
+                val user2 = task.result.getValue(User::class.java)
                 score = user2?.score?.toString() ?: "0"
                 db.scoreText.text = score
             } else {
                 // Handle potential errors, you can pass a default score in case of failure
             }
-        }
-    }
-
-    // Define the User class (same as before)
-    class User {
-        var name: String? = null
-        var imageUrl: String? = null
-        var score: Int = 0
-
-        constructor()
-
-        constructor(name: String?, imageUrl: String?, score: Int) {
-            this.name = name
-            this.imageUrl = imageUrl
-            this.score = score
         }
     }
 

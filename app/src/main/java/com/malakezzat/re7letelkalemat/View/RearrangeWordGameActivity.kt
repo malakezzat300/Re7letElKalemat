@@ -30,11 +30,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
 import com.malakezzat.re7letelkalemat.R
-import com.malakezzat.re7letelkalemat.View.EditProfileActivity.User
 import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBinding
 
 
@@ -483,7 +483,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         var oldScore = 0
         userRef.get().addOnCompleteListener(object : OnCompleteListener<DataSnapshot> {
             override fun onComplete(p0: Task<DataSnapshot>) {
-                val user = p0.result.getValue(EditProfileActivity.User::class.java)
+                val user = p0.result.getValue(User::class.java)
                 oldScore =  user?.score ?: 0
                 val finalScore = newScore + oldScore
                 // Update the score field

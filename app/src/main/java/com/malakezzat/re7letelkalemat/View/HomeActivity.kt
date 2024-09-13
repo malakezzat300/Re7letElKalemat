@@ -20,8 +20,8 @@ import com.google.firebase.database.values
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
-import com.malakezzat.re7letelkalemat.View.EditProfileActivity.User
 import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
 
 
@@ -93,21 +93,6 @@ class HomeActivity : AppCompatActivity() {
             .addOnFailureListener { exception: java.lang.Exception? -> }
     }
 
-    // Define the User class
-    class User {
-        var name: String? = null
-        var imageUrl: String? = null
-        var score: Int = 0
-
-        constructor()
-
-        constructor(name: String?, imageUrl: String?, score: Int) {
-            this.name = name
-            this.imageUrl = imageUrl
-            this.score = score
-        }
-    }
-
     fun getUserScore(userId: String?) : String {
         var score : String = "0"
         // Get Firebase Realtime Database reference
@@ -116,7 +101,7 @@ class HomeActivity : AppCompatActivity() {
 
         userRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val user2 = task.result.getValue(EditProfileActivity.User::class.java)
+                val user2 = task.result.getValue(User::class.java)
                 score = user2?.score?.toString() ?: "0"
                 storeUserData(user?.email,user?.displayName, user?.photoUrl.toString(),user2?.score ?: 0)
             } else {
