@@ -43,7 +43,8 @@ class ProfileFragment : Fragment() {
             Toast.makeText(context, "قريباً", Toast.LENGTH_SHORT).show()
         }
         db.friendsButton.setOnClickListener {
-            Toast.makeText(context, "قريباً", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, LeaderBoardActivity::class.java)
+            startActivity(intent)
         }
         db.editButton.setOnClickListener {
             val intent = Intent(context, EditProfileActivity::class.java)
