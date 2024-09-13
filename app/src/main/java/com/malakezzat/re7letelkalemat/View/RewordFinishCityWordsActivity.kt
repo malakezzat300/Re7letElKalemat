@@ -20,13 +20,16 @@ import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.View.Interfaces.CityView
 import com.malakezzat.re7letelkalemat.databinding.ActivityRewordFinishCityWordsBinding
 
-class RewordFinishCityWordsActivity : AppCompatActivity(),CityView{
+class RewordFinishCityWordsActivity : AppCompatActivity(),CityView {
     private lateinit var db: ActivityRewordFinishCityWordsBinding
 
     private lateinit var button1: Button
     private lateinit var button2: Button
     lateinit var handler: Handler
-    lateinit var city: String
+
+    companion object {
+        lateinit var currentCity: String
+    }
     private var myService: MyCardDetailService? = null
     private var isBound = false
     var pos:Int=0
@@ -57,7 +60,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity(),CityView{
         button2.setOnClickListener{
             tear_down()
             val intent = Intent(this, MeccaActivity::class.java)
-            intent.putExtra("city",city)
+            intent.putExtra("city",currentCity)
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_pop_in, R.anim.fragment_slide_out_left)
             finish()
@@ -149,7 +152,7 @@ class RewordFinishCityWordsActivity : AppCompatActivity(),CityView{
     }
 
     override fun getCityName(city: String) {
-        this.city = city
+        currentCity = city
     }
 
 }
