@@ -253,8 +253,8 @@ class EditProfileActivity : AppCompatActivity() {
         val uri = imageUrl?.toUri() ?: AppCompatResources.getDrawable(applicationContext, R.drawable.vector__1_)
             .toString().toUri()
 
-            usersRef.child("imageUrl").setValue(uri)
-            uploadImage(uri)
+        usersRef.child("imageUrl").setValue(uri.toString())
+        uploadImage(uri)
 
         // Assuming uploadImage function uploads the image and returns the URL
 
