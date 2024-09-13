@@ -239,16 +239,24 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showFail() {
-        current++
-        if(current<limte){
-            presenter.genrateRandomWords()
-            Toast.makeText(this,"Fail", Toast.LENGTH_SHORT).show()
-
-
-        }else{
-            // navigate here
-
-            Toast.makeText(this,"Failed", Toast.LENGTH_SHORT).show()
+        // Decrease hearts
+        val hearts = db.hearts.text.toString().toInt()
+        if (hearts > 0) {
+            db.hearts.text = (hearts - 1).toString()
+            if (hearts - 1 == 0) {
+                // Navigate to AfterFailingInGameActivity
+                val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                presenter.genrateRandomWords()
+                Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Navigate to AfterFailingInGameActivity if no hearts left
+            val intent = Intent(this, AfterFailingInGameActivity::class.java)
+            startActivity(intent)
+            finish()
         }
         clear()
     }
