@@ -485,12 +485,12 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             override fun onComplete(p0: Task<DataSnapshot>) {
                 val user = p0.result.getValue(EditProfileActivity.User::class.java)
                 oldScore =  user?.score ?: 0
+                val finalScore = newScore + oldScore
+                // Update the score field
+                userRef.child("score").setValue(finalScore)
             }
         })
-        val finalScore = newScore + oldScore
 
-        // Update the score field
-        userRef.child("score").setValue(finalScore)
     }
 
 
