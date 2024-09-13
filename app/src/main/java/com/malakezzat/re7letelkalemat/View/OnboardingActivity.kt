@@ -14,7 +14,7 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
-        /*val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val adapter = OnboardingPagerAdapter(this)
         viewPager.adapter = adapter
     }
@@ -22,12 +22,11 @@ class OnboardingActivity : AppCompatActivity() {
     fun navigateToNextPage() {
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         viewPager.currentItem = viewPager.currentItem + 1
-    }*/
+    }
 
     fun startMainActivity() {
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
         finish()
     }
-}
 }

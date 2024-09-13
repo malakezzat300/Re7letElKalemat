@@ -9,7 +9,7 @@ import com.malakezzat.re7letelkalemat.View.OnboardingActivity
 
 class OnboardingFragment : Fragment() {
 
-    /*private var page: Int = 0
+    private var page: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,19 +30,22 @@ class OnboardingFragment : Fragment() {
     }
 
     private fun setupPage1(view: View) {
-        view.findViewById<Button>(R.id.nextButton1).setOnClickListener {
+        val nextButton: Button = view.findViewById(R.id.nextButton1)
+        nextButton.setOnClickListener {
             (activity as? OnboardingActivity)?.navigateToNextPage()
         }
     }
 
     private fun setupPage2(view: View) {
-        view.findViewById<Button>(R.id.nextButton2).setOnClickListener {
+        val nextButton: Button = view.findViewById(R.id.nextButton2)
+        nextButton.setOnClickListener {
             (activity as? OnboardingActivity)?.navigateToNextPage()
         }
     }
 
     private fun setupPage3(view: View) {
-        view.findViewById<Button>(R.id.startButton).setOnClickListener {
+        val startButton: Button = view.findViewById(R.id.startButton)
+        startButton.setOnClickListener {
             (activity as? OnboardingActivity)?.startMainActivity()
         }
     }
@@ -55,5 +58,5 @@ class OnboardingFragment : Fragment() {
             fragment.arguments = args
             return fragment
         }
-    }*/
+    }
 }
