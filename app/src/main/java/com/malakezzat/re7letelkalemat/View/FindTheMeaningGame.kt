@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.Rect
@@ -221,14 +222,18 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showSuccess() {
-        current++
-        if(current<limte){
+        // Increase progress
+        val progress = db.progressBar.progress + 20
+        if (progress >= 100) {
+            db.progressBar.progress = 100
+            // Navigate to AfterSuccessInGame activity
+            val intent = Intent(this, AfterSuccessInGame::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            db.progressBar.progress = progress
             presenter.genrateRandomWords()
-            Toast.makeText(this,"Success", Toast.LENGTH_SHORT).show()
-
-        }else{
-            // navigate here
-            Toast.makeText(this,"Congratulation", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
         }
         clear()
     }
