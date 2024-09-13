@@ -127,7 +127,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 exampleSentence = exampleList?.get(position).toString(),
                 soundResId = soundList?.get(position) ?: R.raw.ready
             )
-            if(!favWord) {
+            if (!favWord) {
                 presenter.addWord(word)
                 db.favoriteButton.setImageResource(R.drawable.favorite_button_pressed)
                 Toast.makeText(this, "تمت الإضافة بنجاح", Toast.LENGTH_SHORT).show()
@@ -139,6 +139,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 favWord = false
             }
         }
+
         setup_handler()
         val intent = Intent(this, MyCardDetailService::class.java)
         bindService(intent, connection, BIND_AUTO_CREATE)
