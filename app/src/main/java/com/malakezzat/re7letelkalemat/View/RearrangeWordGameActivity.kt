@@ -121,7 +121,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             onPositiveClick = {
                 progressBarValue = (progressBarValue + 20).coerceAtMost(100)
                 db.progressBar.progress = progressBarValue
-
+                score += 1
                 if (progressBarValue == 100) {
                     updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                     val intent = Intent(this, AfterSuccessInGame::class.java)
@@ -132,7 +132,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                 }
             }
         )
-        score += 1
+
     }
 
     override fun showFail() {
