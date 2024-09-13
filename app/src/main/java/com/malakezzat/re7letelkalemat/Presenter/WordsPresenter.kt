@@ -40,16 +40,16 @@ class WordsPresenter(private val view: WordsContract.View, var w:Word? =null,var
         view.showSuccess()
     }
     override fun genrateRandomWords(){
-        val r1=wordsList.random()
-        var r2=wordsList.random()
-        var r3=wordsList.random()
-        var r4=wordsList.random()
+        val r1=wordsList.take(10).random()
+        var r2=wordsList.take(10).random()
+        var r3=wordsList.take(10).random()
+        var r4=wordsList.take(10).random()
         while (r1 == r2){
-            r2=wordsList.random()}
+            r2=wordsList.take(10).random()}
         while (r3 == r2||r3==r1){
-            r3=wordsList.random()}
+            r3=wordsList.take(10).random()}
         while (r4 == r2||r4==r1||r4==r3){
-            r4=wordsList.random()}
+            r4=wordsList.take(10).random()}
         view.showlistWords(listOf(r1,r2,r3,r4))
     }
 
