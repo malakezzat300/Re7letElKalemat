@@ -19,7 +19,7 @@ class LeaderBoardAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val orderNumber : TextView = itemView.findViewById(R.id.order_number)
         val userName: TextView = itemView.findViewById(R.id.user_name)
-        val userScore: TextView = itemView.findViewById(R.id.scoreText)
+        val userScore: TextView = itemView.findViewById(R.id.scoreText2)
         val profileImg : ImageView = itemView.findViewById(R.id.profileImg)
     }
 
@@ -34,7 +34,7 @@ class LeaderBoardAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = userList[position]
         holder.orderNumber.text = (position + 1).toString()
-        holder.userName.text = user.name
+        holder.userName.text = user.name?.substringBefore(" ")
         holder.userScore.text = user.score.toString()
         Glide.with(holder.profileImg.context)
             .load(user.imageUrl)
