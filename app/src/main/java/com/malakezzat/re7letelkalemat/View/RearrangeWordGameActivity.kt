@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -39,6 +43,39 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         super.onCreate(savedInstanceState)
         db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
         setContentView(db.root)
+        val linearLayout: LinearLayout = db.linearLayout
+        val progressBar: ProgressBar = db.progressBar
+        TapTargetView.showFor(this, TapTarget.forView(
+            linearLayout,
+            "وحدات الصحة الخاصة بك",
+            "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)  // لون الدائرة الخارجية
+            .outerCircleAlpha(1f)  // شفافية الدائرة الخارجية
+            .titleTextSize(26)  // حجم النص في العنوان
+            .descriptionTextSize(20)  // حجم النص في الوصف
+            .textColor(R.color.my_primary_variant_color)  // لون النص
+            .drawShadow(true)  // رسم الظل
+            .cancelable(true)  // إمكانية إغلاق التوجيه
+            .tintTarget(true)  // تلوين الهدف
+            .transparentTarget(true)  // جعل الهدف شفافًا
+        )
+        /*TapTargetView.showFor(this, TapTarget.forView(
+            progressBar,
+            "معدل التقدم",
+            "يجب عليك ملئ شريط التقدم حتى تجتاز اللعبة بنجاح"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(0.7f)
+            .titleTextSize(20)
+            .descriptionTextSize(14)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true)
+        )*/
+
         if (savedInstanceState != null) {
             current = savedInstanceState.getInt("current")
             data = savedInstanceState.getStringArrayList("data")!!
