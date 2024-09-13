@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentProfileBinding
 
@@ -61,7 +63,7 @@ class ProfileFragment : Fragment() {
             requireActivity().overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             activity?.finish()
         }
-
+        getUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."))
     }
 
     override fun onResume() {
@@ -74,5 +76,26 @@ class ProfileFragment : Fragment() {
         }
         db.profileNametxt.text = "مرحباً بك يا " + FirebaseAuth.getInstance().currentUser?.displayName
 
+    }
+
+
+    fun getUserScore(userId: String?) {
+        var score : String = "0"
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(userId!!)
+
+
+
+        // Attach a listener to read the data
+        userRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user2 = task.result.getValue(User::class.java)
+                score = user2?.score?.toString() ?: "0"
+                db.scoreText.text = score
+            } else {
+                // Handle potential errors, you can pass a default score in case of failure
+            }
+        }
     }
 }

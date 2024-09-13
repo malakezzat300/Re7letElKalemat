@@ -217,7 +217,7 @@ class EditProfileActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val user2 = task.result.getValue(User::class.java)
                 score = user2?.score?.toString() ?: "0"
-                db.scoreText.text = score
+                //db.scoreText.text = score
             } else {
                 // Handle potential errors, you can pass a default score in case of failure
             }
