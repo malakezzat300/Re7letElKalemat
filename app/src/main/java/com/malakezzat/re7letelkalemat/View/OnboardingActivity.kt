@@ -25,7 +25,7 @@ class OnboardingActivity : AppCompatActivity() {
     }*/
 
     fun startMainActivity() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
         finish()
     }
