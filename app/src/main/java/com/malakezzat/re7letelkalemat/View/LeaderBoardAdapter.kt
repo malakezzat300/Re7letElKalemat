@@ -10,24 +10,24 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
+import com.malakezzat.re7letelkalemat.databinding.LeaderboardItemBinding
 
 class LeaderBoardAdapter(
     private val userList: List<User>
 ) : RecyclerView.Adapter<LeaderBoardAdapter.ViewHolder>() {
 
     // ViewHolder class to hold and recycle views
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val orderNumber : TextView = itemView.findViewById(R.id.order_number)
-        val userName: TextView = itemView.findViewById(R.id.user_name)
-        val userScore: TextView = itemView.findViewById(R.id.scoreText2)
-        val profileImg : ImageView = itemView.findViewById(R.id.profileImg)
+    inner class ViewHolder(val db: LeaderboardItemBinding) : RecyclerView.ViewHolder(db.root) {
+        val orderNumber : TextView = db.orderNumber
+        val userName: TextView = db.userName
+        val userScore: TextView = db.scoreText2
+        val profileImg : ImageView = db.profileImg
     }
 
     // Inflate the item layout and create ViewHolder objects
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.leaderboard_item, parent, false)
-        return ViewHolder(view)
+        val db= LeaderboardItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ViewHolder(db)
     }
 
     // Bind the data to the views in each list item
