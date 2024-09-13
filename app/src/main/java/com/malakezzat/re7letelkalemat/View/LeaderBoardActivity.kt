@@ -3,6 +3,8 @@ package com.malakezzat.re7letelkalemat.View
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -11,15 +13,22 @@ import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
 
 class LeaderBoardActivity : AppCompatActivity()  {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var leaderboardAdapter: LeaderBoardAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leader_board)
 
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.myCardRecycler)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
         retrieveAndSortUsers { sortedUsersList ->
-            // Use the sorted list of users
-            sortedUsersList.forEach { user ->
-                println("Name: ${user.name}, Score: ${user.score}, Image URL: ${user.imageUrl}")
-            }
+            // Set up the adapter with the sorted user list
+            leaderboardAdapter = LeaderBoardAdapter(sortedUsersList)
+            recyclerView.adapter = leaderboardAdapter
 
             // Show a toast message with the top user's name and score
             if (sortedUsersList.isNotEmpty()) {

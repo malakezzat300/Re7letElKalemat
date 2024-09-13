@@ -16,6 +16,7 @@ class LeaderBoardAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName: TextView = itemView.findViewById(R.id.user_name)
         val userScore: TextView = itemView.findViewById(R.id.scoreText)
+        val orderNumber: TextView = itemView.findViewById(R.id.order_number)
     }
 
     // Inflate the item layout and create ViewHolder objects
@@ -30,6 +31,7 @@ class LeaderBoardAdapter(
         val user = userList[position]
         holder.userName.text = user.name
         holder.userScore.text = user.score.toString()
+        holder.orderNumber.text = (position + 1).toString()
     }
 
     // Return the total number of list items

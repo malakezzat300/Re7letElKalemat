@@ -54,11 +54,11 @@
                 android:textSize="32sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/profileImg"
-                app:layout_constraintStart_toEndOf="@+id/score_text"
+                app:layout_constraintStart_toEndOf="@+id/scoreText"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/score_text"
+                android:id="@+id/scoreText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
