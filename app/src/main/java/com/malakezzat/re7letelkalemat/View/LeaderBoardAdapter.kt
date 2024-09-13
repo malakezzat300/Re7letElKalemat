@@ -19,7 +19,7 @@ class LeaderBoardAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val orderNumber : TextView = itemView.findViewById(R.id.order_number)
         val userName: TextView = itemView.findViewById(R.id.user_name)
-        val userScore: TextView = itemView.findViewById(R.id.score_text)
+        val userScore: TextView = itemView.findViewById(R.id.scoreText)
         val profileImg : ImageView = itemView.findViewById(R.id.profileImg)
     }
 
