@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -29,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var db: ActivityHomeBinding
     private lateinit var navController: NavController
     lateinit var  bottomNavigationView: BottomNavigationView
-
+    lateinit var user : FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,8 @@ class HomeActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_home_fragment)
         bottomNavigationView = db.bottomNavigation
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-        val user = FirebaseAuth.getInstance().currentUser
-        storeUserData(user?.email,user?.displayName, user?.photoUrl.toString(),getUserScore(user?.email?.substringBefore(".")).toInt())
+        user = FirebaseAuth.getInstance().currentUser!!
+        getUserScore(user?.email?.substringBefore("."))
     }
 
     // Function to upload image
@@ -113,12 +114,15 @@ class HomeActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val userRef = database.getReference("users").child(userId!!)
 
-        userRef.get().addOnCompleteListener(object : OnCompleteListener<DataSnapshot>{
-            override fun onComplete(p0: Task<DataSnapshot>) {
-                val user = p0.result.getValue(EditProfileActivity.User::class.java)
-                score =  user?.score.toString()
+        userRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user2 = task.result.getValue(EditProfileActivity.User::class.java)
+                score = user2?.score?.toString() ?: "0"
+                storeUserData(user?.email,user?.displayName, user?.photoUrl.toString(),user2?.score ?: 0)
+            } else {
+                // Handle potential errors, you can pass a default score in case of failure
             }
-        })
+        }
 //        // Attach a listener to read the data
 //        userRef.addValueEventListener(object : ValueEventListener {
 //            override fun onDataChange(dataSnapshot: DataSnapshot) {

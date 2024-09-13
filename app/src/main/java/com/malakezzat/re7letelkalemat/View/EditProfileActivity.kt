@@ -179,12 +179,12 @@ class EditProfileActivity : AppCompatActivity() {
                     }
                 }
         }
-        db.scoreText.text = getUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."))
+        getUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."))
     }
 
 
     // Function to retrieve the user's score
-    fun getUserScore(userId: String?) : String {
+    fun getUserScore(userId: String?) {
         var score : String = "0"
         // Get Firebase Realtime Database reference
         val database = FirebaseDatabase.getInstance()
@@ -193,25 +193,15 @@ class EditProfileActivity : AppCompatActivity() {
 
 
         // Attach a listener to read the data
-        userRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // Check if the data exists
-                if (dataSnapshot.exists()) {
-                    // Retrieve the User object from the snapshot
-                    val user = dataSnapshot.getValue(User::class.java)
-                    score =  user?.score.toString()
-                } else {
-
-                }
+        userRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user2 = task.result.getValue(EditProfileActivity.User::class.java)
+                score = user2?.score?.toString() ?: "0"
+                db.scoreText.text = score
+            } else {
+                // Handle potential errors, you can pass a default score in case of failure
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle potential errors
-
-            }
-        })
-
-        return score
+        }
     }
 
     // Define the User class (same as before)
