@@ -55,6 +55,8 @@
     <string name="sorry">للأسف لقد نفذت وحدات الصحة الخاصة بك</string>
     <string name="skip">تخطي</string>
     <string name="learn_today">تعلم كلمة اليوم</string>
+    <string name="leader_board">المتصدرين</string>
+    <string name="your_score">النقاط الخاصة بك</string>
 
 
 </resources>
