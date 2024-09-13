@@ -1,39 +1,25 @@
 package com.malakezzat.re7letelkalemat.View
 
 
-import android.animation.Animator
 import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.app.AlarmManager.AlarmClockInfo
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.CalendarContract
 import android.provider.Settings
 import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivitySplashBinding
-import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 class SplashActivity : AppCompatActivity() {
     lateinit var db: ActivitySplashBinding
@@ -72,26 +58,48 @@ class SplashActivity : AppCompatActivity() {
         intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
         intent.data = Uri.parse("package:" + this.packageName)
         this.startActivity(intent)
-       scheduleDailyWork(this)
-
-
-    }
-    fun scheduleDailyWork(context: Context) {
-//        val workManager = WorkManager.getInstance(context)
-//
-//        Log.d("scheduleDailyWork", "Creating and Enqueuing WorkManager")
-//
-//        // Create a PeriodicWorkRequest to execute the worker every 24 hours
-//        val dailyWorkRequest = PeriodicWorkRequestBuilder<MyDailyNotificationJobService>(1, TimeUnit.DAYS)
-//            .setInitialDelay(0, TimeUnit.MILLISECONDS) // Start the worker immediately
-//            .build()
-//
-//        workManager.enqueueUniquePeriodicWork(
-//            "DailyWork",
-//            ExistingPeriodicWorkPolicy.REPLACE,  // Replaces any existing periodic work with the same name
-//            dailyWorkRequest
-//        )
+        //scheduleDailyWork(this)
+        if (getSharedPreferences("alert", MODE_PRIVATE).getBoolean("alert", true)) {
+            scheduleDailyAlarm(this)
+        }
     }
 
+    fun scheduleDailyAlarm(context: Context) {
+        getSharedPreferences("alert", MODE_PRIVATE).edit().putBoolean("alert", false).apply()
+        val intent = Intent(context, MyBordCast::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            159157,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, 10)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            pendingIntent
+        )
+
+        val intent2 = Intent()
+        intent2.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        intent2.data = Uri.parse("package:" + context.packageName)
+        context.startActivity(intent2)
+
+        Log.d("AlarmManager", "Alarm set for 10 AM daily")
+    }
 
 }
+
+
+
