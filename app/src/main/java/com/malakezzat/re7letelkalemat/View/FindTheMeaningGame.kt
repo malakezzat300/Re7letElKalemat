@@ -185,7 +185,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val y = ObjectAnimator.ofFloat(view, "y", ys)
         set2 = AnimatorSet()
 
-        set2!!.duration = 50
+        set2!!.duration = 300
         set2!!.playTogether(x, y)
         set2!!.doOnStart {
             db.main.findViewWithTag<TextView>(db.choosed.text)?.let {
@@ -216,7 +216,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val x = ObjectAnimator.ofFloat(view, "x", xs)
         val y = ObjectAnimator.ofFloat(view, "y", ys)
         set1 = AnimatorSet()
-        set1!!.duration = 50
+        set1!!.duration = 300
         set1!!.playTogether(x, y)
         set1!!.doOnStart {
             db.choosed.text = ""
