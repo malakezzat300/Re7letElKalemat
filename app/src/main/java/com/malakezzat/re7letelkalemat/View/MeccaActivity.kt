@@ -45,6 +45,7 @@ class MeccaActivity : AppCompatActivity() {
     var pos:Int=0
     var res=0
     lateinit var cityView : CityView
+    lateinit var cityViewForReword : CityView
 
     private var e:Boolean=true
     lateinit var handler: Handler
@@ -57,6 +58,7 @@ class MeccaActivity : AppCompatActivity() {
         layout = binding.main
         anim.playAnimation()
         cityView = AfterSuccessInGame()
+        cityViewForReword = RewordFinishCityWordsActivity()
         skip.setOnClickListener(View.OnClickListener {
             if (isBound) {
                 myService?.stopSound()
@@ -82,6 +84,7 @@ class MeccaActivity : AppCompatActivity() {
 
         city = intent.getStringExtra("city") ?: ""
         cityView.getCityName(city)
+        cityViewForReword.getCityName(city)
         words = arrayListOf()
         meanings = arrayListOf()
         examples = arrayListOf()

@@ -1,14 +1,17 @@
 package com.malakezzat.re7letelkalemat.View
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.databinding.FragmentHomeBinding
@@ -56,6 +59,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -64,6 +68,17 @@ class HomeFragment : Fragment() {
         lottiePin3 = binding.lottieAnimation3
         lottiePin4 = binding.lottieAnimation4
         imageView = binding.imageView
+
+        matrix.postTranslate(-1000f, -600f)
+        constrainMatrix()
+        imageView.imageMatrix = matrix
+
+        imageView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                updateLottiePinPositions()
+            }
+        })
 
         // Set up scale gesture detector
         scaleGestureDetector = ScaleGestureDetector(requireContext(), object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -98,6 +113,9 @@ class HomeFragment : Fragment() {
                         constrainMatrix()
                         imageView.imageMatrix = matrix
                         updateLottiePinPositions()
+                        Log.i("homeTest", "onViewCreated: "
+                        + "deltaX: " + deltaX +
+                                "deltaY: " + deltaY)
 
                         lastTouchX = event.x
                         lastTouchY = event.y
