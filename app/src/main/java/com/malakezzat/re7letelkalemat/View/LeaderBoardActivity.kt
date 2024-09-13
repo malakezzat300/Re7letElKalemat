@@ -4,43 +4,29 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
+import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
+import com.malakezzat.re7letelkalemat.databinding.ActivityLeaderBoardBinding
 
 class LeaderBoardActivity : AppCompatActivity()  {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var leaderboardAdapter: LeaderBoardAdapter
-
+    lateinit var db: ActivityLeaderBoardBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_leader_board)
+        db = ActivityLeaderBoardBinding.inflate(layoutInflater)
+        setContentView(db.root)
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.myCardRecycler)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        db.myCardRecycler.layoutManager = LinearLayoutManager(this)
 
+        // Retrieve and set sorted users
         retrieveAndSortUsers { sortedUsersList ->
-            // Set up the adapter with the sorted user list
-            leaderboardAdapter = LeaderBoardAdapter(sortedUsersList)
-            recyclerView.adapter = leaderboardAdapter
-
-            // Show a toast message with the top user's name and score
-            if (sortedUsersList.isNotEmpty()) {
-                val topUser = sortedUsersList.first()
-                Toast.makeText(
-                    this,
-                    "Top User: ${topUser.name}, Score: ${topUser.score}",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                Toast.makeText(this, "No users found", Toast.LENGTH_LONG).show()
-            }
+            val adapter = LeaderBoardAdapter(sortedUsersList)
+            db.myCardRecycler.adapter = adapter
         }
     }
 

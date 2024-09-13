@@ -3,7 +3,6 @@ package com.malakezzat.re7letelkalemat.View
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -41,93 +40,80 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView = db.bottomNavigation
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
         user = FirebaseAuth.getInstance().currentUser!!
-        getUserScore(user?.email?.substringBefore("."))
+        getUserScore(user.email?.substringBefore(".")) { s -> { } }
     }
 
-    // Function to upload image
-    fun uploadImage(imageUri: Uri/*, callback: UploadCallback*/) {
+    // Function to upload the image to Firebase Storage and get its URL
+    fun uploadImage(imageUri: Uri, callback: (String) -> Unit) {
         // Get Firebase Storage reference
-        val storage: FirebaseStorage = FirebaseStorage.getInstance()
-        val storageRef: StorageReference = storage.getReference()
-
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
 
         // Create a unique file name based on timestamp
         val fileName = "images/" + System.currentTimeMillis() + ".jpg"
-        val imageRef: StorageReference = storageRef.child(fileName)
-
+        val imageRef = storageRef.child(fileName)
 
         // Upload image
-        val uploadTask: UploadTask = imageRef.putFile(imageUri)
-//        uploadTask.addOnSuccessListener { taskSnapshot ->
-//            // Get the download URL
-//            imageRef.getDownloadUrl().addOnSuccessListener { uri ->
-//                // Pass the download URL to the callback
-//                callback.onSuccess(uri.toString())
-//
-//            }.addOnFailureListener { exception ->
-//                callback.onFailure(exception)
-//            }
-//        }.addOnFailureListener { exception ->
-//            callback.onFailure(exception)
-//        }
+        val uploadTask = imageRef.putFile(imageUri)
+
+        // Get the download URL after successful upload
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            imageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result.toString()
+                callback(downloadUri)  // Return the download URL
+            } else {
+                // Handle failure
+            }
+        }
     }
 
-    // Define the callback interface
-    interface UploadCallback {
-        fun onSuccess(imageUrl: String?)
-        fun onFailure(exception: Exception?)
+    fun storeUserData(userEmail: String?, userName: String?, imageUri: Uri, userScore: Int) {
+        // First, upload the image to Firebase Storage
+        uploadImage(imageUri) { imageUrl ->
+            // After getting the image URL, store the user data
+            val database = FirebaseDatabase.getInstance()
+            val userId = userEmail?.substringBefore(".")
+            val usersRef = database.getReference("users").child(userId ?: (userName + imageUrl))
+
+            // Create a User object with image URL
+            val user = User(userName, imageUrl, userScore)
+
+            // Store the User object in the Realtime Database
+            usersRef.setValue(user).addOnSuccessListener {
+                // Successfully stored the user data
+            }.addOnFailureListener {
+                // Handle failure to store data
+            }
+        }
     }
 
-    fun storeUserData(userEmail:String?,userName: String?, imageUrl: String?, userScore: Int) {
+    fun getUserScore(userEmail: String?, callback: (String) -> Unit) {
         // Get Firebase Realtime Database reference
         val database = FirebaseDatabase.getInstance()
         val userId = userEmail?.substringBefore(".")
-        val usersRef = database.getReference("users").child(userId ?: (userName + imageUrl))
-
-
-        // Create a User object
-        val user = User(userName, imageUrl, userScore)
-
-        uploadImage(imageUrl?.toUri() ?:
-        AppCompatResources.getDrawable(applicationContext,R.drawable.vector__1_).toString().toUri())
-        // Store the User object in the database
-        usersRef.setValue(user).addOnSuccessListener { aVoid: Void? -> }
-            .addOnFailureListener { exception: java.lang.Exception? -> }
-    }
-
-    fun getUserScore(userId: String?) : String {
-        var score : String = "0"
-        // Get Firebase Realtime Database reference
-        val database = FirebaseDatabase.getInstance()
-        val userRef = database.getReference("users").child(userId!!)
+        val userRef = database.getReference("users").child(userId ?: "")
 
         userRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val user2 = task.result.getValue(User::class.java)
-                score = user2?.score?.toString() ?: "0"
-                storeUserData(user?.email,user?.displayName, user?.photoUrl.toString(),user2?.score ?: 0)
+                val user = task.result.getValue(User::class.java)
+                val score = user?.score?.toString() ?: "0"
+
+                // Retrieve user info from Firebase Authentication
+                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                firebaseUser?.let {
+                    storeUserData(firebaseUser.email, firebaseUser.displayName, firebaseUser.photoUrl!!, user?.score ?: 0)
+                }
+
+                callback(score) // Return the score
             } else {
-                // Handle potential errors, you can pass a default score in case of failure
+                // Handle error and return a default score
+                callback("0")
             }
         }
-//        // Attach a listener to read the data
-//        userRef.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                // Check if the data exists
-//                if (dataSnapshot.exists()) {
-//                    // Retrieve the User object from the snapshot
-//
-//                } else {
-//
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                // Handle potential errors
-//
-//            }
-//        })
-
-        return score
     }
 }

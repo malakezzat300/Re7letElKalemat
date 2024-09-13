@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
+import androidx.transition.Visibility
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.OnCompleteListener
@@ -57,7 +58,8 @@ class EditProfileActivity : AppCompatActivity() {
                                 .apply(RequestOptions().override(200, 200))
                                 .placeholder(R.drawable.vector__1_)
                                 .into(db.profileImg)
-                            updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
+                            // Update image URL in Firebase Database
+                            updateUserPhoto(user.email, user.photoUrl.toString())
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                         }
@@ -124,7 +126,8 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
-                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
+                        // Update image URL in Firebase Database
+                        updateUserPhoto(user.email, user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -145,7 +148,8 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
-                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
+                        // Update image URL in Firebase Database
+                        updateUserPhoto(user.email, user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -166,7 +170,8 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
-                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
+                        // Update image URL in Firebase Database
+                        updateUserPhoto(user.email, user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -187,7 +192,8 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
-                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
+                        // Update image URL in Firebase Database
+                        updateUserPhoto(user.email, user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -255,15 +261,43 @@ class EditProfileActivity : AppCompatActivity() {
 
     // Function to upload image
     fun uploadImage(imageUri: Uri/*, callback: UploadCallback*/) {
-        // Get Firebase Storage reference
-        val storage: FirebaseStorage = FirebaseStorage.getInstance()
-        val storageRef: StorageReference = storage.getReference()
+        val storageRef = FirebaseStorage.getInstance().reference
+        val imageUrl = imageUri.toString().substringAfterLast("/")
+        val userImagesRef = storageRef.child("user_images/${imageUrl}.jpg")
 
-        // Create a unique file name based on timestamp
-        val fileName = "images/" + System.currentTimeMillis() + ".jpg"
-        val imageRef: StorageReference = storageRef.child(fileName)
+        val uploadTask = userImagesRef.putFile(imageUri)
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            // Get the download URL
+            userImagesRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                // Store this URL in Firebase Realtime Database
+                storeImageUrlInDatabase(downloadUri.toString())
+            } else {
+                // Handle failures
+            }
+        }
+    }
 
-        // Upload image
-        imageRef.putFile(imageUri)
+    fun storeImageUrlInDatabase(imageUrl: String) {
+        val databaseRef = FirebaseDatabase.getInstance().reference
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        // Assuming you want to save the image URL under a "users" node
+        userId?.let {
+            val userRef = databaseRef.child("users").child(it)
+            userRef.child("imageUrl").setValue(imageUrl)
+                .addOnSuccessListener {
+                    // Image URL successfully saved to database
+                }
+                .addOnFailureListener {
+                    // Handle failure to save URL
+                }
+        }
     }
 }
