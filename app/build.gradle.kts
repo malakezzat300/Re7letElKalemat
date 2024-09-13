@@ -45,6 +45,9 @@ dependencies {
     //filxbox
     implementation (libs.flexbox)
 
+    //worker
+    val work_version = "2.9.1"
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 
     //charts
     implementation (libs.mpandroidchart)
@@ -61,6 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.room.common)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -80,4 +84,6 @@ dependencies {
 
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$room_version")
+    //TAP TARGET VIEW
+    implementation ("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
 }

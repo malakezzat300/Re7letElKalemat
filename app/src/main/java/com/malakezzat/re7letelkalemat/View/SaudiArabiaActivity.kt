@@ -10,17 +10,21 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivitySaudiArabiaBinding
 
 class SaudiArabiaActivity : AppCompatActivity() {
     lateinit var binding : ActivitySaudiArabiaBinding
     private var myService: MyCardDetailService? = null
+   private lateinit var skip : Button
     private var isBound = false
     var pos:Int=0
     private var e:Boolean=true
-
+    lateinit var animation : LottieAnimationView
     lateinit var handler: Handler
 
     private  val TAG = "SaudiArabiaActivity"
@@ -28,6 +32,20 @@ class SaudiArabiaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySaudiArabiaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        skip = binding.skipBtn
+        animation = binding.animationSaudi
+        animation.playAnimation()
+        skip.setOnClickListener(View.OnClickListener {
+            if (isBound) {
+                myService?.stopSound()
+                unbindService(connection)
+                isBound = false
+            }
+            val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
+            intent.putExtra("city","mecca")
+            startActivity(intent)
+            finish()
+        })
         if (savedInstanceState != null) {
             pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
         }else{
@@ -60,6 +78,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
         myService?.playSound(R.raw.mosta3ed)
         myService?.seekTo(pos)
         handler.sendEmptyMessage(0)
+        animation.playAnimation()
     }
 
     override fun onPause() {
@@ -67,10 +86,13 @@ class SaudiArabiaActivity : AppCompatActivity() {
         super.onPause()
         savePos()
         myService?.stopSound()
+        animation.pauseAnimation()
     }
 
     fun savePos(){
-        pos=myService!!.getCurrentPosition()
+        if (myService!=null) {
+            pos = myService!!.getCurrentPosition()
+        }
         getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
     }
 
@@ -90,6 +112,7 @@ class SaudiArabiaActivity : AppCompatActivity() {
                             }
                             Log.d("eeeeeeeeeeeeeeeeeeeeeeeeee", "handleMessage:")
                             val intent = Intent(this@SaudiArabiaActivity, MeccaActivity::class.java)
+                            intent.putExtra("city","mecca")
                             startActivity(intent)
                             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                             finish()

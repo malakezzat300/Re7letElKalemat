@@ -2,7 +2,9 @@ package com.malakezzat.re7letelkalemat.View
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -10,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,15 +21,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBinding
 
+
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
+    private lateinit var sharedPreferences: SharedPreferences
+    private var score: Int = 0
     var sentenceGame : String? = null
     var current=0
     var games=5
@@ -34,20 +51,29 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     var an3:AnimatorSet?=null
     private var progressBarValue = 0
     private var heartsCount = 5
+    private var isDialogShown = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = FragmentRearrangeWordGameBinding.inflate(layoutInflater)
         setContentView(db.root)
+        val linearLayout: LinearLayout = db.linearLayout
+        val progressBar: ProgressBar = db.progressBar
         if (savedInstanceState != null) {
             current = savedInstanceState.getInt("current")
             data = savedInstanceState.getStringArrayList("data")!!
             chosed = savedInstanceState.getStringArrayList("chosed")!!
             sentenceGame = savedInstanceState.getString("word")!!
         }
+
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
         presenter = WordsPresenter(this, null,sentenceGame)
         presenter.loadWords()
         Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
+        if (isFirstRun) {
+            showTapTargets(linearLayout, progressBar)
+        }
     }
 
     override fun showWord(words: Word) {
@@ -95,49 +121,63 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             onPositiveClick = {
                 progressBarValue = (progressBarValue + 20).coerceAtMost(100)
                 db.progressBar.progress = progressBarValue
-
-                if (progressBarValue >= 100) {
+                score += 1
+                if (progressBarValue == 100) {
+                    updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                     val intent = Intent(this, AfterSuccessInGame::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    if (current < games) {
                         restData()
-                    } else {
-                        val intent = Intent(this, AfterSuccessInGame::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
                 }
             }
         )
+
     }
 
     override fun showFail() {
-        showCustomDialog(
-            layoutResId = R.layout.failer_dialog_custom,
-            title = getString(R.string.wrong_answer),
-            imageResId = R.drawable.cross_ic,
-            backgroundColor = R.color.LightRed,
-            onPositiveClick = {
-                heartsCount = (heartsCount - 1).coerceAtLeast(0)
-                db.hearts.text = heartsCount.toString()
+        if (heartsCount == 1) {
+            // Show the sad dialog when heartsCount is 1
+            showCustomDialog(
+                layoutResId = R.layout.sad_dialog,
+                title = getString(R.string.sorry),  // Use a suitable string resource or literal text
+                imageResId = R.drawable.sad_ic,     // Use the drawable resource for the sad image
+                backgroundColor = R.color.LightRed, // Use a color resource for the background color
+                onPositiveClick = {
+                    heartsCount = (heartsCount - 1).coerceAtLeast(0)
+                    db.hearts.text = heartsCount.toString()
 
-                if (heartsCount <= 0) {
-                    val intent = Intent(this, AfterFailingInGameActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    if (current < games) {
-                        restData()
-                    } else {
+                    if (heartsCount <= 0) {
+                        updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                         val intent = Intent(this, AfterFailingInGameActivity::class.java)
                         startActivity(intent)
                         finish()
+                    } else {
+                        restData()
                     }
                 }
-            }
-        )
+            )
+        } else {
+            // Show the existing fail dialog for other cases
+            showCustomDialog(
+                layoutResId = R.layout.failer_dialog_custom,
+                title = getString(R.string.wrong_answer),
+                imageResId = R.drawable.cross_ic,
+                backgroundColor = R.color.LightRed,
+                onPositiveClick = {
+                    heartsCount = (heartsCount - 1).coerceAtLeast(0)
+                    db.hearts.text = heartsCount.toString()
+
+                    if (heartsCount <= 0) {
+                        val intent = Intent(this, AfterFailingInGameActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        restData()
+                    }
+                }
+            )
+        }
     }
 
     private fun showCustomDialog(
@@ -147,6 +187,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         backgroundColor: Int,
         onPositiveClick: () -> Unit
     ) {
+        if (isDialogShown) return // Prevent showing the dialog if it's already shown
+
+        isDialogShown = true
+
         val dialogView = layoutInflater.inflate(layoutResId, null)
         val titleView = dialogView.findViewById<TextView>(R.id.dialog_title)
         val imageView = dialogView.findViewById<ImageView>(R.id.imageView)
@@ -175,6 +219,10 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         button.setOnClickListener {
             onPositiveClick()
             dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            isDialogShown = false // Reset the flag when the dialog is dismissed
         }
 
         dialog.show()
@@ -380,5 +428,71 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         outState.putStringArrayList("data", ArrayList(data))
         outState.putString("word", sentenceGame)
     }
+    private fun showTapTargets(linearLayout: LinearLayout, progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            linearLayout,
+            "وحدات الصحة الخاصة بك",
+            "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                }
+
+                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                    super.onTargetDismissed(view, userInitiated)
+                    showProgressBarTarget(progressBar)
+                }
+            }
+        )
+    }
+
+    private fun showProgressBarTarget(progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            progressBar,
+            "معدل التقدم",
+            "يجب عليك ملئ شريط التقدم حتى تجتاز اللعبة بنجاح"
+        ).targetRadius(0)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true)
+        )
+        sharedPreferences.edit().putBoolean("isFirstRun", false).apply()
+    }
+
+    fun updateUserScore(userId: String?, newScore: Int) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(userId!!)
+
+        var oldScore = 0
+        userRef.get().addOnCompleteListener(object : OnCompleteListener<DataSnapshot> {
+            override fun onComplete(p0: Task<DataSnapshot>) {
+                val user = p0.result.getValue(User::class.java)
+                oldScore =  user?.score ?: 0
+                val finalScore = newScore + oldScore
+                // Update the score field
+                userRef.child("score").setValue(finalScore)
+            }
+        })
+
+    }
+
+
 
 }

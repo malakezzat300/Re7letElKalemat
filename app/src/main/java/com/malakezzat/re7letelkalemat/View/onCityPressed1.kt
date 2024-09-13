@@ -89,8 +89,10 @@ class onCityPressed1 : AppCompatActivity() {
     }
 
     fun savePos(){
-        pos=myService!!.getCurrentPosition()
-        getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
+        if (myService != null) {
+            pos = myService!!.getCurrentPosition()
+        }
+            getSharedPreferences(TAG, MODE_PRIVATE).edit().putInt("position", pos).apply()
     }
     override fun onPause() {
         super.onPause()
