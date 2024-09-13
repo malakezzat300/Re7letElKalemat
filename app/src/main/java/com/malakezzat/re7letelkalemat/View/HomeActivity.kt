@@ -100,20 +100,27 @@ class HomeActivity : AppCompatActivity() {
 
         userRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val user = task.result.getValue(User::class.java)
-                val score = user?.score?.toString() ?: "0"
+                val dataSnapshot = task.result
+                if (dataSnapshot.exists()) {
+                    val user = dataSnapshot.getValue(User::class.java)
+                    val score = user?.score?.toString() ?: "0"
 
-                // Retrieve user info from Firebase Authentication
-                val firebaseUser = FirebaseAuth.getInstance().currentUser
-                firebaseUser?.let {
-                    storeUserData(firebaseUser.email, firebaseUser.displayName, firebaseUser.photoUrl!!, user?.score ?: 0)
+                    // Retrieve user info from Firebase Authentication
+                    val firebaseUser = FirebaseAuth.getInstance().currentUser
+                    firebaseUser?.let {
+                        storeUserData(firebaseUser.email, firebaseUser.displayName, firebaseUser.photoUrl!!, user?.score ?: 0)
+                    }
+
+                    callback(score) // Return the score
+                } else {
+                    // No data found, handle as a new user
+                    callback("0") // Default score for new users
                 }
-
-                callback(score) // Return the score
             } else {
                 // Handle error and return a default score
                 callback("0")
             }
         }
     }
+
 }
