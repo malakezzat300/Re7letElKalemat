@@ -9,6 +9,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.OnCompleteListener
@@ -18,6 +20,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityEditProfileBinding
@@ -52,6 +57,7 @@ class EditProfileActivity : AppCompatActivity() {
                                 .apply(RequestOptions().override(200, 200))
                                 .placeholder(R.drawable.vector__1_)
                                 .into(db.profileImg)
+                            updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
                         } else {
                             Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                         }
@@ -66,7 +72,9 @@ class EditProfileActivity : AppCompatActivity() {
                 PickVisualMediaRequest.Builder()
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
                     .build()
+
             )
+
         }
 
         db.changeNameButton.setOnClickListener {
@@ -83,6 +91,7 @@ class EditProfileActivity : AppCompatActivity() {
                                 getString(R.string.change_name_done),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            updateUserName(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),db.usernameChangeEditText.text.toString() )
                             finish()
                         } else {
                             Toast.makeText(
@@ -115,6 +124,7 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
+                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -135,6 +145,7 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
+                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -155,6 +166,7 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
+                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -175,6 +187,7 @@ class EditProfileActivity : AppCompatActivity() {
                             .apply(RequestOptions().override(200, 200))
                             .placeholder(R.drawable.vector__1_)
                             .into(db.profileImg)
+                        updateUserPhoto(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."), user.photoUrl.toString())
                     } else {
                         Toast.makeText(applicationContext, getString(R.string.change_image_failed), Toast.LENGTH_SHORT).show()
                     }
@@ -205,4 +218,52 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
+
+    fun updateUserName(userEmail: String?, userName: String?) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userId = userEmail?.substringBefore(".")
+        val usersRef = database.getReference("users").child(userId ?: "")
+
+        // Assuming User is a data class that has a name field
+        // Create or update the User object with the new name
+        usersRef.child("name").setValue(userName).addOnSuccessListener {
+            // Success logic, e.g., show a message
+            Log.d("Firebase", "User name updated successfully")
+        }.addOnFailureListener { exception ->
+            // Failure logic, handle errors
+            Log.e("Firebase", "Failed to update user name", exception)
+        }
+
+    }
+
+    fun updateUserPhoto(userEmail: String?, imageUrl: String?) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userId = userEmail?.substringBefore(".")
+        val usersRef = database.getReference("users").child(userId ?: "")
+
+        // Upload the image and update the photo URL
+        val uri = imageUrl?.toUri() ?: AppCompatResources.getDrawable(applicationContext, R.drawable.vector__1_)
+            .toString().toUri()
+
+        usersRef.child("imageUrl").setValue(uri)
+
+        // Assuming uploadImage function uploads the image and returns the URL
+        uploadImage(uri)
+    }
+
+    // Function to upload image
+    fun uploadImage(imageUri: Uri/*, callback: UploadCallback*/) {
+        // Get Firebase Storage reference
+        val storage: FirebaseStorage = FirebaseStorage.getInstance()
+        val storageRef: StorageReference = storage.getReference()
+
+        // Create a unique file name based on timestamp
+        val fileName = "images/" + System.currentTimeMillis() + ".jpg"
+        val imageRef: StorageReference = storageRef.child(fileName)
+
+        // Upload image
+        imageRef.putFile(imageUri)
+    }
 }

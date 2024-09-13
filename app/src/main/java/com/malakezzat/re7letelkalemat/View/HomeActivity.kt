@@ -3,6 +3,7 @@ package com.malakezzat.re7letelkalemat.View
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -87,7 +88,8 @@ class HomeActivity : AppCompatActivity() {
         // Create a User object
         val user = User(userName, imageUrl, userScore)
 
-        uploadImage(imageUrl?.toUri() ?: "".toUri())
+        uploadImage(imageUrl?.toUri() ?:
+        AppCompatResources.getDrawable(applicationContext,R.drawable.vector__1_).toString().toUri())
         // Store the User object in the database
         usersRef.setValue(user).addOnSuccessListener { aVoid: Void? -> }
             .addOnFailureListener { exception: java.lang.Exception? -> }
