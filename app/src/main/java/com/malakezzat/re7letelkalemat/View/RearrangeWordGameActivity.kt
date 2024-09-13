@@ -32,8 +32,6 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
-    private lateinit var tapTargetView1: TapTargetView
-    private lateinit var tapTargetView2: TapTargetView
     private lateinit var sharedPreferences: SharedPreferences
     var sentenceGame : String? = null
     var current=0
