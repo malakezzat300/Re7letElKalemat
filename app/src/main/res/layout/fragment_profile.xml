@@ -29,6 +29,31 @@
         app:layout_constraintEnd_toEndOf="@id/profileImg"
         app:layout_constraintStart_toStartOf="@id/profileImg"
         app:layout_constraintTop_toBottomOf="@id/profileImg" />
+
+    <TextView
+        android:id="@+id/textview_score"
+        style="@style/GeneralText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:text="@string/your_score"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/score_text"
+        app:layout_constraintTop_toBottomOf="@+id/profileNametxt" />
+
+    <TextView
+        android:id="@+id/score_text"
+        style="@style/GeneralText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:text="50"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toStartOf="@+id/textview_score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textview_score" />
+
     <View
         android:id="@+id/profileView"
         android:layout_width="0dp"
@@ -93,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/app"
-            android:text="@string/friends"
+            android:text="@string/leader_board"
             android:textColor="@color/darkGray"
             android:textSize="30dp" />
 
