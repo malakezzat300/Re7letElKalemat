@@ -279,26 +279,9 @@ class EditProfileActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val downloadUri = task.result
                 // Store this URL in Firebase Realtime Database
-                storeImageUrlInDatabase(downloadUri.toString())
             } else {
                 // Handle failures
             }
-        }
-    }
-
-    fun storeImageUrlInDatabase(imageUrl: String) {
-        val databaseRef = FirebaseDatabase.getInstance().reference
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        // Assuming you want to save the image URL under a "users" node
-        userId?.let {
-            val userRef = databaseRef.child("users").child(it)
-            userRef.child("imageUrl").setValue(imageUrl)
-                .addOnSuccessListener {
-                    // Image URL successfully saved to database
-                }
-                .addOnFailureListener {
-                    // Handle failure to save URL
-                }
         }
     }
 }
