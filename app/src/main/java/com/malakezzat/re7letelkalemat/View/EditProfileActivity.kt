@@ -1,8 +1,6 @@
 package com.malakezzat.re7letelkalemat.View
 
 import android.content.ContentResolver
-import android.content.Context
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +8,16 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.AnyRes
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityEditProfileBinding
 
@@ -178,7 +179,54 @@ class EditProfileActivity : AppCompatActivity() {
                     }
                 }
         }
+        db.scoreText.text = getUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."))
+    }
 
+
+    // Function to retrieve the user's score
+    fun getUserScore(userId: String?) : String {
+        var score : String = "0"
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(userId!!)
+
+
+
+        // Attach a listener to read the data
+        userRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Check if the data exists
+                if (dataSnapshot.exists()) {
+                    // Retrieve the User object from the snapshot
+                    val user = dataSnapshot.getValue(User::class.java)
+                    score =  user?.score.toString()
+                } else {
+
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle potential errors
+
+            }
+        })
+
+        return score
+    }
+
+    // Define the User class (same as before)
+    class User {
+        var name: String? = null
+        var imageUrl: String? = null
+        var score: Int = 0
+
+        constructor()
+
+        constructor(name: String?, imageUrl: String?, score: Int) {
+            this.name = name
+            this.imageUrl = imageUrl
+            this.score = score
+        }
     }
 
 }

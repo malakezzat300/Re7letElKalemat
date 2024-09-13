@@ -23,16 +23,26 @@ import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
 import com.malakezzat.re7letelkalemat.R
+import com.malakezzat.re7letelkalemat.View.EditProfileActivity.User
 import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBinding
+
 
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
     private lateinit var sharedPreferences: SharedPreferences
+    private var score: Int = 0
     var sentenceGame : String? = null
     var current=0
     var games=5
@@ -113,6 +123,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                 db.progressBar.progress = progressBarValue
 
                 if (progressBarValue == 100) {
+                    updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                     val intent = Intent(this, AfterSuccessInGame::class.java)
                     startActivity(intent)
                     finish()
@@ -121,6 +132,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                 }
             }
         )
+        score += 1
     }
 
     override fun showFail() {
@@ -136,6 +148,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                     db.hearts.text = heartsCount.toString()
 
                     if (heartsCount <= 0) {
+                        updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                         val intent = Intent(this, AfterFailingInGameActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -461,5 +474,25 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         )
         sharedPreferences.edit().putBoolean("isFirstRun", false).apply()
     }
+
+    fun updateUserScore(userId: String?, newScore: Int) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(userId!!)
+
+        var oldScore = 0
+        userRef.get().addOnCompleteListener(object : OnCompleteListener<DataSnapshot> {
+            override fun onComplete(p0: Task<DataSnapshot>) {
+                val user = p0.result.getValue(EditProfileActivity.User::class.java)
+                oldScore =  user?.score ?: 0
+            }
+        })
+        val finalScore = newScore + oldScore
+
+        // Update the score field
+        userRef.child("score").setValue(finalScore)
+    }
+
+
 
 }
