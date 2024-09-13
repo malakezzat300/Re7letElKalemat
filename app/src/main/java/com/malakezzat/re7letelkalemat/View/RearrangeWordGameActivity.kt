@@ -2,7 +2,9 @@ package com.malakezzat.re7letelkalemat.View
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -30,8 +32,7 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
-    private lateinit var tapTargetView1: TapTargetView
-    private lateinit var tapTargetView2: TapTargetView
+    private lateinit var sharedPreferences: SharedPreferences
     var sentenceGame : String? = null
     var current=0
     var games=5
@@ -53,11 +54,16 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             chosed = savedInstanceState.getStringArrayList("chosed")!!
             sentenceGame = savedInstanceState.getString("word")!!
         }
+
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
         presenter = WordsPresenter(this, null,sentenceGame)
         presenter.loadWords()
         Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
-        showTapTargets(linearLayout, progressBar)
+        if (isFirstRun) {
+            showTapTargets(linearLayout, progressBar)
+        }
     }
 
     override fun showWord(words: Word) {
@@ -453,6 +459,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             .tintTarget(true)
             .transparentTarget(true)
         )
+        sharedPreferences.edit().putBoolean("isFirstRun", false).apply()
     }
 
 }

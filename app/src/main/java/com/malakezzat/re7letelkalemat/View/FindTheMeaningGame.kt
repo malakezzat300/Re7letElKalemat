@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.Rect
@@ -17,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,6 +33,8 @@ import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -51,6 +57,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     var set2: AnimatorSet? = null
     private var isDialogShown = false
     lateinit var listWord: List<Word>
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db.progressBar.progress = 0 // Set the initial progress
@@ -67,6 +74,8 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         }
         setContentView(db.root)
 
+        val linearLayout: LinearLayout = db.linearLayout
+        val progressBar: ProgressBar = db.progressBar
         db.main.post {
             db.main.getLocationOnScreen(loc)
             setupChosesTextViews()
@@ -74,7 +83,11 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
                 if (current < limte) presenter.check(w!!.word, db.choosed.text.toString())
             }
         }
-
+        sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val isFirstRunn = sharedPreferences.getBoolean("isFirstRunn", true)
+        if (isFirstRunn) {
+            showTapTargets(linearLayout, progressBar)
+        }
     }
 
     fun set_data_from_saved_state(s: String) {
@@ -347,5 +360,52 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         }
 
         dialog.show()
+    }
+
+    private fun showTapTargets(linearLayout: LinearLayout, progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            linearLayout,
+            "وحدات الصحة الخاصة بك",
+            "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                }
+
+                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                    super.onTargetDismissed(view, userInitiated)
+                    showProgressBarTarget(progressBar)
+                }
+            }
+        )
+    }
+
+    private fun showProgressBarTarget(progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            progressBar,
+            "معدل التقدم",
+            "يجب عليك ملئ شريط التقدم حتى تجتاز اللعبة بنجاح"
+        ).targetRadius(0)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true)
+        )
+        sharedPreferences.edit().putBoolean("isFirstRunn", false).apply()
     }
 }
