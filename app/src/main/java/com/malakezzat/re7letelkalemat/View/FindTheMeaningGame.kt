@@ -35,6 +35,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
 import com.malakezzat.re7letelkalemat.Presenter.WordsPresenter
@@ -52,7 +53,6 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         WordsPresenter(this)
     }
     var current = 0;
-    val limte = 5
     var set1: AnimatorSet? = null
     var set2: AnimatorSet? = null
     private var isDialogShown = false
@@ -77,10 +77,21 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val linearLayout: LinearLayout = db.linearLayout
         val progressBar: ProgressBar = db.progressBar
         db.main.post {
-            db.main.getLocationOnScreen(loc)
             setupChosesTextViews()
+            db.main.getLocationOnScreen(loc)
             db.button.setOnClickListener {
-                if (current < limte) presenter.check(w!!.word, db.choosed.text.toString())
+                if (set1 != null) {
+                    set1!!.cancel()
+                }
+                if (set2 != null) {
+                    set2!!.cancel()
+                }
+                if (db.choosed.text.toString() != "") {
+                    Log.d("Xxxxxxxxxxxxxxxxxxxxxxxxxxxx", "onCreate: ${db.choosed.text}")
+                    presenter.check(w!!.word, db.choosed.text.toString())
+                }else{
+                    Toast.makeText(this, "اختر حرف اولا", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
@@ -105,7 +116,6 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         db.ch1.tag = db.ch1.text
         db.ch2.tag = db.ch2.text
         db.ch3.tag = db.ch3.text
-
         db.ch1.setOnClickListener {
             val loc2 = IntArray(2)
             db.ch1.getLocationOnScreen(loc2)
@@ -126,16 +136,19 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         db.choosed.setOnClickListener {
             val loc2 = IntArray(2)
             it.getLocationOnScreen(loc2)
-            sendToChsTextViews(it as TextView, loc2)
             it.isEnabled = false
+            sendToChsTextViews(it as TextView, loc2)
+
         }
     }
 
     private fun setup_click(view: View) {
         val loc2 = IntArray(2)
         view.getLocationOnScreen(loc2)
-        view.isEnabled = false
+
         sendToChoseTextView(view as TextView, loc2)
+        view.isEnabled = false
+
     }
 
     private fun sendToChoseTextView(view: TextView, loc2: IntArray) {
@@ -146,9 +159,9 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             y = loc2[1].toFloat() - loc[1]
         }
         db.main.addView(animatedtextview)
-        db.main.post {
-            animateToChoose(animatedtextview)
-        }
+
+        animateToChoose(animatedtextview)
+
     }
 
     private fun sendToChsTextViews(view: TextView, loc2: IntArray) {
@@ -160,9 +173,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             y = loc2[1].toFloat() - loc[1] + (db.choosed.height / 2) - target.height / 2
         }
         db.main.addView(animatedtextview)
-        db.main.post {
             animateToBack(animatedtextview)
-        }
     }
 
     private fun animateToChoose(view: TextView) {
@@ -174,7 +185,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val y = ObjectAnimator.ofFloat(view, "y", ys)
         set2 = AnimatorSet()
 
-        set2!!.duration = 300
+        set2!!.duration = 50
         set2!!.playTogether(x, y)
         set2!!.doOnStart {
             db.main.findViewWithTag<TextView>(db.choosed.text)?.let {
@@ -185,6 +196,8 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         }
         set2!!.doOnCancel {
             db.main.removeView(view)
+            db.choosed.isEnabled = true
+
         }
         set2!!.doOnEnd {
             db.main.removeView(view)
@@ -203,11 +216,17 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         val x = ObjectAnimator.ofFloat(view, "x", xs)
         val y = ObjectAnimator.ofFloat(view, "y", ys)
         set1 = AnimatorSet()
-        set1!!.duration = 300
+        set1!!.duration = 50
         set1!!.playTogether(x, y)
         set1!!.doOnStart {
             db.choosed.text = ""
         }
+        set1!!.doOnCancel {
+            db.main.removeView(view)
+            db.choosed.isEnabled = true
+
+        }
+
         set1!!.doOnEnd {
             db.main.removeView(view)
             target.isEnabled = true
@@ -223,21 +242,16 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     }
 
     fun clear() {
-        if (set1 != null) {
-            set1!!.cancel()
-        }
-        if (set2 != null) {
-            set2!!.cancel()
-        }
-        db.choosed.text = ""
-        db.ch1.isEnabled = true
-        db.ch2.isEnabled = true
-        db.ch3.isEnabled = true
-        db.ch4.isEnabled = true
+           setupChosesTextViews()
+            db.choosed.text = ""
+            db.ch1.isEnabled = true
+            db.ch2.isEnabled = true
+            db.ch3.isEnabled = true
+            db.ch4.isEnabled = true
+
     }
 
     override fun showlistWords(words: List<Word>) {
-
         listWord = words
         w = listWord.random()
         db.fakra.text = w!!.meaning
@@ -245,12 +259,15 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         db.ch2.text = listWord[1].word
         db.ch3.text = listWord[2].word
         db.ch4.text = listWord[3].word
+        clear()
+
     }
 
     override fun showError(message: String) {
     }
 
     override fun showSuccess() {
+        clear()
         val progress = db.progressBar.progress + 20
         if (progress >= 100) {
             db.progressBar.progress = 100
@@ -260,20 +277,22 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         } else {
             db.progressBar.progress = progress
             presenter.genrateRandomWords()
-            showCustomDialog(
-                layoutResId = R.layout.success_dialog_custom,
-                title = getString(R.string.good_jop),
-                imageResId = R.drawable.correct_ic,
-                backgroundColor = R.color.LightGreen,
-                onPositiveClick = {dialog ->
-                    dialog.dismiss()
-                }
-            )
+//            showCustomDialog(
+//                layoutResId = R.layout.success_dialog_custom,
+//                title = getString(R.string.good_jop),
+//                imageResId = R.drawable.correct_ic,
+//                backgroundColor = R.color.LightGreen,
+//                onPositiveClick = {dialog ->
+//                    dialog.dismiss()
+//                }
+//            )
+            Toast.makeText(this, "نجحت", Toast.LENGTH_SHORT).show()
         }
-        clear()
+
     }
 
     override fun showFail() {
+        clear()
         // Decrease hearts
         val hearts = db.hearts.text.toString().toInt()
         if (hearts > 0) {
@@ -285,15 +304,16 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
                 finish()
             } else {
                 presenter.genrateRandomWords()
-                showCustomDialog(
-                    layoutResId = R.layout.failer_dialog_custom,
-                    title = getString(R.string.wrong_answer),
-                    imageResId = R.drawable.cross_ic,
-                    backgroundColor = R.color.LightRed,
-                    onPositiveClick = { dialog ->
-                        dialog.dismiss()
-                    }
-                )
+                Toast.makeText(this, "خطأ", Toast.LENGTH_SHORT).show()
+//                showCustomDialog(
+//                    layoutResId = R.layout.failer_dialog_custom,
+//                    title = getString(R.string.wrong_answer),
+//                    imageResId = R.drawable.cross_ic,
+//                    backgroundColor = R.color.LightRed,
+//                    onPositiveClick = { dialog ->
+//                        dialog.dismiss()
+//                    }
+//                )
             }
         } else {
             // Navigate to AfterFailingInGameActivity if no hearts left
@@ -301,7 +321,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             startActivity(intent)
             finish()
         }
-        clear()
+
     }
 
     override fun check() {
