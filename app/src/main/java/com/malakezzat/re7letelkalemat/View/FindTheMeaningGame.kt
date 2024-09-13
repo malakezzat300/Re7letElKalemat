@@ -35,6 +35,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.FirebaseDatabase
+import com.malakezzat.re7letelkalemat.Model.User
 
 import com.malakezzat.re7letelkalemat.Model.Word
 import com.malakezzat.re7letelkalemat.Presenter.WordsContract
@@ -52,6 +58,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     val presenter: WordsPresenter by lazy {
         WordsPresenter(this)
     }
+    private var score: Int = 0
     var current = 0;
     var set1: AnimatorSet? = null
     var set2: AnimatorSet? = null
@@ -269,8 +276,10 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
     override fun showSuccess() {
         clear()
         val progress = db.progressBar.progress + 20
+        score += 1
         if (progress >= 100) {
             db.progressBar.progress = 100
+            updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
             val intent = Intent(this, AfterSuccessInGame::class.java)
             startActivity(intent)
             finish()
@@ -286,7 +295,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
 //                    dialog.dismiss()
 //                }
 //            )
-            Toast.makeText(this, "نجحت", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "إجابة صحيحة", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -299,6 +308,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             db.hearts.text = (hearts - 1).toString()
             if (hearts - 1 == 0) {
                 // Navigate to AfterFailingInGameActivity
+                updateUserScore(FirebaseAuth.getInstance().currentUser?.email?.substringBefore("."),score)
                 val intent = Intent(this, AfterFailingInGameActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -427,5 +437,22 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
             .transparentTarget(true)
         )
         sharedPreferences.edit().putBoolean("isFirstRunn", false).apply()
+    }
+    fun updateUserScore(userId: String?, newScore: Int) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userRef = database.getReference("users").child(userId!!)
+
+        var oldScore = 0
+        userRef.get().addOnCompleteListener(object : OnCompleteListener<DataSnapshot> {
+            override fun onComplete(p0: Task<DataSnapshot>) {
+                val user = p0.result.getValue(User::class.java)
+                oldScore =  user?.score ?: 0
+                val finalScore = newScore + oldScore
+                // Update the score field
+                userRef.child("score").setValue(finalScore)
+            }
+        })
+
     }
 }
