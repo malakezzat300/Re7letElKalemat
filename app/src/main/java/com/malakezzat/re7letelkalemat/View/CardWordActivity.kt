@@ -68,6 +68,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         val exampleList: List<String>? = intent.getStringArrayListExtra(EXAMPLE_LIST)
         soundList= intent.getIntegerArrayListExtra(SOUND_LIST)
         val background: Int = intent.getIntExtra(BACKGROUND, R.drawable.background)
+        var city : String = intent.getStringExtra("city") ?: ""
         position = intent.getIntExtra(POSITION, 0)
 
         isReleased = false
@@ -99,6 +100,8 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             db.viewAnimator.cancelAnimation()
             if (position == wordsList?.size?.minus(1)) {
                 val intent2 = Intent(this, RewordFinishCityWordsActivity::class.java)
+                intent2.putExtra("city",city)
+                Log.i("TAG", "onCreate: cardWord $city")
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
                 finish()
@@ -110,6 +113,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                 intent2.putIntegerArrayListExtra(SOUND_LIST, intent.getIntegerArrayListExtra(SOUND_LIST))
                 intent2.putExtra(BACKGROUND, intent.getIntExtra(BACKGROUND, R.drawable.background))
                 intent2.putExtra(POSITION, position + 1)
+                intent2.putExtra("city",city)
                 startActivity(intent2)
                 overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             }
