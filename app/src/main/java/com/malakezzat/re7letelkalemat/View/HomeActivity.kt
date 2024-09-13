@@ -3,6 +3,7 @@ package com.malakezzat.re7letelkalemat.View
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -77,8 +78,8 @@ class HomeActivity : AppCompatActivity() {
         uploadImage(imageUri) { imageUrl ->
             // After getting the image URL, store the user data
             val database = FirebaseDatabase.getInstance()
-            val userId = userEmail?.substringBefore(".")
-            val usersRef = database.getReference("users").child(userId ?: (userName + imageUrl))
+            val userId = userEmail?.substringBefore(".") ?: (userName + imageUrl)
+            val usersRef = database.getReference("users").child(userId)
 
             // Create a User object with image URL
             val user = User(userName, imageUrl, userScore)
@@ -95,8 +96,8 @@ class HomeActivity : AppCompatActivity() {
     fun getUserScore(userEmail: String?, callback: (String) -> Unit) {
         // Get Firebase Realtime Database reference
         val database = FirebaseDatabase.getInstance()
-        val userId = userEmail?.substringBefore(".")
-        val userRef = database.getReference("users").child(userId ?: "")
+        val userId = userEmail?.substringBefore(".") ?: ""
+        val userRef = database.getReference("users").child(userId)
 
         userRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -108,7 +109,12 @@ class HomeActivity : AppCompatActivity() {
                     // Retrieve user info from Firebase Authentication
                     val firebaseUser = FirebaseAuth.getInstance().currentUser
                     firebaseUser?.let {
-                        storeUserData(firebaseUser.email, firebaseUser.displayName, firebaseUser.photoUrl!!, user?.score ?: 0)
+                        val userName = firebaseUser.displayName ?: firebaseUser.email
+                        val imageUrl = firebaseUser.photoUrl?.toString()?.toUri()
+                            ?: AppCompatResources.getDrawable(applicationContext, R.drawable.vector__1_)
+                                .toString().toUri()
+
+                        storeUserData(firebaseUser.email, userName, imageUrl, user?.score ?: 0)
                     }
 
                     callback(score) // Return the score
@@ -122,5 +128,6 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
+
 
 }
