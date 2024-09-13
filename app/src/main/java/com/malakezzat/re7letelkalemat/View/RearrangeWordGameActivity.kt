@@ -30,6 +30,8 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
+    private lateinit var tapTargetView1: TapTargetView
+    private lateinit var tapTargetView2: TapTargetView
     var sentenceGame : String? = null
     var current=0
     var games=5
@@ -45,37 +47,6 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         setContentView(db.root)
         val linearLayout: LinearLayout = db.linearLayout
         val progressBar: ProgressBar = db.progressBar
-        TapTargetView.showFor(this, TapTarget.forView(
-            linearLayout,
-            "وحدات الصحة الخاصة بك",
-            "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
-        ).targetRadius(60)
-            .outerCircleColor(R.color.white)  // لون الدائرة الخارجية
-            .outerCircleAlpha(1f)  // شفافية الدائرة الخارجية
-            .titleTextSize(26)  // حجم النص في العنوان
-            .descriptionTextSize(20)  // حجم النص في الوصف
-            .textColor(R.color.my_primary_variant_color)  // لون النص
-            .drawShadow(true)  // رسم الظل
-            .cancelable(true)  // إمكانية إغلاق التوجيه
-            .tintTarget(true)  // تلوين الهدف
-            .transparentTarget(true)  // جعل الهدف شفافًا
-        )
-        /*TapTargetView.showFor(this, TapTarget.forView(
-            progressBar,
-            "معدل التقدم",
-            "يجب عليك ملئ شريط التقدم حتى تجتاز اللعبة بنجاح"
-        ).targetRadius(60)
-            .outerCircleColor(R.color.white)
-            .outerCircleAlpha(0.7f)
-            .titleTextSize(20)
-            .descriptionTextSize(14)
-            .textColor(R.color.my_primary_variant_color)
-            .drawShadow(true)
-            .cancelable(true)
-            .tintTarget(true)
-            .transparentTarget(true)
-        )*/
-
         if (savedInstanceState != null) {
             current = savedInstanceState.getInt("current")
             data = savedInstanceState.getStringArrayList("data")!!
@@ -86,6 +57,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         presenter.loadWords()
         Log.d("eeeeeeeeeeeeeeeeeeeeeeeeeee", "onViewCreated: " + chosed.size)
         set_data()
+        showTapTargets(linearLayout, progressBar)
     }
 
     override fun showWord(words: Word) {
@@ -436,6 +408,51 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         outState.putStringArrayList("chosed", ArrayList(chosed))
         outState.putStringArrayList("data", ArrayList(data))
         outState.putString("word", sentenceGame)
+    }
+    private fun showTapTargets(linearLayout: LinearLayout, progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            linearLayout,
+            "وحدات الصحة الخاصة بك",
+            "يكلف كل خطأ وحدة صحة وأنت بحاجة الي وحدات الصحة لإستكمال اللعبة"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                }
+
+                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                    super.onTargetDismissed(view, userInitiated)
+                    showProgressBarTarget(progressBar)
+                }
+            }
+        )
+    }
+
+    private fun showProgressBarTarget(progressBar: ProgressBar) {
+        TapTargetView.showFor(this, TapTarget.forView(
+            progressBar,
+            "معدل التقدم",
+            "يجب عليك ملئ شريط التقدم حتى تجتاز اللعبة بنجاح"
+        ).targetRadius(0)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true)
+        )
     }
 
 }
