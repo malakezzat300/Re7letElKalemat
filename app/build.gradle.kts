@@ -86,4 +86,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     //TAP TARGET VIEW
     implementation ("com.getkeepsafe.taptargetview:taptargetview:1.13.3")
+    //viewpager2
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    //TabLayout
+    implementation ("com.google.android.material:material:1.8.0")
 }

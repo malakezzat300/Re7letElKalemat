@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
             splashAnimation.cancelAnimation()
 
 
-            val intent = Intent(this@SplashActivity, AuthActivity::class.java)
+            val intent = Intent(this@SplashActivity, OnboardingActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left)
             finish()
