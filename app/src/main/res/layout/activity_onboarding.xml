@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".OnboardingActivity">
+    tools:context=".View.OnboardingActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -30,7 +30,6 @@
         android:text="Next"
         android:textSize="24sp"
         android:layout_margin="36dp"
-        android:fontFamily="@font/app"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
