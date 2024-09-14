@@ -15,11 +15,13 @@
         android:clickable="true"
         android:src="@drawable/baseline_replay_24"
         app:backgroundTint="@android:color/white"
+
         app:layout_constraintBottom_toBottomOf="@+id/word_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toEndOf="@+id/word_text"
         app:layout_constraintTop_toBottomOf="@+id/viewAnimator"
+
         app:tint="@color/my_primary_color" />
 
 
