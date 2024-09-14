@@ -60,7 +60,8 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
             pos=0
             position=0
         }
-//
+
+
         presenter = DatabasePresenter(this, WordRepository(this))
 
         val wordsList: List<String>? = intent.getStringArrayListExtra(WORDS_LIST)
@@ -143,6 +144,19 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         setup_handler()
         val intent = Intent(this, MyCardDetailService::class.java)
         bindService(intent, connection, BIND_AUTO_CREATE)
+        db.replay.setOnClickListener {
+            restart()
+        }
+    }
+
+    fun restart(){
+        myService?.stopSound()
+        e=true
+        pos=0
+        savePos()
+        myService?.playSound(soundList!![position])
+        myService?.seekTo(pos)
+        handler.sendEmptyMessage(0)
     }
 
     override fun showWord(word: Word) {
@@ -170,12 +184,11 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                             lottieAnimation.cancelAnimation()
                             e=false
                             pos=myService!!.getCurrentPosition()
-
-                            if (isBound) {
-                                myService?.stopSound()
-                                unbindService(connection)
-                                isBound = false
-                            }
+//                            if (isBound) {
+//                                myService?.stopSound()
+//                                unbindService(connection)
+//                                isBound = false
+//                            }
                             db.nextButton.isEnabled = true
                         } else {
                             handler.sendEmptyMessageDelayed(0,50)
