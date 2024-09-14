@@ -13,6 +13,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Page 3"
+        android:text="@string/flashcards_text"
         android:textSize="24sp"/>
 </LinearLayout>
