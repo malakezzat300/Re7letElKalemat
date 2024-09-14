@@ -2,10 +2,15 @@ package com.malakezzat.re7letelkalemat.View
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.IBinder
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -39,6 +44,8 @@ import com.malakezzat.re7letelkalemat.databinding.FragmentRearrangeWordGameBindi
 
 
 class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
+    var checked = false
+    private var myService: MyCardDetailService? = null
     lateinit var db: FragmentRearrangeWordGameBinding
     private lateinit var presenter: WordsContract.Presenter
     private lateinit var sharedPreferences: SharedPreferences
@@ -63,8 +70,13 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             data = savedInstanceState.getStringArrayList("data")!!
             chosed = savedInstanceState.getStringArrayList("chosed")!!
             sentenceGame = savedInstanceState.getString("word")!!
+            pos=getSharedPreferences(TAG, MODE_PRIVATE).getInt("position",0)
+            e=getSharedPreferences(TAG, MODE_PRIVATE).getBoolean("e",true)
+        }else{
+            getSharedPreferences(TAG, MODE_PRIVATE).edit().clear().apply()
         }
-
+        val intent = Intent(this, MyCardDetailService::class.java)
+        bindService(intent, connection, BIND_AUTO_CREATE)
         sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
         val isFirstRun = sharedPreferences.getBoolean("isFirstRun", true)
         presenter = WordsPresenter(this, null,sentenceGame)
@@ -75,11 +87,42 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
             showTapTargets(linearLayout, progressBar)
         }
     }
-
-    override fun showWord(words: Word) {
+    private var isBound = false
+    var pos:Int=0
+    var e=true
+    private val connection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            myService = (service as MyCardDetailService.myBinder).getService()
+            isBound = true
+        }
+        override fun onServiceDisconnected(name: ComponentName?) {
+            myService = null
+            isBound = false
+        }
     }
 
+    fun tear_down(){
+        if (isBound) {
+            myService?.stopSound()
+            unbindService(connection)
+            isBound = false
+        }
+    }
+    override fun onPause() {
+        super.onPause()
+        myService?.stopSound()
+    }
+    override fun showWord(words: Word) {
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        tear_down()
+    }
+
+    private  val TAG = "RearrangeWordGameActivi"
+
     override fun showSentence(sentence: String) {
+        checked=false
         sentenceGame = sentence
         val temp = sentence.split(" ").toMutableList()
         temp.shuffle()
@@ -102,6 +145,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         {
             while (an3!!.isRunning){}
         }
+        myService?.stopSound()
         data.clear()
         chosed.clear()
         presenter.restWords()
@@ -113,6 +157,8 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
     }
     override fun showSuccess() {
+        myService?.stopSound()
+        myService?.playSound(R.raw.correctanswer)
         showCustomDialog(
             layoutResId = R.layout.success_dialog_custom,
             title = getString(R.string.good_jop),
@@ -136,6 +182,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
     }
 
     override fun showFail() {
+        Log.d("TAG", "showFail: ")
+        myService?.stopSound()
+        myService?.playSound(R.raw.wronganswer)
         if (heartsCount == 1) {
             // Show the sad dialog when heartsCount is 1
             showCustomDialog(
@@ -160,6 +209,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         } else {
             // Show the existing fail dialog for other cases
             showCustomDialog(
+
                 layoutResId = R.layout.failer_dialog_custom,
                 title = getString(R.string.wrong_answer),
                 imageResId = R.drawable.cross_ic,
@@ -190,20 +240,22 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         if (isDialogShown) return // Prevent showing the dialog if it's already shown
 
         isDialogShown = true
-
         val dialogView = layoutInflater.inflate(layoutResId, null)
+        if (layoutResId==R.layout.failer_dialog_custom) {
+            val the_right_arrange_sentace=dialogView.findViewById<TextView>(R.id.textView6)
+            val theRightAnswer = dialogView.findViewById<TextView>(R.id.theRightAnswer)
+            theRightAnswer.text=sentenceGame
+            the_right_arrange_sentace.text=getString(R.string.the_right_arreng_is)
+        }
         val titleView = dialogView.findViewById<TextView>(R.id.dialog_title)
         val imageView = dialogView.findViewById<ImageView>(R.id.imageView)
         val button = dialogView.findViewById<Button>(R.id.follow_up_button)
-
         titleView.text = title
         imageView.setImageResource(imageResId)
         dialogView.setBackgroundResource(R.drawable.dialog_background)
-
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
             .create()
-
         dialog.window?.apply {
             // Set the dialog to appear from below
             setLayout(
@@ -222,6 +274,7 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
         }
 
         dialog.setOnDismissListener {
+            myService?.stopSound()
             isDialogShown = false // Reset the flag when the dialog is dismissed
         }
 
@@ -230,8 +283,12 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
 
 
     override fun check() {
-        if (chosed.size == data.size) {
-            presenter.check(chosed)
+
+            if (chosed.size == data.size) {
+                if (!checked) {
+                     checked = true
+                     presenter.check(chosed)
+            }
         }
     }
 
@@ -410,7 +467,9 @@ class RearrangeWordGameActivity : AppCompatActivity(), WordsContract.View {
                                 test.visibility = View.GONE
                                 db.sentence.findViewWithTag<Button>(i).visibility = View.VISIBLE
                                 db.main.removeView(test)
-                                check()
+
+                                    check()
+
                             }
                         }
                     }

@@ -50,7 +50,7 @@
     <string name="good_jop">أحسنت عملاً</string>
     <string name="follow_up">المتابعة</string>
     <string name="wrong_answer">إجابة غير صحيحة</string>
-    <string name="rearrange_words_title">رتب الكلمات الأتية لتكوين جملة مفيدة</string>
+    <string name="rearrange_words_title">رتب الكلمات الآتية لتكوين جملة مفيدة</string>
     <string name="example">مثال : </string>
     <string name="sorry">للأسف لقد نفذت وحدات الصحة الخاصة بك</string>
     <string name="skip">تخطي</string>
@@ -58,5 +58,7 @@
     <string name="leader_board">المتصدرين</string>
     <string name="your_score">النقاط الخاصة بك</string>
     <string name="time_to_learn">حان وقت التعلم</string>
+    <string name="the_right_word_is">الكلمة الصحيحة هي </string>
+    <string name="the_right_arreng_is">الترتيب الصحيحة هو </string>
 
 </resources>
