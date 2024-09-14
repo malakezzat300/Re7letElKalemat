@@ -21,9 +21,6 @@
             android:name=".View.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".View.MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".View.LeaderBoardActivity"
             android:exported="false" />
         <activity
