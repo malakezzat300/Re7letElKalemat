@@ -167,6 +167,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
                     if (mediaPlayer != null) {
                         pos = service.getCurrentPosition()
                         if (!mediaPlayer.isPlaying&&e) {
+                            lottieAnimation.cancelAnimation()
                             e=false
                             pos=myService!!.getCurrentPosition()
 
@@ -194,6 +195,7 @@ class CardWordActivity : AppCompatActivity(), DatabaseContract.View {
         myService?.playSound(soundList!![position])
         myService?.seekTo(pos)
         db.viewAnimator.resumeAnimation()
+        db.viewAnimator.loop(true)
         handler.sendEmptyMessage(0)
     }
     fun savePos(){
