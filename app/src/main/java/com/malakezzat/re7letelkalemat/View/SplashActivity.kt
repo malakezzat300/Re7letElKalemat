@@ -80,14 +80,12 @@ class SplashActivity : AppCompatActivity() {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
 
-        if (calendar.before(Calendar.getInstance())) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
-        }
 
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.setExactAndAllowWhileIdle(
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY ,
             pendingIntent
         )
 
