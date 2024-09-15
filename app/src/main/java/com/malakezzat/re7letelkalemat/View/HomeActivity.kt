@@ -24,6 +24,11 @@ import com.google.firebase.storage.UploadTask
 import com.malakezzat.re7letelkalemat.Model.User
 import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.ActivityHomeBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class HomeActivity : AppCompatActivity() {
@@ -41,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView = db.bottomNavigation
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
         user = FirebaseAuth.getInstance().currentUser!!
-        getUserScore(user.email?.substringBefore(".")) { s -> { } }
+        checkAndCreateUserData(user.email?.substringBefore("."), user.displayName, 0)
     }
 
     // Function to upload the image to Firebase Storage and get its URL
@@ -75,14 +80,14 @@ class HomeActivity : AppCompatActivity() {
 
     fun storeUserData(userEmail: String?, userName: String?, imageUri: Uri, userScore: Int) {
         // First, upload the image to Firebase Storage
-        uploadImage(imageUri) { imageUrl ->
+
             // After getting the image URL, store the user data
             val database = FirebaseDatabase.getInstance()
-            val userId = userEmail?.substringBefore(".") ?: (userName + imageUrl)
+            val userId = userEmail?.substringBefore(".") ?: (userName + "")
             val usersRef = database.getReference("users").child(userId)
 
             // Create a User object with image URL
-            val user = User(userName, imageUrl, userScore)
+            val user = User(userName," ", userScore)
 
             // Store the User object in the Realtime Database
             usersRef.setValue(user).addOnSuccessListener {
@@ -90,7 +95,7 @@ class HomeActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 // Handle failure to store data
             }
-        }
+
     }
 
     fun getUserScore(userEmail: String?, callback: (String) -> Unit) {
@@ -129,5 +134,41 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    fun checkAndCreateUserData(userEmail: String?, defaultUserName: String?, defaultUserScore: Int) {
+        // Get Firebase Realtime Database reference
+        val database = FirebaseDatabase.getInstance()
+        val userId = userEmail?.substringBefore(".") ?: ""
+        val userRef = database.getReference("users").child(userId)
+
+        // Check if user data exists in the database
+        userRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val dataSnapshot = task.result
+                if (!dataSnapshot.exists()) {
+                    // User data doesn't exist, so create the user data with default values
+                    val firebaseUser = FirebaseAuth.getInstance().currentUser
+                    GlobalScope.launch(Dispatchers.Main) {
+                        // Suspend the coroutine for 500 milliseconds
+                        delay(1000)
+                        firebaseUser?.let {
+
+                            val userName = it.displayName ?: defaultUserName
+                            val imageUrl = it.photoUrl?.toString()?.toUri()
+                                ?: AppCompatResources.getDrawable(applicationContext, R.drawable.vector__1_)
+                                    .toString().toUri()
+
+                            // Store default user data
+                            storeUserData(it.email, userName, imageUrl, defaultUserScore)
+                        }
+                    }
+
+                }
+                // If user data already exists, do nothing
+            } else {
+                // Handle error in checking the database
+            }
+        }
+    }
 
 }
