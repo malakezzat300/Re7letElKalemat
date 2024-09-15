@@ -1,7 +1,9 @@
 package com.malakezzat.re7letelkalemat.View
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
@@ -20,15 +22,17 @@ import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-
+    val EGYPT = "egypt"
+    val SAUDI = "saudi"
     private lateinit var binding: FragmentHomeBinding
     private lateinit var lottiePin1: LottieAnimationView
     private lateinit var lottiePin2: LottieAnimationView
     private lateinit var lottiePin3: LottieAnimationView
     private lateinit var lottiePin4: LottieAnimationView
     private lateinit var lottiePin5: LottieAnimationView
-
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var imageView: ImageView
+    private var isFirstHomeRun: Boolean = true
     private lateinit var scaleGestureDetector: ScaleGestureDetector
     private val matrix: Matrix by lazy {
         Matrix().apply {
@@ -57,6 +61,9 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences =
+            requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        isFirstHomeRun = sharedPreferences.getBoolean("isFirstHomeRun", true)
     }
 
     override fun onCreateView(
@@ -81,27 +88,31 @@ class HomeFragment : Fragment() {
         constrainMatrix()
         imageView.imageMatrix = matrix
 
-        imageView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        imageView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 updateLottiePinPositions()
-                showFragmentTapTarget()
+                if (isFirstHomeRun)
+                    showFragmentTapTarget()
             }
         })
 
         // Set up scale gesture detector
-        scaleGestureDetector = ScaleGestureDetector(requireContext(), object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector): Boolean {
-                scaleFactor *= detector.scaleFactor
-                scaleFactor = scaleFactor.coerceIn(minScaleFactor, maxScaleFactor)
+        scaleGestureDetector = ScaleGestureDetector(
+            requireContext(),
+            object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                override fun onScale(detector: ScaleGestureDetector): Boolean {
+                    scaleFactor *= detector.scaleFactor
+                    scaleFactor = scaleFactor.coerceIn(minScaleFactor, maxScaleFactor)
 
-                matrix.setScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
-                constrainMatrix()
-                imageView.imageMatrix = matrix
-                updateLottiePinPositions()
-                return true
-            }
-        })
+                    matrix.setScale(scaleFactor, scaleFactor, detector.focusX, detector.focusY)
+                    constrainMatrix()
+                    imageView.imageMatrix = matrix
+                    updateLottiePinPositions()
+                    return true
+                }
+            })
 
         // Apply touch listener for zooming and scrolling
         imageView.setOnTouchListener { _, event ->
@@ -113,6 +124,7 @@ class HomeFragment : Fragment() {
                     lastTouchY = event.y
                     isDragging = true
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     if (isDragging) {
                         val deltaX = event.x - lastTouchX
@@ -122,14 +134,17 @@ class HomeFragment : Fragment() {
                         constrainMatrix()
                         imageView.imageMatrix = matrix
                         updateLottiePinPositions()
-                        Log.i("homeTest", "onViewCreated: "
-                        + "deltaX: " + deltaX +
-                                "deltaY: " + deltaY)
+                        Log.i(
+                            "homeTest", "onViewCreated: "
+                                    + "deltaX: " + deltaX +
+                                    "deltaY: " + deltaY
+                        )
 
                         lastTouchX = event.x
                         lastTouchY = event.y
                     }
                 }
+
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     isDragging = false
                 }
@@ -138,13 +153,15 @@ class HomeFragment : Fragment() {
             true
         }
 
-//        lottiePin1.setOnClickListener {
-//            val intent = Intent(requireContext(), onCityPressed1::class.java)
-//            startActivity(intent)
-//        }
+        lottiePin4.setOnClickListener {
+            val intent = Intent(requireContext(), onCityPressed1::class.java)
+            intent.putExtra("Country",EGYPT)
+            startActivity(intent)
+        }
 
         lottiePin2.setOnClickListener {
             val intent = Intent(requireContext(), onCityPressed1::class.java)
+            intent.putExtra("Country",SAUDI)
             startActivity(intent)
         }
     }
@@ -225,9 +242,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun showFragmentTapTarget() {
-        TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin5,
-            "أهلاً بك في الصفحة الرئيسية",
-            "هنا تبداء رحلتنا الى استكشاف الكلمات والمعاني الجديدة في مختلف البلدان العربية والبداية ستكون من المملكة العربية السعودية"
+        TapTargetView.showFor(requireActivity(), TapTarget.forView(
+            lottiePin5,
+            getString(R.string.welcome_to_home_fragment),
+            getString(R.string.home_fragment_disc)
         ).targetRadius(60)
             .outerCircleColor(R.color.white)
             .outerCircleAlpha(1f)
@@ -249,30 +267,26 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+        sharedPreferences.edit().putBoolean("isFirstHomeRun", false).apply()
     }
-    private fun showLottiePinTapTarget() {
-        TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin2,
-            "اضغط هنا",
-            "المدخل الى بداية الرحلة في المملكة العربية السعودية"
-        ).targetRadius(35)
-            .outerCircleColor(R.color.white)
-            .outerCircleAlpha(1f)
-            .titleTextSize(26)
-            .descriptionTextSize(20)
-            .textColor(R.color.my_primary_variant_color)
-            .drawShadow(true)
-            .cancelable(true)
-            .tintTarget(true)
-            .transparentTarget(true),
-            object : TapTargetView.Listener() {
-                override fun onTargetClick(view: TapTargetView?) {
-                    super.onTargetClick(view)
-                }
 
-                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
-                    super.onTargetDismissed(view, userInitiated)
-                }
-            }
+    private fun showLottiePinTapTarget() {
+        TapTargetView.showFor(
+            requireActivity(), TapTarget.forView(
+                lottiePin2,
+                getString(R.string.click_here),
+                getString(R.string.beginning_journey_in_saudi_arabia)
+            ).targetRadius(35)
+                .outerCircleColor(R.color.white)
+                .outerCircleAlpha(1f)
+                .titleTextSize(26)
+                .descriptionTextSize(20)
+                .textColor(R.color.my_primary_variant_color)
+                .drawShadow(true)
+                .cancelable(true)
+                .tintTarget(true)
+                .transparentTarget(true)
         )
+        sharedPreferences.edit().putBoolean("isFirstHomeRun", false).apply()
     }
 }
