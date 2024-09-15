@@ -31,6 +31,19 @@
             app:lottie_rawRes="@raw/pin" />
 
         <!-- The second LottieAnimationView -->
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimation5"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="top|start"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/pin" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimation2"
             android:layout_width="100dp"
