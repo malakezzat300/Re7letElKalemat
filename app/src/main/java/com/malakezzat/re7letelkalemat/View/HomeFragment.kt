@@ -1,7 +1,9 @@
 package com.malakezzat.re7letelkalemat.View
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
@@ -27,8 +29,9 @@ class HomeFragment : Fragment() {
     private lateinit var lottiePin3: LottieAnimationView
     private lateinit var lottiePin4: LottieAnimationView
     private lateinit var lottiePin5: LottieAnimationView
-
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var imageView: ImageView
+    private  var  isFirstHomeRun : Boolean = true
     private lateinit var scaleGestureDetector: ScaleGestureDetector
     private val matrix: Matrix by lazy {
         Matrix().apply {
@@ -57,6 +60,8 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences = requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        isFirstHomeRun = sharedPreferences.getBoolean("isFirstHomeRun", true)
     }
 
     override fun onCreateView(
@@ -85,6 +90,7 @@ class HomeFragment : Fragment() {
             override fun onGlobalLayout() {
                 imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 updateLottiePinPositions()
+                if (isFirstHomeRun)
                 showFragmentTapTarget()
             }
         })
@@ -249,6 +255,7 @@ class HomeFragment : Fragment() {
                 }
             }
         )
+        sharedPreferences.edit().putBoolean("isFirstHomeRun", false).apply()
     }
     private fun showLottiePinTapTarget() {
         TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin2,
@@ -263,16 +270,8 @@ class HomeFragment : Fragment() {
             .drawShadow(true)
             .cancelable(true)
             .tintTarget(true)
-            .transparentTarget(true),
-            object : TapTargetView.Listener() {
-                override fun onTargetClick(view: TapTargetView?) {
-                    super.onTargetClick(view)
-                }
-
-                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
-                    super.onTargetDismissed(view, userInitiated)
-                }
-            }
+            .transparentTarget(true)
         )
+        sharedPreferences.edit().putBoolean("isFirstHomeRun", false).apply()
     }
 }
