@@ -226,8 +226,8 @@ class HomeFragment : Fragment() {
 
     private fun showFragmentTapTarget() {
         TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin5,
-            "أهلاً بك في الصفحة الرئيسية",
-            "هنا تبداء رحلتنا الى استكشاف الكلمات والمعاني الجديدة في مختلف البلدان العربية والبداية ستكون من المملكة العربية السعودية"
+            getString(R.string.welcome_to_home_fragment),
+            getString(R.string.home_fragment_disc)
         ).targetRadius(60)
             .outerCircleColor(R.color.white)
             .outerCircleAlpha(1f)
@@ -252,8 +252,8 @@ class HomeFragment : Fragment() {
     }
     private fun showLottiePinTapTarget() {
         TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin2,
-            "اضغط هنا",
-            "المدخل الى بداية الرحلة في المملكة العربية السعودية"
+            getString(R.string.click_here),
+            getString(R.string.beginning_journey_in_saudi_arabia)
         ).targetRadius(35)
             .outerCircleColor(R.color.white)
             .outerCircleAlpha(1f)
