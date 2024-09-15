@@ -14,6 +14,9 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetView
+import com.malakezzat.re7letelkalemat.R
 import com.malakezzat.re7letelkalemat.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -23,6 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var lottiePin2: LottieAnimationView
     private lateinit var lottiePin3: LottieAnimationView
     private lateinit var lottiePin4: LottieAnimationView
+    private lateinit var lottiePin5: LottieAnimationView
 
     private lateinit var imageView: ImageView
     private lateinit var scaleGestureDetector: ScaleGestureDetector
@@ -71,6 +75,7 @@ class HomeFragment : Fragment() {
         lottiePin2 = binding.lottieAnimation2
         lottiePin3 = binding.lottieAnimation3
         lottiePin4 = binding.lottieAnimation4
+        lottiePin5 = binding.lottieAnimation5
         imageView = binding.imageView
 
         constrainMatrix()
@@ -80,6 +85,7 @@ class HomeFragment : Fragment() {
             override fun onGlobalLayout() {
                 imageView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 updateLottiePinPositions()
+                showFragmentTapTarget()
             }
         })
 
@@ -216,5 +222,57 @@ class HomeFragment : Fragment() {
 
     private fun dpToPx(dp: Float): Float {
         return dp * requireContext().resources.displayMetrics.density
+    }
+
+    private fun showFragmentTapTarget() {
+        TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin5,
+            "أهلاً بك في الصفحة الرئيسية",
+            "هنا تبداء رحلتنا الى استكشاف الكلمات والمعاني الجديدة في مختلف البلدان العربية والبداية ستكون من المملكة العربية السعودية"
+        ).targetRadius(60)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                }
+
+                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                    super.onTargetDismissed(view, userInitiated)
+                    showLottiePinTapTarget()
+                }
+            }
+        )
+    }
+    private fun showLottiePinTapTarget() {
+        TapTargetView.showFor(requireActivity(), TapTarget.forView(lottiePin2,
+            "اضغط هنا",
+            "المدخل الى بداية الرحلة في المملكة العربية السعودية"
+        ).targetRadius(35)
+            .outerCircleColor(R.color.white)
+            .outerCircleAlpha(1f)
+            .titleTextSize(26)
+            .descriptionTextSize(20)
+            .textColor(R.color.my_primary_variant_color)
+            .drawShadow(true)
+            .cancelable(true)
+            .tintTarget(true)
+            .transparentTarget(true),
+            object : TapTargetView.Listener() {
+                override fun onTargetClick(view: TapTargetView?) {
+                    super.onTargetClick(view)
+                }
+
+                override fun onTargetDismissed(view: TapTargetView?, userInitiated: Boolean) {
+                    super.onTargetDismissed(view, userInitiated)
+                }
+            }
+        )
     }
 }
