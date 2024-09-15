@@ -323,7 +323,6 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
         myService?.stopSound()
         myService?.playSound(R.raw.wronganswer)
         clear()
-        // Decrease hearts
         val hearts = db.hearts.text.toString().toInt()
         if (hearts > 0) {
             db.hearts.text = (hearts - 1).toString()
@@ -334,7 +333,6 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
                 startActivity(intent)
                 finish()
             } else {
-                presenter.genrateRandomWords()
                 showCustomDialog(
                     layoutResId = R.layout.failer_dialog_custom,
                     title = getString(R.string.wrong_answer),
@@ -344,6 +342,7 @@ class FindTheMeaningGame : AppCompatActivity(), WordsContract.View {
                         dialog.dismiss()
                     }
                 )
+                presenter.genrateRandomWords()
             }
         } else {
             // Navigate to AfterFailingInGameActivity if no hearts left
